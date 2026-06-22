@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سایت سرور AZ_NY</title>
     <style>
-        /* ===== استایل‌های کامل (همان‌های قبل) ===== */
+        /* ===== استایل‌های کامل ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Tahoma, Arial, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; min-height: 100vh; }
         .admin-btn { position: fixed; bottom: 20px; left: 20px; background: #1a73e8; color: white; border: none; padding: 14px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(26,115,232,0.4); z-index: 999; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
@@ -59,8 +59,6 @@
         .admin-tab-content { display: none; padding: 20px; background: white; border-radius: 0 8px 8px 8px; border: 1px solid #e8f0fe; }
         .admin-tab-content.active { display: block; }
         .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-        .debug-box { background: #263238; color: #aed581; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; direction: ltr; text-align: left; margin-top: 10px; display: none; }
-        .debug-box.show { display: block; }
     </style>
 </head>
 <body>
@@ -80,12 +78,9 @@
             <div id="adminStatus" class="status"></div>
             
             <div class="btn-group">
-                <button class="btn btn-success" onclick="fetchDataAdmin()">📥 بارگذاری داده</button>
-                <button class="btn btn-warning" onclick="saveToGitHub()">💾 ذخیره در گیت‌هاب</button>
-                <button class="btn btn-danger" onclick="toggleDebug()">🐛 نمایش خطاها</button>
+                <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری داده</button>
+                <button class="btn btn-warning" onclick="saveToJsonBin()">💾 ذخیره در JSONBin</button>
             </div>
-            
-            <div id="debugBox" class="debug-box"></div>
             
             <hr style="margin: 20px 0;">
             
@@ -191,171 +186,84 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- ===== اسکریپت‌ها با پروکسی ===== -->
+    <!-- ===== اسکریپت JSONBin با اطلاعات شما ===== -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 🔐 تنظیمات گیت‌هاب (با پروکسی)
+        // 🔐 تنظیمات JSONBin (با اطلاعات شما)
         // ============================================================
-        const GITHUB_TOKEN = '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';
-        const REPO_OWNER = 'IDHAMIDNULL';
-        const REPO_NAME = 'Test';
-        const FILE_PATH = 'AZ_NY.JSON';
-        
-        // آدرس‌های با پروکسی برای دور زدن CORS و فیلترینگ
-        const PROXY = 'https://corsproxy.io/?';
-        const RAW_URL = PROXY + encodeURIComponent(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${FILE_PATH}`);
-        const API_URL = PROXY + encodeURIComponent(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`);
+        const JSONBIN_BIN_ID = '6a39abe9da38895dfeee1a82';
+        const JSONBIN_API_KEY = '6a39abbda8b6024c762596d9';
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         let currentData = null;
-        let debugLogs = [];
 
         // ============================================================
-        // 📝 لاگ خطاها
-        // ============================================================
-        function logDebug(message, data = null) {
-            const timestamp = new Date().toLocaleTimeString('fa-IR');
-            const logEntry = `[${timestamp}] ${message}` + (data ? '\n' + JSON.stringify(data, null, 2) : '');
-            debugLogs.push(logEntry);
-            console.log(logEntry);
-            
-            const debugBox = document.getElementById('debugBox');
-            if (debugBox) {
-                debugBox.textContent = debugLogs.join('\n\n');
-                debugBox.scrollTop = debugBox.scrollHeight;
-            }
-        }
-
-        function toggleDebug() {
-            const box = document.getElementById('debugBox');
-            box.classList.toggle('show');
-            if (box.classList.contains('show')) {
-                box.textContent = debugLogs.join('\n\n');
-            }
-        }
-
-        // ============================================================
-        // 📥 دریافت داده (با پروکسی)
+        // 📥 دریافت داده از JSONBin
         // ============================================================
         function fetchData() {
-            logDebug('📥 شروع دریافت داده از (با پروکسی):', RAW_URL);
-            
-            fetch(RAW_URL + '&t=' + new Date().getTime())
-                .then(response => {
-                    logDebug(`📡 پاسخ دریافت: وضعیت ${response.status}`);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    return response.json();
-                })
-                .then(data => {
-                    currentData = data;
-                    logDebug('✅ داده با موفقیت دریافت شد', data);
-                    renderMainPage(data);
-                    renderAdminPanel(data);
-                    showAdminStatus('✅ داده با موفقیت بارگذاری شد', 'success');
-                })
-                .catch(error => {
-                    logDebug('❌ خطا در دریافت داده:', error.message);
-                    document.getElementById('mainContent').innerHTML =
-                        `<div class="error">❌ خطا در بارگذاری: ${error.message}</div>`;
-                    showAdminStatus('❌ خطا: ' + error.message, 'error');
-                });
-        }
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = '<div class="loading">⏳ در حال بارگذاری اطلاعات...</div>';
+            showAdminStatus('⏳ در حال دریافت داده...', 'info');
 
-        function fetchDataAdmin() {
-            showAdminStatus('⏳ در حال بارگذاری داده...', 'info');
-            fetchData();
-        }
-
-        // ============================================================
-        // 💾 ذخیره در گیت‌هاب (با پروکسی)
-        // ============================================================
-        function saveToGitHub() {
-            if (!currentData) {
-                showAdminStatus('❌ داده‌ای برای ذخیره وجود ندارد. ابتدا بارگذاری کنید.', 'error');
-                logDebug('❌ تلاش برای ذخیره بدون داده');
-                return;
-            }
-
-            showAdminStatus('⏳ مرحله 1: در حال دریافت اطلاعات فایل از گیت‌هاب...', 'info');
-            logDebug('💾 شروع فرآیند ذخیره‌سازی (با پروکسی)');
-
-            // مرحله 1: دریافت SHA فایل
-            fetch(API_URL + '&t=' + new Date().getTime(), {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
+            fetch(JSONBIN_URL, {
+                headers: { 'X-Master-Key': JSONBIN_API_KEY }
             })
             .then(response => {
-                logDebug(`📡 پاسخ دریافت SHA: وضعیت ${response.status}`);
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        throw new Error('فایل در گیت‌هاب پیدا نشد (404). ابتدا فایل را به مخزن اضافه کنید.');
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return response.json();
             })
             .then(data => {
-                const sha = data.sha;
-                logDebug('✅ SHA دریافت شد:', sha);
-                
-                showAdminStatus('⏳ مرحله 2: در حال آماده‌سازی و ذخیره فایل...', 'info');
-                
-                // مرحله 2: ذخیره فایل با SHA
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
-                logDebug('📦 محتوای JSON آماده شد (طول: ' + content.length + ' کاراکتر)');
-                
-                // برای PUT باید از آدرس اصلی بدون پروکسی استفاده کنیم چون پروکسی PUT را پشتیبانی نمی‌کند
-                const directApiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-                
-                return fetch(directApiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        message: 'به‌روزرسانی از پنل مدیریت | ' + new Date().toLocaleString('fa-IR'),
-                        content: content,
-                        sha: sha
-                    })
-                });
-            })
-            .then(response => {
-                logDebug(`📡 پاسخ ذخیره: وضعیت ${response.status}`);
-                if (!response.ok) {
-                    return response.json().then(errData => {
-                        logDebug('❌ جزئیات خطای ذخیره:', errData);
-                        throw new Error(`HTTP ${response.status}: ${errData.message || 'خطای ناشناخته'}`);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.content) {
-                    logDebug('✅ فایل با موفقیت ذخیره شد!', data);
-                    showAdminStatus('✅ فایل با موفقیت در گیت‌هاب ذخیره شد!', 'success');
-                    document.getElementById('adminLastUpdate').textContent = new Date().toLocaleString('fa-IR');
-                    renderMainPage(currentData);
-                    document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR');
-                } else {
-                    logDebug('⚠️ پاسخ غیرمنتظره از گیت‌هاب:', data);
-                    showAdminStatus('⚠️ پاسخ غیرمنتظره: ' + JSON.stringify(data), 'error');
-                }
+                currentData = data.record;
+                renderMainPage(currentData);
+                renderAdminPanel(currentData);
+                showAdminStatus('✅ داده با موفقیت بارگذاری شد', 'success');
             })
             .catch(error => {
-                logDebug('❌ خطای نهایی:', error.message);
+                mainContent.innerHTML = `<div class="error">❌ خطا در بارگذاری: ${error.message}</div>`;
                 showAdminStatus('❌ خطا: ' + error.message, 'error');
-                if (error.message.includes('404')) {
-                    showAdminStatus('❌ فایل AZ_NY.JSON در مخزن وجود ندارد. لطفاً ابتدا فایل را ایجاد کنید.', 'error');
-                }
             });
         }
 
         // ============================================================
-        // 🖼 توابع رندر (همان‌های قبلی)
+        // 💾 ذخیره در JSONBin
+        // ============================================================
+        function saveToJsonBin() {
+            if (!currentData) {
+                showAdminStatus('❌ داده‌ای برای ذخیره وجود ندارد', 'error');
+                return;
+            }
+
+            showAdminStatus('⏳ در حال ذخیره در JSONBin...', 'info');
+
+            fetch(JSONBIN_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify(currentData)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.record) {
+                    showAdminStatus('✅ فایل با موفقیت در JSONBin ذخیره شد!', 'success');
+                    document.getElementById('adminLastUpdate').textContent = new Date().toLocaleString('fa-IR');
+                    document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR');
+                } else {
+                    showAdminStatus('⚠️ پاسخ غیرمنتظره: ' + JSON.stringify(data), 'error');
+                }
+            })
+            .catch(error => {
+                showAdminStatus('❌ خطا: ' + error.message, 'error');
+            });
+        }
+
+        // ============================================================
+        // 🖼 توابع رندر
         // ============================================================
         function renderMainPage(data) {
             const container = document.getElementById('mainContent');
@@ -512,7 +420,6 @@
             input.value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ پیام اضافه شد', 'success');
-            logDebug('➕ پیام جدید اضافه شد:', text);
         }
 
         function addMusicAdmin() {
@@ -527,7 +434,6 @@
             document.getElementById('new-music-play').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ آهنگ اضافه شد', 'success');
-            logDebug('➕ آهنگ جدید اضافه شد:', name);
         }
 
         function addPollAdmin() {
@@ -541,7 +447,6 @@
             document.getElementById('new-poll-options').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ نظرسنجی اضافه شد', 'success');
-            logDebug('➕ نظرسنجی جدید اضافه شد:', question);
         }
 
         function addChatAdmin() {
@@ -558,7 +463,6 @@
             document.getElementById('new-chat-text').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ پیام چت اضافه شد', 'success');
-            logDebug('➕ پیام چت جدید اضافه شد:', text);
         }
 
         // ============================================================
@@ -569,7 +473,6 @@
             currentData[section].splice(index, 1);
             renderAdminPanel(currentData);
             showAdminStatus('✅ آیتم حذف شد', 'success');
-            logDebug(`🗑 آیتم از ${section} حذف شد، ایندکس: ${index}`);
         }
 
         // ============================================================
@@ -578,7 +481,6 @@
         function updateSettingAdmin(key, value) {
             currentData.settings[key] = value;
             showAdminStatus(`✅ تنظیم ${key} ${value ? 'فعال' : 'غیرفعال'} شد`, 'success');
-            logDebug(`⚙️ تنظیم ${key} = ${value}`);
         }
 
         // ============================================================
@@ -610,19 +512,16 @@
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('show');
             document.body.style.overflow = 'hidden';
-            logDebug('🔓 پنل مدیریت باز شد');
         }
 
         function closeAdminPanel() {
             document.getElementById('adminModal').classList.remove('show');
             document.body.style.overflow = 'auto';
-            logDebug('🔒 پنل مدیریت بسته شد');
         }
 
         // ============================================================
         // 🚀 بارگذاری اولیه
         // ============================================================
-        logDebug('🚀 سایت بارگذاری شد (نسخه با پروکسی)');
         fetchData();
     </script>
 
