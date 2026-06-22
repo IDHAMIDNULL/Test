@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اطلاعات سرور AZ_NY</title>
+    <title>پنل مدیریت JSON</title>
     <style>
         * {
             margin: 0;
@@ -14,24 +14,22 @@
             font-family: Tahoma, Arial, sans-serif;
             padding: 20px;
             background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
+            direction: rtl;
         }
         .container {
-            max-width: 800px;
-            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
             background: white;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         h1 {
-            text-align: center;
             color: #1a73e8;
             border-bottom: 3px solid #e8f0fe;
             padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            text-align: center;
         }
         .section {
             background: #f8f9fa;
@@ -43,255 +41,575 @@
         .section h2 {
             color: #1a73e8;
             font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .form-group {
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        .item {
-            display: flex;
-            padding: 8px 0;
-            border-bottom: 1px dashed #e0e0e0;
-        }
-        .item:last-child {
-            border-bottom: none;
-        }
-        .key {
+        .form-group label {
+            display: block;
             font-weight: bold;
-            width: 120px;
+            margin-bottom: 4px;
             color: #555;
-            flex-shrink: 0;
         }
-        .value {
-            color: #222;
-            word-break: break-word;
-        }
-        .badge {
-            background: #1a73e8;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-right: 8px;
-        }
-        .loading {
-            text-align: center;
-            color: #666;
-            padding: 40px 0;
-            font-size: 16px;
-        }
-        .error {
-            background: #fce4ec;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .success {
-            background: #e8f5e9;
-            color: #2e7d32;
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
             padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
+            font-size: 14px;
+            font-family: inherit;
         }
-        .retry-btn {
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .btn {
             background: #1a73e8;
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 15px;
-            display: block;
-            margin: 20px auto 0;
-            transition: background 0.3s;
+            font-size: 14px;
+            margin-left: 10px;
+            margin-bottom: 5px;
         }
-        .retry-btn:hover {
+        .btn:hover {
             background: #1557b0;
         }
-        .timestamp {
-            text-align: center;
-            color: #999;
-            font-size: 12px;
-            margin-top: 20px;
+        .btn-danger {
+            background: #d32f2f;
         }
-        .music-item, .poll-item, .chat-item, .msg-item {
-            background: white;
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+        .btn-success {
+            background: #2e7d32;
+        }
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+        .btn-warning {
+            background: #f57c00;
+        }
+        .btn-warning:hover {
+            background: #e65100;
+        }
+        .status {
             padding: 12px;
             border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        .status.error {
+            background: #fce4ec;
+            color: #c62828;
+            display: block;
+        }
+        .status.info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            display: block;
+        }
+        .item-list {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
             margin-bottom: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        .chat-item {
-            border-right: 3px solid #1a73e8;
-        }
-        .chat-item .sender {
-            font-weight: bold;
-            color: #1a73e8;
-        }
-        .chat-item .time {
-            color: #999;
-            font-size: 12px;
-        }
-        .option-item {
+            border: 1px solid #eee;
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
+            align-items: center;
+        }
+        .item-list .remove-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .item-list .remove-btn:hover {
+            background: #b71c1c;
+        }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #e8f0fe;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .tab.active {
+            background: #1a73e8;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 0 8px 8px 8px;
+            border: 1px solid #e8f0fe;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📡 اطلاعات سرور AZ_NY</h1>
-        <div id="serverInfo" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
-        <button class="retry-btn" onclick="fetchData()">🔄 تلاش مجدد</button>
-        <div class="timestamp" id="timestamp"></div>
+        <h1>📝 پنل مدیریت JSON</h1>
+
+        <div id="status" class="status"></div>
+
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری داده</button>
+            <button class="btn btn-warning" onclick="saveToGitHub()">💾 ذخیره در گیت‌هاب</button>
+        </div>
+
+        <hr style="margin: 20px 0;">
+
+        <!-- تب‌ها -->
+        <div>
+            <div class="tab active" onclick="switchTab('messages')">💬 پیام‌ها</div>
+            <div class="tab" onclick="switchTab('music')">🎵 موسیقی</div>
+            <div class="tab" onclick="switchTab('polls')">📊 نظرسنجی</div>
+            <div class="tab" onclick="switchTab('chat')">💬 چت</div>
+            <div class="tab" onclick="switchTab('settings')">⚙️ تنظیمات</div>
+        </div>
+
+        <!-- ===== تب پیام‌ها ===== -->
+        <div id="tab-messages" class="tab-content active">
+            <div class="section">
+                <h2>💬 پیام‌ها</h2>
+                <div id="messages-list"></div>
+                <div class="form-group">
+                    <label>متن پیام جدید:</label>
+                    <input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید...">
+                </div>
+                <button class="btn btn-success" onclick="addMessage()">➕ اضافه کردن پیام</button>
+            </div>
+        </div>
+
+        <!-- ===== تب موسیقی ===== -->
+        <div id="tab-music" class="tab-content">
+            <div class="section">
+                <h2>🎵 موسیقی</h2>
+                <div id="music-list"></div>
+                <div class="form-group">
+                    <label>نام آهنگ:</label>
+                    <input type="text" id="new-music-name" placeholder="نام آهنگ...">
+                </div>
+                <div class="form-group">
+                    <label>خواننده:</label>
+                    <input type="text" id="new-music-artist" placeholder="نام خواننده...">
+                </div>
+                <div class="form-group">
+                    <label>لینک پخش:</label>
+                    <input type="text" id="new-music-play" placeholder="https://...">
+                </div>
+                <button class="btn btn-success" onclick="addMusic()">➕ اضافه کردن آهنگ</button>
+            </div>
+        </div>
+
+        <!-- ===== تب نظرسنجی ===== -->
+        <div id="tab-polls" class="tab-content">
+            <div class="section">
+                <h2>📊 نظرسنجی</h2>
+                <div id="polls-list"></div>
+                <div class="form-group">
+                    <label>سوال نظرسنجی:</label>
+                    <input type="text" id="new-poll-question" placeholder="سوال را وارد کنید...">
+                </div>
+                <div class="form-group">
+                    <label>گزینه‌ها (با کاما جدا کنید):</label>
+                    <input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3">
+                </div>
+                <button class="btn btn-success" onclick="addPoll()">➕ اضافه کردن نظرسنجی</button>
+            </div>
+        </div>
+
+        <!-- ===== تب چت ===== -->
+        <div id="tab-chat" class="tab-content">
+            <div class="section">
+                <h2>💬 چت</h2>
+                <div id="chat-list"></div>
+                <div class="form-group">
+                    <label>فرستنده:</label>
+                    <select id="new-chat-sender">
+                        <option value="user">کاربر</option>
+                        <option value="admin">مدیر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>متن پیام:</label>
+                    <input type="text" id="new-chat-text" placeholder="متن پیام...">
+                </div>
+                <button class="btn btn-success" onclick="addChat()">➕ اضافه کردن پیام</button>
+            </div>
+        </div>
+
+        <!-- ===== تب تنظیمات ===== -->
+        <div id="tab-settings" class="tab-content">
+            <div class="section">
+                <h2>⚙️ تنظیمات</h2>
+                <div id="settings-list"></div>
+                <button class="btn btn-success" onclick="saveSettings()">💾 ذخیره تنظیمات</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            داده‌ها در <strong>گیت‌هاب</strong> ذخیره می‌شوند | آخرین تغییر: <span id="lastUpdate">-</span>
+        </div>
     </div>
 
     <script>
-        // آدرس مستقیم فایل JSON در مخزن شما
-        const targetUrl = 'https://raw.githubusercontent.com/IDHAMIDNULL/Test/main/AZ_NY.json';
+        // ============================================================
+        // 🔐 تنظیمات گیت‌هاب - توکن خود را اینجا قرار دهید
+        // ============================================================
+        const GITHUB_TOKEN = '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'; // توکن شما
+        const REPO_OWNER = 'IDHAMIDNULL';
+        const REPO_NAME = 'Test';
+        const FILE_PATH = 'AZ_NY.JSON';
+        const RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${FILE_PATH}`;
+        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
+        let currentData = null;
+        let currentSha = null;
+
+        // ============================================================
+        // 📥 دریافت داده
+        // ============================================================
         function fetchData() {
-            const infoDiv = document.getElementById('serverInfo');
-            infoDiv.className = 'loading';
-            infoDiv.innerHTML = '⏳ در حال دریافت اطلاعات...';
+            showStatus('⏳ در حال بارگذاری داده...', 'info');
 
-            fetch(targetUrl)
+            fetch(RAW_URL + '?t=' + new Date().getTime())
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status} - فایل پیدا نشد`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     return response.json();
                 })
                 .then(data => {
-                    let html = '<div class="success">✅ داده با موفقیت دریافت شد</div>';
-
-                    // ===== متا =====
-                    if (data.meta) {
-                        html += `<div class="section">
-                            <h2>📋 اطلاعات پایه</h2>`;
-                        for (const [key, value] of Object.entries(data.meta)) {
-                            html += `
-                                <div class="item">
-                                    <span class="key">${key}:</span>
-                                    <span class="value">${value}</span>
-                                </div>
-                            `;
-                        }
-                        html += `</div>`;
-                    }
-
-                    // ===== تنظیمات =====
-                    if (data.settings) {
-                        html += `<div class="section">
-                            <h2>⚙️ تنظیمات</h2>`;
-                        for (const [key, value] of Object.entries(data.settings)) {
-                            const status = value ? '✅ فعال' : '❌ غیرفعال';
-                            html += `
-                                <div class="item">
-                                    <span class="key">${key}:</span>
-                                    <span class="value">${status}</span>
-                                </div>
-                            `;
-                        }
-                        html += `</div>`;
-                    }
-
-                    // ===== پیام‌ها =====
-                    if (data.messages && data.messages.length > 0) {
-                        html += `<div class="section">
-                            <h2>💬 پیام‌ها <span class="badge">${data.messages.length}</span></h2>`;
-                        data.messages.forEach(msg => {
-                            html += `
-                                <div class="msg-item">
-                                    <div><strong>${msg.text}</strong></div>
-                                    <div style="color:#999;font-size:12px;">📅 ${msg.date}</div>
-                                </div>
-                            `;
-                        });
-                        html += `</div>`;
-                    }
-
-                    // ===== موسیقی =====
-                    if (data.music && data.music.length > 0) {
-                        html += `<div class="section">
-                            <h2>🎵 موسیقی <span class="badge">${data.music.length}</span></h2>`;
-                        data.music.forEach(song => {
-                            html += `
-                                <div class="music-item">
-                                    <div><strong>${song.name}</strong> - ${song.artist}</div>
-                                    <div style="font-size:12px;color:#1a73e8;">
-                                        <a href="${song.play}" target="_blank">▶ پخش</a> | 
-                                        <a href="${song.download}" target="_blank">⬇ دانلود</a>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        html += `</div>`;
-                    }
-
-                    // ===== نظرسنجی =====
-                    if (data.polls && data.polls.length > 0) {
-                        html += `<div class="section">
-                            <h2>📊 نظرسنجی‌ها <span class="badge">${data.polls.length}</span></h2>`;
-                        data.polls.forEach(poll => {
-                            html += `
-                                <div class="poll-item">
-                                    <div><strong>❓ ${poll.question}</strong></div>`;
-                            poll.options.forEach(opt => {
-                                html += `
-                                    <div class="option-item">
-                                        <span>${opt.text}</span>
-                                        <span>${opt.votes} رای</span>
-                                    </div>
-                                `;
-                            });
-                            html += `</div>`;
-                        });
-                        html += `</div>`;
-                    }
-
-                    // ===== چت =====
-                    if (data.chat && data.chat.length > 0) {
-                        html += `<div class="section">
-                            <h2>💬 چت <span class="badge">${data.chat.length}</span></h2>`;
-                        data.chat.forEach(msg => {
-                            const senderLabel = msg.sender === 'admin' ? 'مدیر' : 'کاربر';
-                            html += `
-                                <div class="chat-item">
-                                    <span class="sender">${senderLabel}</span>
-                                    <span class="time">${msg.time}</span>
-                                    <div style="margin-top:4px;">${msg.text}</div>
-                                </div>
-                            `;
-                        });
-                        html += `</div>`;
-                    }
-
-                    infoDiv.className = '';
-                    infoDiv.innerHTML = html;
-                    document.getElementById('timestamp').textContent =
-                        'آخرین دریافت: ' + new Date().toLocaleString('fa-IR');
+                    currentData = data;
+                    showStatus('✅ داده با موفقیت بارگذاری شد', 'success');
+                    renderAll();
+                    document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
                 })
                 .catch(error => {
-                    infoDiv.className = 'error';
-                    infoDiv.innerHTML = `
-                        ❌ دریافت داده با خطا مواجه شد.<br>
-                        <small>${error.message}</small><br>
-                        <div style="background:#fff3e0;padding:10px;border-radius:6px;margin-top:10px;font-size:12px;color:#e65100;">
-                            📁 مسیر فایل: ${targetUrl}
-                        </div>
-                        <small style="font-size:12px;display:block;margin-top:10px;">
-                            راهنمایی: مطمئن شوید فایل AZ_NY.JSON در مخزن موجود است.
-                        </small>
-                    `;
-                    console.error('خطای دریافت:', error);
+                    showStatus('❌ خطا در بارگذاری: ' + error.message, 'error');
                 });
         }
 
+        // ============================================================
+        // 💾 ذخیره در گیت‌هاب
+        // ============================================================
+        function saveToGitHub() {
+            if (!currentData) {
+                showStatus('❌ داده‌ای برای ذخیره وجود ندارد. ابتدا بارگذاری کنید.', 'error');
+                return;
+            }
+
+            showStatus('⏳ در حال ذخیره در گیت‌هاب...', 'info');
+
+            // دریافت SHA فایل
+            fetch(API_URL, {
+                headers: { 
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                const sha = data.sha;
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
+                
+                return fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: 'به‌روزرسانی از پنل مدیریت | ' + new Date().toLocaleString('fa-IR'),
+                        content: content,
+                        sha: sha
+                    })
+                });
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.content) {
+                    showStatus('✅ فایل با موفقیت در گیت‌هاب ذخیره شد!', 'success');
+                    document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
+                } else {
+                    showStatus('❌ خطا در ذخیره: ' + JSON.stringify(data), 'error');
+                }
+            })
+            .catch(error => {
+                showStatus('❌ خطا در ذخیره: ' + error.message, 'error');
+                console.error('Error:', error);
+            });
+        }
+
+        // ============================================================
+        // 📊 نمایش وضعیت
+        // ============================================================
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+            if (type !== 'info') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        // ============================================================
+        // 🖼 رندر کردن همه بخش‌ها
+        // ============================================================
+        function renderAll() {
+            if (!currentData) return;
+            renderMessages();
+            renderMusic();
+            renderPolls();
+            renderChat();
+            renderSettings();
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('messages-list');
+            if (!currentData.messages || currentData.messages.length === 0) {
+                container.innerHTML = '<p style="color:#999;">هیچ پیامی وجود ندارد.</p>';
+                return;
+            }
+            let html = '';
+            currentData.messages.forEach((msg, index) => {
+                html += `
+                    <div class="item-list">
+                        <span><strong>${msg.text}</strong> <span style="color:#999;font-size:12px;">📅 ${msg.date}</span></span>
+                        <button class="remove-btn" onclick="removeItem('messages', ${index})">🗑</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderMusic() {
+            const container = document.getElementById('music-list');
+            if (!currentData.music || currentData.music.length === 0) {
+                container.innerHTML = '<p style="color:#999;">هیچ آهنگی وجود ندارد.</p>';
+                return;
+            }
+            let html = '';
+            currentData.music.forEach((song, index) => {
+                html += `
+                    <div class="item-list">
+                        <span><strong>${song.name}</strong> - ${song.artist}</span>
+                        <button class="remove-btn" onclick="removeItem('music', ${index})">🗑</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderPolls() {
+            const container = document.getElementById('polls-list');
+            if (!currentData.polls || currentData.polls.length === 0) {
+                container.innerHTML = '<p style="color:#999;">هیچ نظرسنجی وجود ندارد.</p>';
+                return;
+            }
+            let html = '';
+            currentData.polls.forEach((poll, index) => {
+                html += `
+                    <div class="item-list">
+                        <span><strong>❓ ${poll.question}</strong> (${poll.options.length} گزینه)</span>
+                        <button class="remove-btn" onclick="removeItem('polls', ${index})">🗑</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chat-list');
+            if (!currentData.chat || currentData.chat.length === 0) {
+                container.innerHTML = '<p style="color:#999;">هیچ پیام چتی وجود ندارد.</p>';
+                return;
+            }
+            let html = '';
+            currentData.chat.forEach((msg, index) => {
+                const senderLabel = msg.sender === 'admin' ? 'مدیر' : 'کاربر';
+                html += `
+                    <div class="item-list">
+                        <span><span style="color:#1a73e8;font-weight:bold;">${senderLabel}</span> ${msg.text}</span>
+                        <button class="remove-btn" onclick="removeItem('chat', ${index})">🗑</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderSettings() {
+            const container = document.getElementById('settings-list');
+            if (!currentData.settings) return;
+            let html = '';
+            for (const [key, value] of Object.entries(currentData.settings)) {
+                const checked = value ? 'checked' : '';
+                html += `
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ${checked} onchange="updateSetting('${key}', this.checked)">
+                            ${key}
+                        </label>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // ➕ عملیات اضافه کردن
+        // ============================================================
+        function addMessage() {
+            const input = document.getElementById('new-message-text');
+            const text = input.value.trim();
+            if (!text) { showStatus('❌ لطفاً متن پیام را وارد کنید', 'error'); return; }
+
+            if (!currentData.messages) currentData.messages = [];
+            currentData.messages.push({
+                id: currentData.messages.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                text: text
+            });
+            input.value = '';
+            renderAll();
+            showStatus('✅ پیام اضافه شد', 'success');
+        }
+
+        function addMusic() {
+            const name = document.getElementById('new-music-name').value.trim();
+            const artist = document.getElementById('new-music-artist').value.trim();
+            const play = document.getElementById('new-music-play').value.trim();
+            if (!name || !artist) { showStatus('❌ نام و خواننده را وارد کنید', 'error'); return; }
+
+            if (!currentData.music) currentData.music = [];
+            currentData.music.push({
+                id: currentData.music.length + 1,
+                name: name,
+                artist: artist,
+                play: play || '#',
+                download: '#'
+            });
+            document.getElementById('new-music-name').value = '';
+            document.getElementById('new-music-artist').value = '';
+            document.getElementById('new-music-play').value = '';
+            renderAll();
+            showStatus('✅ آهنگ اضافه شد', 'success');
+        }
+
+        function addPoll() {
+            const question = document.getElementById('new-poll-question').value.trim();
+            const optionsText = document.getElementById('new-poll-options').value.trim();
+            if (!question || !optionsText) { showStatus('❌ سوال و گزینه‌ها را وارد کنید', 'error'); return; }
+
+            const options = optionsText.split(',').map(text => ({
+                text: text.trim(),
+                votes: 0
+            }));
+
+            if (!currentData.polls) currentData.polls = [];
+            currentData.polls.push({
+                id: currentData.polls.length + 1,
+                question: question,
+                options: options
+            });
+            document.getElementById('new-poll-question').value = '';
+            document.getElementById('new-poll-options').value = '';
+            renderAll();
+            showStatus('✅ نظرسنجی اضافه شد', 'success');
+        }
+
+        function addChat() {
+            const sender = document.getElementById('new-chat-sender').value;
+            const text = document.getElementById('new-chat-text').value.trim();
+            if (!text) { showStatus('❌ متن پیام را وارد کنید', 'error'); return; }
+
+            if (!currentData.chat) currentData.chat = [];
+            currentData.chat.push({
+                id: currentData.chat.length + 1,
+                sender: sender,
+                text: text,
+                time: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' })
+            });
+            document.getElementById('new-chat-text').value = '';
+            renderAll();
+            showStatus('✅ پیام چت اضافه شد', 'success');
+        }
+
+        // ============================================================
+        // 🗑 حذف آیتم
+        // ============================================================
+        function removeItem(section, index) {
+            if (!confirm('آیا مطمئن هستید؟')) return;
+            currentData[section].splice(index, 1);
+            renderAll();
+            showStatus('✅ آیتم حذف شد', 'success');
+        }
+
+        // ============================================================
+        // ⚙️ به‌روزرسانی تنظیمات
+        // ============================================================
+        function updateSetting(key, value) {
+            currentData.settings[key] = value;
+            showStatus(`✅ تنظیم ${key} ${value ? 'فعال' : 'غیرفعال'} شد`, 'success');
+        }
+
+        function saveSettings() {
+            showStatus('✅ تنظیمات ذخیره شد. حالا روی "ذخیره در گیت‌هاب" کلیک کنید.', 'info');
+        }
+
+        // ============================================================
+        // 🔄 تغییر تب
+        // ============================================================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // ============================================================
+        // 🚀 بارگذاری اولیه
+        // ============================================================
         fetchData();
     </script>
 </body>
