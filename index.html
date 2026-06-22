@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سgایت سرور AZ_NY</title>
+    <title>سایت سرور AZ_NY</title>
     <style>
-        /* ===== استایل‌های کامل (قبلی) ===== */
+        /* ===== استایل‌های کامل (همان‌های قبل) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Tahoma, Arial, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; min-height: 100vh; }
         .admin-btn { position: fixed; bottom: 20px; left: 20px; background: #1a73e8; color: white; border: none; padding: 14px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(26,115,232,0.4); z-index: 999; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
@@ -59,25 +59,37 @@
         .admin-tab-content { display: none; padding: 20px; background: white; border-radius: 0 8px 8px 8px; border: 1px solid #e8f0fe; }
         .admin-tab-content.active { display: block; }
         .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .debug-box { background: #263238; color: #aed581; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; direction: ltr; text-align: left; margin-top: 10px; display: none; }
+        .debug-box.show { display: block; }
     </style>
 </head>
 <body>
 
+    <!-- ===== دکمه پنل مدیریت ===== -->
     <button class="admin-btn" onclick="openAdminPanel()">
         <span class="icon">⚙️</span>
         پنل مدیریت
     </button>
 
+    <!-- ===== مودال پنل مدیریت ===== -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeAdminPanel()">✕ بستن</button>
             <h1 style="text-align:center; color:#1a73e8;">📝 پنل مدیریت</h1>
+            
             <div id="adminStatus" class="status"></div>
+            
             <div class="btn-group">
-                <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری داده</button>
-                <button class="btn btn-warning" onclick="saveToJsonBin()">💾 ذخیره در JSONBin</button>
+                <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری از گیت‌هاب</button>
+                <button class="btn btn-warning" onclick="saveToGitHub()">💾 ذخیره در گیت‌هاب</button>
+                <button class="btn btn-danger" onclick="toggleDebug()">🐛 نمایش خطاها</button>
             </div>
+            
+            <div id="debugBox" class="debug-box"></div>
+            
             <hr style="margin: 20px 0;">
+            
+            <!-- تب‌ها -->
             <div>
                 <div class="admin-tab active" onclick="switchAdminTab('messages')">💬 پیام‌ها</div>
                 <div class="admin-tab" onclick="switchAdminTab('music')">🎵 موسیقی</div>
@@ -85,155 +97,256 @@
                 <div class="admin-tab" onclick="switchAdminTab('chat')">💬 چت</div>
                 <div class="admin-tab" onclick="switchAdminTab('settings')">⚙️ تنظیمات</div>
             </div>
-            <div id="admin-tab-messages" class="admin-tab-content active"><div class="admin-section"><h2>💬 پیام‌ها</h2><div id="admin-messages-list"></div><div class="form-group"><label>متن پیام جدید:</label><input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید..."></div><button class="btn btn-success" onclick="addMessageAdmin()">➕ اضافه کردن پیام</button></div></div>
-            <div id="admin-tab-music" class="admin-tab-content"><div class="admin-section"><h2>🎵 موسیقی</h2><div id="admin-music-list"></div><div class="form-group"><label>نام آهنگ:</label><input type="text" id="new-music-name" placeholder="نام آهنگ..."></div><div class="form-group"><label>خواننده:</label><input type="text" id="new-music-artist" placeholder="نام خواننده..."></div><div class="form-group"><label>لینک پخش:</label><input type="text" id="new-music-play" placeholder="https://..."></div><button class="btn btn-success" onclick="addMusicAdmin()">➕ اضافه کردن آهنگ</button></div></div>
-            <div id="admin-tab-polls" class="admin-tab-content"><div class="admin-section"><h2>📊 نظرسنجی</h2><div id="admin-polls-list"></div><div class="form-group"><label>سوال نظرسنجی:</label><input type="text" id="new-poll-question" placeholder="سوال را وارد کنید..."></div><div class="form-group"><label>گزینه‌ها (با کاما جدا کنید):</label><input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3"></div><button class="btn btn-success" onclick="addPollAdmin()">➕ اضافه کردن نظرسنجی</button></div></div>
-            <div id="admin-tab-chat" class="admin-tab-content"><div class="admin-section"><h2>💬 چت</h2><div id="admin-chat-list"></div><div class="form-group"><label>فرستنده:</label><select id="new-chat-sender"><option value="user">کاربر</option><option value="admin">مدیر</option></select></div><div class="form-group"><label>متن پیام:</label><input type="text" id="new-chat-text" placeholder="متن پیام..."></div><button class="btn btn-success" onclick="addChatAdmin()">➕ اضافه کردن پیام</button></div></div>
-            <div id="admin-tab-settings" class="admin-tab-content"><div class="admin-section"><h2>⚙️ تنظیمات</h2><div id="admin-settings-list"></div></div></div>
-            <div style="text-align:center; margin-top:20px; color:#999; font-size:12px;">آخرین تغییر: <span id="adminLastUpdate">-</span></div>
+
+            <!-- تب پیام‌ها -->
+            <div id="admin-tab-messages" class="admin-tab-content active">
+                <div class="admin-section">
+                    <h2>💬 پیام‌ها</h2>
+                    <div id="admin-messages-list"></div>
+                    <div class="form-group">
+                        <label>متن پیام جدید:</label>
+                        <input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید...">
+                    </div>
+                    <button class="btn btn-success" onclick="addMessageAdmin()">➕ اضافه کردن پیام</button>
+                </div>
+            </div>
+
+            <!-- تب موسیقی -->
+            <div id="admin-tab-music" class="admin-tab-content">
+                <div class="admin-section">
+                    <h2>🎵 موسیقی</h2>
+                    <div id="admin-music-list"></div>
+                    <div class="form-group">
+                        <label>نام آهنگ:</label>
+                        <input type="text" id="new-music-name" placeholder="نام آهنگ...">
+                    </div>
+                    <div class="form-group">
+                        <label>خواننده:</label>
+                        <input type="text" id="new-music-artist" placeholder="نام خواننده...">
+                    </div>
+                    <div class="form-group">
+                        <label>لینک پخش:</label>
+                        <input type="text" id="new-music-play" placeholder="https://...">
+                    </div>
+                    <button class="btn btn-success" onclick="addMusicAdmin()">➕ اضافه کردن آهنگ</button>
+                </div>
+            </div>
+
+            <!-- تب نظرسنجی -->
+            <div id="admin-tab-polls" class="admin-tab-content">
+                <div class="admin-section">
+                    <h2>📊 نظرسنجی</h2>
+                    <div id="admin-polls-list"></div>
+                    <div class="form-group">
+                        <label>سوال نظرسنجی:</label>
+                        <input type="text" id="new-poll-question" placeholder="سوال را وارد کنید...">
+                    </div>
+                    <div class="form-group">
+                        <label>گزینه‌ها (با کاما جدا کنید):</label>
+                        <input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3">
+                    </div>
+                    <button class="btn btn-success" onclick="addPollAdmin()">➕ اضافه کردن نظرسنجی</button>
+                </div>
+            </div>
+
+            <!-- تب چت -->
+            <div id="admin-tab-chat" class="admin-tab-content">
+                <div class="admin-section">
+                    <h2>💬 چت</h2>
+                    <div id="admin-chat-list"></div>
+                    <div class="form-group">
+                        <label>فرستنده:</label>
+                        <select id="new-chat-sender">
+                            <option value="user">کاربر</option>
+                            <option value="admin">مدیر</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>متن پیام:</label>
+                        <input type="text" id="new-chat-text" placeholder="متن پیام...">
+                    </div>
+                    <button class="btn btn-success" onclick="addChatAdmin()">➕ اضافه کردن پیام</button>
+                </div>
+            </div>
+
+            <!-- تب تنظیمات -->
+            <div id="admin-tab-settings" class="admin-tab-content">
+                <div class="admin-section">
+                    <h2>⚙️ تنظیمات</h2>
+                    <div id="admin-settings-list"></div>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:20px; color:#999; font-size:12px;">
+                آخرین تغییر: <span id="adminLastUpdate">-</span>
+            </div>
         </div>
     </div>
 
+    <!-- ===== بخش اصلی سایت ===== -->
     <div class="container">
         <h1>📡 اطلاعات سرور AZ_NY</h1>
         <div id="mainContent" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
         <div class="timestamp" id="mainTimestamp"></div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- ===== اسکریپت با گیت‌هاب (خواندن و نوشتن) ===== -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 🔐 تنظیمات JSONBin (با Bin و کلید جدید شما)
+        // 🔐 تنظیمات گیت‌هاب
         // ============================================================
-        const JSONBIN_BIN_ID = '6a39af83f5f4af5e291fb234';
-        const JSONBIN_API_KEY = '$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        const GITHUB_TOKEN = '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';
+        const REPO_OWNER = 'IDHAMIDNULL';
+        const REPO_NAME = 'Test';
+        const FILE_PATH = 'AZ_NY.JSON';
+        const RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${FILE_PATH}`;
+        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
         let currentData = null;
+        let debugLogs = [];
 
         // ============================================================
-        // 📥 دریافت داده
+        // 📝 لاگ خطاها
+        // ============================================================
+        function logDebug(message, data = null) {
+            const timestamp = new Date().toLocaleTimeString('fa-IR');
+            const logEntry = `[${timestamp}] ${message}` + (data ? '\n' + JSON.stringify(data, null, 2) : '');
+            debugLogs.push(logEntry);
+            console.log(logEntry);
+            
+            const debugBox = document.getElementById('debugBox');
+            if (debugBox) {
+                debugBox.textContent = debugLogs.join('\n\n');
+                debugBox.scrollTop = debugBox.scrollHeight;
+            }
+        }
+
+        function toggleDebug() {
+            const box = document.getElementById('debugBox');
+            box.classList.toggle('show');
+            if (box.classList.contains('show')) {
+                box.textContent = debugLogs.join('\n\n');
+            }
+        }
+
+        // ============================================================
+        // 📥 دریافت داده از گیت‌هاب
         // ============================================================
         function fetchData() {
             const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = '<div class="loading">⏳ در حال بارگذاری اطلاعات...</div>';
-            showAdminStatus('⏳ در حال دریافت داده...', 'info');
+            mainContent.innerHTML = '<div class="loading">⏳ در حال دریافت از گیت‌هاب...</div>';
+            showAdminStatus('⏳ در حال دریافت داده از گیت‌هاب...', 'info');
+            logDebug('📥 شروع دریافت از گیت‌هاب');
 
-            fetch(JSONBIN_URL, {
-                headers: { 'X-Master-Key': JSONBIN_API_KEY }
-            })
+            fetch(RAW_URL + '?t=' + new Date().getTime())
             .then(response => {
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        // اگه Bin خالی بود، داده پیش‌فرض می‌سازیم
-                        return createDefaultData();
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                logDebug(`📡 پاسخ: وضعیت ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status} - فایل در گیت‌هاب پیدا نشد`);
                 return response.json();
             })
             .then(data => {
-                if (data && data.meta) {
-                    currentData = data;
-                } else {
-                    currentData = data.record;
-                }
+                currentData = data;
+                logDebug('✅ داده دریافت شد', data);
                 renderMainPage(currentData);
                 renderAdminPanel(currentData);
-                showAdminStatus('✅ داده با موفقیت بارگذاری شد', 'success');
+                showAdminStatus('✅ داده با موفقیت از گیت‌هاب بارگذاری شد', 'success');
+                document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR') + ' (از گیت‌هاب)';
             })
             .catch(error => {
+                logDebug('❌ خطا:', error.message);
                 mainContent.innerHTML = `<div class="error">❌ خطا: ${error.message}</div>`;
                 showAdminStatus('❌ خطا: ' + error.message, 'error');
             });
         }
 
         // ============================================================
-        // 📝 ایجاد داده پیش‌فرض
+        // 💾 ذخیره در گیت‌هاب (با توکن)
         // ============================================================
-        function createDefaultData() {
-            const defaultData = {
-                "meta": {
-                    "siteName": "private-love-site",
-                    "version": 1,
-                    "lastUpdate": new Date().toISOString().split('T')[0]
-                },
-                "settings": {
-                    "messagesEnabled": true,
-                    "musicEnabled": true,
-                    "pollEnabled": true,
-                    "chatEnabled": true
-                },
-                "messages": [
-                    { "id": 1, "date": new Date().toISOString().split('T')[0], "text": "به پنل مدیریت خوش آمدید!" }
-                ],
-                "music": [
-                    { "id": 1, "name": "Perfect", "artist": "Ed Sheeran", "play": "#", "download": "#" }
-                ],
-                "polls": [
-                    { "id": 1, "question": "حالت چطوره؟", "options": [{ "text": "عالی", "votes": 0 }, { "text": "خوب", "votes": 0 }, { "text": "معمولی", "votes": 0 }] }
-                ],
-                "chat": [
-                    { "id": 1, "sender": "admin", "text": "سلام! به سایت خوش آمدید", "time": new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }) }
-                ]
-            };
-
-            return fetch(JSONBIN_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': JSONBIN_API_KEY
-                },
-                body: JSON.stringify(defaultData)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('خطا در ایجاد داده پیش‌فرض');
-                return response.json();
-            })
-            .then(() => {
-                showAdminStatus('✅ داده پیش‌فرض ایجاد شد', 'success');
-                return defaultData;
-            });
-        }
-
-        // ============================================================
-        // 💾 ذخیره در JSONBin
-        // ============================================================
-        function saveToJsonBin() {
+        function saveToGitHub() {
             if (!currentData) {
-                showAdminStatus('❌ داده‌ای برای ذخیره وجود ندارد', 'error');
+                showAdminStatus('❌ داده‌ای برای ذخیره وجود ندارد. ابتدا بارگذاری کنید.', 'error');
+                logDebug('❌ تلاش برای ذخیره بدون داده');
                 return;
             }
 
-            showAdminStatus('⏳ در حال ذخیره در JSONBin...', 'info');
+            showAdminStatus('⏳ مرحله 1: دریافت اطلاعات فایل...', 'info');
+            logDebug('💾 شروع فرآیند ذخیره');
 
-            fetch(JSONBIN_URL, {
-                method: 'PUT',
+            // مرحله 1: دریافت SHA فایل
+            fetch(API_URL, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': JSONBIN_API_KEY
-                },
-                body: JSON.stringify(currentData)
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
             })
             .then(response => {
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                logDebug(`📡 پاسخ دریافت SHA: وضعیت ${response.status}`);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('فایل AZ_NY.JSON در مخزن وجود ندارد. ابتدا فایل را ایجاد کنید.');
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 return response.json();
             })
             .then(data => {
-                if (data.record) {
-                    showAdminStatus('✅ فایل با موفقیت در JSONBin ذخیره شد!', 'success');
+                const sha = data.sha;
+                logDebug('✅ SHA دریافت شد:', sha);
+                
+                showAdminStatus('⏳ مرحله 2: در حال ذخیره فایل...', 'info');
+                
+                // مرحله 2: ذخیره فایل با SHA
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
+                logDebug('📦 محتوای JSON آماده شد (طول: ' + content.length + ' کاراکتر)');
+                
+                return fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: 'به‌روزرسانی از پنل مدیریت | ' + new Date().toLocaleString('fa-IR'),
+                        content: content,
+                        sha: sha
+                    })
+                });
+            })
+            .then(response => {
+                logDebug(`📡 پاسخ ذخیره: وضعیت ${response.status}`);
+                if (!response.ok) {
+                    return response.json().then(errData => {
+                        logDebug('❌ جزئیات خطا:', errData);
+                        throw new Error(`HTTP ${response.status}: ${errData.message || 'خطای ناشناخته'}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.content) {
+                    logDebug('✅ ذخیره موفق!', data);
+                    showAdminStatus('✅ فایل با موفقیت در گیت‌هاب ذخیره شد!', 'success');
                     document.getElementById('adminLastUpdate').textContent = new Date().toLocaleString('fa-IR');
-                    document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR');
+                    document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR') + ' (ذخیره در گیت‌هاب)';
                 } else {
+                    logDebug('⚠️ پاسخ غیرمنتظره:', data);
                     showAdminStatus('⚠️ پاسخ غیرمنتظره: ' + JSON.stringify(data), 'error');
                 }
             })
             .catch(error => {
+                logDebug('❌ خطا:', error.message);
                 showAdminStatus('❌ خطا: ' + error.message, 'error');
+                if (error.message.includes('404')) {
+                    showAdminStatus('❌ فایل AZ_NY.JSON در مخزن وجود ندارد. لطفاً ابتدا فایل را ایجاد کنید.', 'error');
+                }
             });
         }
 
         // ============================================================
-        // 🖼 توابع رندر (همان‌های قبلی)
+        // 🖼 توابع رندر (کامل)
         // ============================================================
         function renderMainPage(data) {
             const container = document.getElementById('mainContent');
@@ -275,7 +388,6 @@
                 html += `</div>`;
             }
             container.innerHTML = html || '<p style="color:#999;">هیچ داده‌ای موجود نیست.</p>';
-            document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR');
         }
 
         function renderAdminPanel(data) {
@@ -390,6 +502,7 @@
             input.value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ پیام اضافه شد', 'success');
+            logDebug('➕ پیام جدید اضافه شد:', text);
         }
 
         function addMusicAdmin() {
@@ -404,6 +517,7 @@
             document.getElementById('new-music-play').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ آهنگ اضافه شد', 'success');
+            logDebug('➕ آهنگ جدید اضافه شد:', name);
         }
 
         function addPollAdmin() {
@@ -417,6 +531,7 @@
             document.getElementById('new-poll-options').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ نظرسنجی اضافه شد', 'success');
+            logDebug('➕ نظرسنجی جدید اضافه شد:', question);
         }
 
         function addChatAdmin() {
@@ -433,6 +548,7 @@
             document.getElementById('new-chat-text').value = '';
             renderAdminPanel(currentData);
             showAdminStatus('✅ پیام چت اضافه شد', 'success');
+            logDebug('➕ پیام چت جدید اضافه شد:', text);
         }
 
         // ============================================================
@@ -443,6 +559,7 @@
             currentData[section].splice(index, 1);
             renderAdminPanel(currentData);
             showAdminStatus('✅ آیتم حذف شد', 'success');
+            logDebug(`🗑 آیتم از ${section} حذف شد`);
         }
 
         // ============================================================
@@ -451,6 +568,7 @@
         function updateSettingAdmin(key, value) {
             currentData.settings[key] = value;
             showAdminStatus(`✅ تنظیم ${key} ${value ? 'فعال' : 'غیرفعال'} شد`, 'success');
+            logDebug(`⚙️ تنظیم ${key} = ${value}`);
         }
 
         // ============================================================
@@ -482,18 +600,21 @@
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('show');
             document.body.style.overflow = 'hidden';
+            logDebug('🔓 پنل مدیریت باز شد');
         }
 
         function closeAdminPanel() {
             document.getElementById('adminModal').classList.remove('show');
             document.body.style.overflow = 'auto';
+            logDebug('🔒 پنل مدیریت بسته شد');
         }
 
         // ============================================================
         // 🚀 بارگذاری اولیه
         // ============================================================
+        logDebug('🚀 سایت بارگذاری شد');
         fetchData();
     </script>
 
 </body>
-</html>
+    </html>
