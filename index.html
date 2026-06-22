@@ -1,54 +1,82 @@
 <!DOCTYPE html>
-<html dir="ltr">
+<html dir="rtl" lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اطلاعات سرور AZ_NY</title>
     <style>
-        body { 
-            font-family: Tahoma, Arial, sans-serif; 
-            padding: 20px; 
-            background: #f0f2f5; 
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            padding: 20px;
+            background: #f0f2f5;
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
         }
         .container {
-            max-width: 650px;
+            max-width: 800px;
             width: 100%;
             background: white;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-        h2 { 
-            text-align: center; 
-            color: #1a73e8; 
-            margin-top: 0;
-            border-bottom: 2px solid #e8f0fe;
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            border-bottom: 3px solid #e8f0fe;
             padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border-right: 4px solid #1a73e8;
+        }
+        .section h2 {
+            color: #1a73e8;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .item {
             display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e0e0e0;
         }
-        .item:last-child { border-bottom: none; }
-        .key { 
-            font-weight: bold; 
-            width: 140px; 
+        .item:last-child {
+            border-bottom: none;
+        }
+        .key {
+            font-weight: bold;
+            width: 120px;
             color: #555;
             flex-shrink: 0;
         }
-        .value { 
-            color: #111; 
+        .value {
+            color: #222;
             word-break: break-word;
         }
-        .loading { 
-            text-align: center; 
-            color: #666; 
+        .badge {
+            background: #1a73e8;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
             padding: 40px 0;
             font-size: 16px;
         }
@@ -66,13 +94,13 @@
             padding: 10px;
             border-radius: 8px;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .retry-btn {
             background: #1a73e8;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 30px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 15px;
@@ -80,91 +108,190 @@
             margin: 20px auto 0;
             transition: background 0.3s;
         }
-        .retry-btn:hover { background: #1557b0; }
+        .retry-btn:hover {
+            background: #1557b0;
+        }
         .timestamp {
             text-align: center;
             color: #999;
             font-size: 12px;
             margin-top: 20px;
         }
+        .music-item, .poll-item, .chat-item, .msg-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .chat-item {
+            border-right: 3px solid #1a73e8;
+        }
+        .chat-item .sender {
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        .chat-item .time {
+            color: #999;
+            font-size: 12px;
+        }
+        .option-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>📡 اطلاعات سرور AZ_NY</h2>
+        <h1>📡 اطلاعات سرور AZ_NY</h1>
         <div id="serverInfo" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
         <button class="retry-btn" onclick="fetchData()">🔄 تلاش مجدد</button>
         <div class="timestamp" id="timestamp"></div>
     </div>
 
     <script>
-        // آدرس فایل JSON در همان مخزن گیت‌هاب
-        const targetUrl = 'AZ_NY.json';
+        // آدرس مستقیم فایل JSON در مخزن شما
+        const targetUrl = 'https://raw.githubusercontent.com/IDHAMIDNULL/Test/main/AZ_NY.JSON';
 
         function fetchData() {
             const infoDiv = document.getElementById('serverInfo');
             infoDiv.className = 'loading';
-            infoDiv.innerHTML = '⏳ در حال دریافت اطلاعات از سرور...';
+            infoDiv.innerHTML = '⏳ در حال دریافت اطلاعات...';
 
             fetch(targetUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`خطا: وضعیت HTTP ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // نمایش داده‌ها
-                let html = '<div class="success">✅ داده با موفقیت دریافت شد</div>';
-                
-                // بررسی اینکه داده آرایه است یا آبجکت
-                if (Array.isArray(data)) {
-                    data.forEach((item, index) => {
-                        html += `<div style="margin-top:15px; padding:10px; background:#f8f9fa; border-radius:8px;">`;
-                        html += `<strong>#${index + 1}</strong>`;
-                        for (const [key, value] of Object.entries(item)) {
-                            const displayValue = typeof value === 'object' ? JSON.stringify(value) : value;
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status} - فایل پیدا نشد`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let html = '<div class="success">✅ داده با موفقیت دریافت شد</div>';
+
+                    // ===== متا =====
+                    if (data.meta) {
+                        html += `<div class="section">
+                            <h2>📋 اطلاعات پایه</h2>`;
+                        for (const [key, value] of Object.entries(data.meta)) {
                             html += `
                                 <div class="item">
                                     <span class="key">${key}:</span>
-                                    <span class="value">${displayValue}</span>
+                                    <span class="value">${value}</span>
                                 </div>
                             `;
                         }
                         html += `</div>`;
-                    });
-                } else {
-                    // اگر داده یک آبجکت است
-                    for (const [key, value] of Object.entries(data)) {
-                        const displayValue = typeof value === 'object' ? JSON.stringify(value, null, 2) : value;
-                        html += `
-                            <div class="item">
-                                <span class="key">${key}:</span>
-                                <span class="value">${displayValue}</span>
-                            </div>
-                        `;
                     }
-                }
 
-                infoDiv.className = '';
-                infoDiv.innerHTML = html;
+                    // ===== تنظیمات =====
+                    if (data.settings) {
+                        html += `<div class="section">
+                            <h2>⚙️ تنظیمات</h2>`;
+                        for (const [key, value] of Object.entries(data.settings)) {
+                            const status = value ? '✅ فعال' : '❌ غیرفعال';
+                            html += `
+                                <div class="item">
+                                    <span class="key">${key}:</span>
+                                    <span class="value">${status}</span>
+                                </div>
+                            `;
+                        }
+                        html += `</div>`;
+                    }
 
-                // نمایش زمان دریافت
-                document.getElementById('timestamp').textContent = 
-                    'آخرین دریافت: ' + new Date().toLocaleString('fa-IR');
-            })
-            .catch(error => {
-                infoDiv.className = 'error';
-                infoDiv.innerHTML = `
-                    ❌ دریافت داده با خطا مواجه شد.<br>
-                    <small>${error.message}</small><br>
-                    <small style="font-size:12px;">مطمئن شوید فایل AZ_NY.json در مخزن وجود دارد.</small>
-                `;
-                console.error('خطای دریافت:', error);
-            });
+                    // ===== پیام‌ها =====
+                    if (data.messages && data.messages.length > 0) {
+                        html += `<div class="section">
+                            <h2>💬 پیام‌ها <span class="badge">${data.messages.length}</span></h2>`;
+                        data.messages.forEach(msg => {
+                            html += `
+                                <div class="msg-item">
+                                    <div><strong>${msg.text}</strong></div>
+                                    <div style="color:#999;font-size:12px;">📅 ${msg.date}</div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    // ===== موسیقی =====
+                    if (data.music && data.music.length > 0) {
+                        html += `<div class="section">
+                            <h2>🎵 موسیقی <span class="badge">${data.music.length}</span></h2>`;
+                        data.music.forEach(song => {
+                            html += `
+                                <div class="music-item">
+                                    <div><strong>${song.name}</strong> - ${song.artist}</div>
+                                    <div style="font-size:12px;color:#1a73e8;">
+                                        <a href="${song.play}" target="_blank">▶ پخش</a> | 
+                                        <a href="${song.download}" target="_blank">⬇ دانلود</a>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    // ===== نظرسنجی =====
+                    if (data.polls && data.polls.length > 0) {
+                        html += `<div class="section">
+                            <h2>📊 نظرسنجی‌ها <span class="badge">${data.polls.length}</span></h2>`;
+                        data.polls.forEach(poll => {
+                            html += `
+                                <div class="poll-item">
+                                    <div><strong>❓ ${poll.question}</strong></div>`;
+                            poll.options.forEach(opt => {
+                                html += `
+                                    <div class="option-item">
+                                        <span>${opt.text}</span>
+                                        <span>${opt.votes} رای</span>
+                                    </div>
+                                `;
+                            });
+                            html += `</div>`;
+                        });
+                        html += `</div>`;
+                    }
+
+                    // ===== چت =====
+                    if (data.chat && data.chat.length > 0) {
+                        html += `<div class="section">
+                            <h2>💬 چت <span class="badge">${data.chat.length}</span></h2>`;
+                        data.chat.forEach(msg => {
+                            const senderLabel = msg.sender === 'admin' ? 'مدیر' : 'کاربر';
+                            html += `
+                                <div class="chat-item">
+                                    <span class="sender">${senderLabel}</span>
+                                    <span class="time">${msg.time}</span>
+                                    <div style="margin-top:4px;">${msg.text}</div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    infoDiv.className = '';
+                    infoDiv.innerHTML = html;
+                    document.getElementById('timestamp').textContent =
+                        'آخرین دریافت: ' + new Date().toLocaleString('fa-IR');
+                })
+                .catch(error => {
+                    infoDiv.className = 'error';
+                    infoDiv.innerHTML = `
+                        ❌ دریافت داده با خطا مواجه شد.<br>
+                        <small>${error.message}</small><br>
+                        <div style="background:#fff3e0;padding:10px;border-radius:6px;margin-top:10px;font-size:12px;color:#e65100;">
+                            📁 مسیر فایل: ${targetUrl}
+                        </div>
+                        <small style="font-size:12px;display:block;margin-top:10px;">
+                            راهنمایی: مطمئن شوید فایل AZ_NY.JSON در مخزن موجود است.
+                        </small>
+                    `;
+                    console.error('خطای دریافت:', error);
+                });
         }
 
-        // اجرا هنگام بارگذاری صفحه
         fetchData();
     </script>
 </body>
