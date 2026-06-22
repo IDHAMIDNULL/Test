@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سایت سرور AZ_NY</title>
+    <title>سgایت سرور AZ_NY</title>
     <style>
-        /* ===== استایل‌های کامل ===== */
+        /* ===== استایل‌های کامل (قبلی) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Tahoma, Arial, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; min-height: 100vh; }
         .admin-btn { position: fixed; bottom: 20px; left: 20px; background: #1a73e8; color: white; border: none; padding: 14px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(26,115,232,0.4); z-index: 999; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
@@ -63,28 +63,21 @@
 </head>
 <body>
 
-    <!-- ===== دکمه پنل مدیریت ===== -->
     <button class="admin-btn" onclick="openAdminPanel()">
         <span class="icon">⚙️</span>
         پنل مدیریت
     </button>
 
-    <!-- ===== مودال پنل مدیریت ===== -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeAdminPanel()">✕ بستن</button>
             <h1 style="text-align:center; color:#1a73e8;">📝 پنل مدیریت</h1>
-            
             <div id="adminStatus" class="status"></div>
-            
             <div class="btn-group">
                 <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری داده</button>
                 <button class="btn btn-warning" onclick="saveToJsonBin()">💾 ذخیره در JSONBin</button>
             </div>
-            
             <hr style="margin: 20px 0;">
-            
-            <!-- تب‌ها -->
             <div>
                 <div class="admin-tab active" onclick="switchAdminTab('messages')">💬 پیام‌ها</div>
                 <div class="admin-tab" onclick="switchAdminTab('music')">🎵 موسیقی</div>
@@ -92,114 +85,33 @@
                 <div class="admin-tab" onclick="switchAdminTab('chat')">💬 چت</div>
                 <div class="admin-tab" onclick="switchAdminTab('settings')">⚙️ تنظیمات</div>
             </div>
-
-            <!-- تب پیام‌ها -->
-            <div id="admin-tab-messages" class="admin-tab-content active">
-                <div class="admin-section">
-                    <h2>💬 پیام‌ها</h2>
-                    <div id="admin-messages-list"></div>
-                    <div class="form-group">
-                        <label>متن پیام جدید:</label>
-                        <input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید...">
-                    </div>
-                    <button class="btn btn-success" onclick="addMessageAdmin()">➕ اضافه کردن پیام</button>
-                </div>
-            </div>
-
-            <!-- تب موسیقی -->
-            <div id="admin-tab-music" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>🎵 موسیقی</h2>
-                    <div id="admin-music-list"></div>
-                    <div class="form-group">
-                        <label>نام آهنگ:</label>
-                        <input type="text" id="new-music-name" placeholder="نام آهنگ...">
-                    </div>
-                    <div class="form-group">
-                        <label>خواننده:</label>
-                        <input type="text" id="new-music-artist" placeholder="نام خواننده...">
-                    </div>
-                    <div class="form-group">
-                        <label>لینک پخش:</label>
-                        <input type="text" id="new-music-play" placeholder="https://...">
-                    </div>
-                    <button class="btn btn-success" onclick="addMusicAdmin()">➕ اضافه کردن آهنگ</button>
-                </div>
-            </div>
-
-            <!-- تب نظرسنجی -->
-            <div id="admin-tab-polls" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>📊 نظرسنجی</h2>
-                    <div id="admin-polls-list"></div>
-                    <div class="form-group">
-                        <label>سوال نظرسنجی:</label>
-                        <input type="text" id="new-poll-question" placeholder="سوال را وارد کنید...">
-                    </div>
-                    <div class="form-group">
-                        <label>گزینه‌ها (با کاما جدا کنید):</label>
-                        <input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3">
-                    </div>
-                    <button class="btn btn-success" onclick="addPollAdmin()">➕ اضافه کردن نظرسنجی</button>
-                </div>
-            </div>
-
-            <!-- تب چت -->
-            <div id="admin-tab-chat" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>💬 چت</h2>
-                    <div id="admin-chat-list"></div>
-                    <div class="form-group">
-                        <label>فرستنده:</label>
-                        <select id="new-chat-sender">
-                            <option value="user">کاربر</option>
-                            <option value="admin">مدیر</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>متن پیام:</label>
-                        <input type="text" id="new-chat-text" placeholder="متن پیام...">
-                    </div>
-                    <button class="btn btn-success" onclick="addChatAdmin()">➕ اضافه کردن پیام</button>
-                </div>
-            </div>
-
-            <!-- تب تنظیمات -->
-            <div id="admin-tab-settings" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>⚙️ تنظیمات</h2>
-                    <div id="admin-settings-list"></div>
-                </div>
-            </div>
-
-            <div style="text-align:center; margin-top:20px; color:#999; font-size:12px;">
-                آخرین تغییر: <span id="adminLastUpdate">-</span>
-            </div>
+            <div id="admin-tab-messages" class="admin-tab-content active"><div class="admin-section"><h2>💬 پیام‌ها</h2><div id="admin-messages-list"></div><div class="form-group"><label>متن پیام جدید:</label><input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید..."></div><button class="btn btn-success" onclick="addMessageAdmin()">➕ اضافه کردن پیام</button></div></div>
+            <div id="admin-tab-music" class="admin-tab-content"><div class="admin-section"><h2>🎵 موسیقی</h2><div id="admin-music-list"></div><div class="form-group"><label>نام آهنگ:</label><input type="text" id="new-music-name" placeholder="نام آهنگ..."></div><div class="form-group"><label>خواننده:</label><input type="text" id="new-music-artist" placeholder="نام خواننده..."></div><div class="form-group"><label>لینک پخش:</label><input type="text" id="new-music-play" placeholder="https://..."></div><button class="btn btn-success" onclick="addMusicAdmin()">➕ اضافه کردن آهنگ</button></div></div>
+            <div id="admin-tab-polls" class="admin-tab-content"><div class="admin-section"><h2>📊 نظرسنجی</h2><div id="admin-polls-list"></div><div class="form-group"><label>سوال نظرسنجی:</label><input type="text" id="new-poll-question" placeholder="سوال را وارد کنید..."></div><div class="form-group"><label>گزینه‌ها (با کاما جدا کنید):</label><input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3"></div><button class="btn btn-success" onclick="addPollAdmin()">➕ اضافه کردن نظرسنجی</button></div></div>
+            <div id="admin-tab-chat" class="admin-tab-content"><div class="admin-section"><h2>💬 چت</h2><div id="admin-chat-list"></div><div class="form-group"><label>فرستنده:</label><select id="new-chat-sender"><option value="user">کاربر</option><option value="admin">مدیر</option></select></div><div class="form-group"><label>متن پیام:</label><input type="text" id="new-chat-text" placeholder="متن پیام..."></div><button class="btn btn-success" onclick="addChatAdmin()">➕ اضافه کردن پیام</button></div></div>
+            <div id="admin-tab-settings" class="admin-tab-content"><div class="admin-section"><h2>⚙️ تنظیمات</h2><div id="admin-settings-list"></div></div></div>
+            <div style="text-align:center; margin-top:20px; color:#999; font-size:12px;">آخرین تغییر: <span id="adminLastUpdate">-</span></div>
         </div>
     </div>
 
-    <!-- ===== بخش اصلی سایت ===== -->
     <div class="container">
         <h1>📡 اطلاعات سرور AZ_NY</h1>
         <div id="mainContent" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
         <div class="timestamp" id="mainTimestamp"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- ===== اسکریپت JSONBin با اطلاعات شما ===== -->
-    <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 🔐 تنظیمات JSONBin (با اطلاعات شما)
+        // 🔐 تنظیمات JSONBin (با Bin و کلید جدید شما)
         // ============================================================
-        const JSONBIN_BIN_ID = '6a39abe9da38895dfeee1a82';
-        const JSONBIN_API_KEY = '6a39abbda8b6024c762596d9';
+        const JSONBIN_BIN_ID = '6a39af83f5f4af5e291fb234';
+        const JSONBIN_API_KEY = '$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         let currentData = null;
 
         // ============================================================
-        // 📥 دریافت داده از JSONBin
+        // 📥 دریافت داده
         // ============================================================
         function fetchData() {
             const mainContent = document.getElementById('mainContent');
@@ -210,18 +122,76 @@
                 headers: { 'X-Master-Key': JSONBIN_API_KEY }
             })
             .then(response => {
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // اگه Bin خالی بود، داده پیش‌فرض می‌سازیم
+                        return createDefaultData();
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 return response.json();
             })
             .then(data => {
-                currentData = data.record;
+                if (data && data.meta) {
+                    currentData = data;
+                } else {
+                    currentData = data.record;
+                }
                 renderMainPage(currentData);
                 renderAdminPanel(currentData);
                 showAdminStatus('✅ داده با موفقیت بارگذاری شد', 'success');
             })
             .catch(error => {
-                mainContent.innerHTML = `<div class="error">❌ خطا در بارگذاری: ${error.message}</div>`;
+                mainContent.innerHTML = `<div class="error">❌ خطا: ${error.message}</div>`;
                 showAdminStatus('❌ خطا: ' + error.message, 'error');
+            });
+        }
+
+        // ============================================================
+        // 📝 ایجاد داده پیش‌فرض
+        // ============================================================
+        function createDefaultData() {
+            const defaultData = {
+                "meta": {
+                    "siteName": "private-love-site",
+                    "version": 1,
+                    "lastUpdate": new Date().toISOString().split('T')[0]
+                },
+                "settings": {
+                    "messagesEnabled": true,
+                    "musicEnabled": true,
+                    "pollEnabled": true,
+                    "chatEnabled": true
+                },
+                "messages": [
+                    { "id": 1, "date": new Date().toISOString().split('T')[0], "text": "به پنل مدیریت خوش آمدید!" }
+                ],
+                "music": [
+                    { "id": 1, "name": "Perfect", "artist": "Ed Sheeran", "play": "#", "download": "#" }
+                ],
+                "polls": [
+                    { "id": 1, "question": "حالت چطوره؟", "options": [{ "text": "عالی", "votes": 0 }, { "text": "خوب", "votes": 0 }, { "text": "معمولی", "votes": 0 }] }
+                ],
+                "chat": [
+                    { "id": 1, "sender": "admin", "text": "سلام! به سایت خوش آمدید", "time": new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }) }
+                ]
+            };
+
+            return fetch(JSONBIN_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify(defaultData)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('خطا در ایجاد داده پیش‌فرض');
+                return response.json();
+            })
+            .then(() => {
+                showAdminStatus('✅ داده پیش‌فرض ایجاد شد', 'success');
+                return defaultData;
             });
         }
 
@@ -263,7 +233,7 @@
         }
 
         // ============================================================
-        // 🖼 توابع رندر
+        // 🖼 توابع رندر (همان‌های قبلی)
         // ============================================================
         function renderMainPage(data) {
             const container = document.getElementById('mainContent');
