@@ -5,25 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اطلاعات سرور AZ_NY</title>
     <style>
-        body { font-family: Tahoma; padding: 20px; background: #f0f2f5; }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        body { 
+            font-family: Tahoma, Arial, sans-serif; 
+            padding: 20px; 
+            background: #f0f2f5; 
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        h2 { text-align: center; color: #1a73e8; margin-top: 0; }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2 { 
+            text-align: center; 
+            color: #1a73e8; 
+            margin-top: 0;
+            border-bottom: 2px solid #e8f0fe;
+            padding-bottom: 15px;
+        }
         .item {
             display: flex;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
         .item:last-child { border-bottom: none; }
-        .key { font-weight: bold; width: 120px; color: #555; }
-        .value { color: #111; word-break: break-word; }
-        .loading { text-align: center; color: #666; padding: 30px 0; }
+        .key { 
+            font-weight: bold; 
+            width: 140px; 
+            color: #555;
+            flex-shrink: 0;
+        }
+        .value { 
+            color: #111; 
+            word-break: break-word;
+        }
+        .loading { 
+            text-align: center; 
+            color: #666; 
+            padding: 40px 0;
+            font-size: 16px;
+        }
         .error {
             background: #fce4ec;
             color: #c62828;
@@ -32,87 +60,111 @@
             text-align: center;
             margin: 10px 0;
         }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
         .retry-btn {
             background: #1a73e8;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             display: block;
-            margin: 15px auto 0;
+            margin: 20px auto 0;
+            transition: background 0.3s;
         }
         .retry-btn:hover { background: #1557b0; }
+        .timestamp {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>📡 اطلاعات سرور AZ_NY</h2>
-        <div id="serverInfo" class="loading">⏳ در حال دریافت اطلاعات...</div>
+        <div id="serverInfo" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
         <button class="retry-btn" onclick="fetchData()">🔄 تلاش مجدد</button>
+        <div class="timestamp" id="timestamp"></div>
     </div>
 
     <script>
-        const targetUrl = 'https://litebase.ir/code/servers/AZ_NY.json';
-        
-        // لیست پروکسی‌های مختلف برای اطمینان بیشتر
-        const proxies = [
-            url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-            url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            url => `https://thingproxy.freeboard.io/fetch/${url}`
-        ];
-
-        let currentProxyIndex = 0;
+        // آدرس فایل JSON در همان مخزن گیت‌هاب
+        const targetUrl = 'AZ_NY.json';
 
         function fetchData() {
             const infoDiv = document.getElementById('serverInfo');
             infoDiv.className = 'loading';
-            infoDiv.innerHTML = '⏳ در حال دریافت اطلاعات... (تلاش ' + (currentProxyIndex + 1) + ' از ' + proxies.length + ')';
+            infoDiv.innerHTML = '⏳ در حال دریافت اطلاعات از سرور...';
 
-            if (currentProxyIndex >= proxies.length) {
-                currentProxyIndex = 0;
-            }
-
-            const proxyUrl = proxies[currentProxyIndex](targetUrl);
-            
-            fetch(proxyUrl)
+            fetch(targetUrl)
             .then(response => {
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`خطا: وضعیت HTTP ${response.status}`);
+                }
                 return response.json();
             })
             .then(data => {
-                let html = '';
-                for (const [key, value] of Object.entries(data)) {
-                    const displayValue = typeof value === 'object' ? JSON.stringify(value, null, 2) : value;
-                    html += `
-                        <div class="item">
-                            <span class="key">${key}:</span>
-                            <span class="value">${displayValue}</span>
-                        </div>
-                    `;
+                // نمایش داده‌ها
+                let html = '<div class="success">✅ داده با موفقیت دریافت شد</div>';
+                
+                // بررسی اینکه داده آرایه است یا آبجکت
+                if (Array.isArray(data)) {
+                    data.forEach((item, index) => {
+                        html += `<div style="margin-top:15px; padding:10px; background:#f8f9fa; border-radius:8px;">`;
+                        html += `<strong>#${index + 1}</strong>`;
+                        for (const [key, value] of Object.entries(item)) {
+                            const displayValue = typeof value === 'object' ? JSON.stringify(value) : value;
+                            html += `
+                                <div class="item">
+                                    <span class="key">${key}:</span>
+                                    <span class="value">${displayValue}</span>
+                                </div>
+                            `;
+                        }
+                        html += `</div>`;
+                    });
+                } else {
+                    // اگر داده یک آبجکت است
+                    for (const [key, value] of Object.entries(data)) {
+                        const displayValue = typeof value === 'object' ? JSON.stringify(value, null, 2) : value;
+                        html += `
+                            <div class="item">
+                                <span class="key">${key}:</span>
+                                <span class="value">${displayValue}</span>
+                            </div>
+                        `;
+                    }
                 }
+
                 infoDiv.className = '';
                 infoDiv.innerHTML = html;
-                currentProxyIndex = 0;
+
+                // نمایش زمان دریافت
+                document.getElementById('timestamp').textContent = 
+                    'آخرین دریافت: ' + new Date().toLocaleString('fa-IR');
             })
             .catch(error => {
-                console.warn(`پروکسی ${currentProxyIndex + 1} ناموفق:`, error.message);
-                currentProxyIndex++;
-                if (currentProxyIndex < proxies.length) {
-                    fetchData();
-                } else {
-                    infoDiv.className = 'error';
-                    infoDiv.innerHTML = `
-                        ❌ دریافت داده با خطا مواجه شد.<br>
-                        <small>لطفاً اتصال اینترنت را بررسی کنید یا دکمه زیر را بزنید.</small>
-                        <br><br>
-                        <button class="retry-btn" onclick="fetchData()">🔄 تلاش مجدد</button>
-                    `;
-                }
+                infoDiv.className = 'error';
+                infoDiv.innerHTML = `
+                    ❌ دریافت داده با خطا مواجه شد.<br>
+                    <small>${error.message}</small><br>
+                    <small style="font-size:12px;">مطمئن شوید فایل AZ_NY.json در مخزن وجود دارد.</small>
+                `;
+                console.error('خطای دریافت:', error);
             });
         }
 
+        // اجرا هنگام بارگذاری صفحه
         fetchData();
     </script>
 </body>
