@@ -5,63 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>❤️ سایت عشق من</title>
     <style>
-        /* ====== RESET ====== */
-        * { margin:0; padding:0; box-sizing:border-box; }
-        
         /* ====== تم‌ها ====== */
         :root {
             --bg1: #fce4ec;
             --bg2: #f3e5f5;
             --bg3: #e8eaf6;
             --card-bg: rgba(255,255,255,0.85);
+            --text: #4a148c;
             --primary: #e91e63;
             --secondary: #9c27b0;
-            --text: #4a148c;
-            --shadow: rgba(233,30,99,0.2);
             --border: #f8bbd0;
+            --shadow: rgba(233,30,99,0.2);
         }
         
-        [data-theme="rose"] {
-            --bg1: #fce4ec;
-            --bg2: #f3e5f5;
-            --bg3: #e8eaf6;
-            --primary: #e91e63;
-            --secondary: #9c27b0;
-            --text: #4a148c;
-            --shadow: rgba(233,30,99,0.2);
-            --border: #f8bbd0;
+        [data-theme="dark"] {
+            --bg1: #1a1a2e;
+            --bg2: #16213e;
+            --bg3: #0f3460;
+            --card-bg: rgba(30,30,60,0.9);
+            --text: #e1bee7;
+            --primary: #ff6b9d;
+            --secondary: #ce93d8;
+            --border: #4a148c;
+            --shadow: rgba(233,30,99,0.4);
         }
-        [data-theme="violet"] {
-            --bg1: #ede7f6;
-            --bg2: #e1bee7;
-            --bg3: #d1c4e9;
-            --primary: #7b1fa2;
-            --secondary: #4a148c;
-            --text: #311b92;
-            --shadow: rgba(123,31,162,0.2);
-            --border: #ce93d8;
-        }
-        [data-theme="sky"] {
-            --bg1: #e3f2fd;
-            --bg2: #bbdefb;
-            --bg3: #90caf9;
-            --primary: #1565c0;
-            --secondary: #0d47a1;
-            --text: #0d47a1;
-            --shadow: rgba(21,101,192,0.2);
-            --border: #64b5f6;
-        }
+        
         [data-theme="sunset"] {
-            --bg1: #fff3e0;
-            --bg2: #ffe0b2;
-            --bg3: #ffcc80;
-            --primary: #e65100;
-            --secondary: #bf360c;
-            --text: #bf360c;
-            --shadow: rgba(230,81,0,0.2);
-            --border: #ffb74d;
+            --bg1: #ff6b6b;
+            --bg2: #ff9f43;
+            --bg3: #feca57;
+            --card-bg: rgba(255,255,255,0.9);
+            --text: #2d3436;
+            --primary: #e17055;
+            --secondary: #d63031;
+            --border: #fdcb6e;
+            --shadow: rgba(225,112,85,0.3);
         }
         
+        [data-theme="ocean"] {
+            --bg1: #00b894;
+            --bg2: #00cec9;
+            --bg3: #0984e3;
+            --card-bg: rgba(255,255,255,0.9);
+            --text: #006064;
+            --primary: #00bcd4;
+            --secondary: #0097a7;
+            --border: #80deea;
+            --shadow: rgba(0,188,212,0.3);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Vazir', Tahoma, sans-serif;
             background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
@@ -70,140 +63,58 @@
             color: var(--text);
             transition: all 0.5s ease;
         }
+        .container { max-width: 900px; margin:0 auto; position:relative; z-index:1; }
         
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* ====== قلب‌های شناور ====== */
+        /* قلب‌های شناور */
         .floating-hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            pointer-events:none; z-index:0; overflow:hidden;
         }
         .heart {
             position: absolute;
             font-size: 20px;
             animation: floatUp 8s linear infinite;
-            opacity: 0.4;
+            opacity:0.3;
         }
         @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.3) rotate(0deg); opacity: 0.6; }
-            100% { transform: translateY(-10vh) scale(1.2) rotate(720deg); opacity: 0; }
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity:0.5; }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(720deg); opacity:0; }
         }
         
-        /* ====== هدر ====== */
-        .header {
-            text-align: center;
-            padding: 30px 20px;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 32px var(--shadow);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .header h1 {
-            font-size: 2.8em;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .header .sub {
-            font-size: 1.2em;
-            color: var(--secondary);
-            margin: 10px 0;
-        }
-        .header .greeting {
-            font-size: 1.1em;
-            color: var(--text);
-            opacity: 0.8;
-            min-height: 30px;
-        }
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 20px;
-            background: var(--primary);
-            animation: blink 1s infinite;
-            vertical-align: middle;
-            margin-right: 2px;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        
-        /* ====== تب‌ها ====== */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-        .tab-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 30px;
-            background: var(--card-bg);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            flex: 1;
-            min-width: 120px;
-            max-width: 200px;
-        }
-        .tab-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px var(--shadow);
-        }
-        .tab-btn.active {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 8px 25px var(--shadow);
-        }
-        
-        /* ====== کارت‌ها ====== */
+        /* کارت‌ها */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border-radius: 25px;
+            border-radius: 20px;
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: 0 8px 32px var(--shadow);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
             display: none;
-            animation: fadeIn 0.5s ease;
         }
-        .card.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .card.active { display: block; }
         
-        .card h2 {
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card-header h2 {
             color: var(--primary);
             border-bottom: 2px solid var(--border);
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
+        .card-toggle {
+            font-size: 24px;
+            color: var(--primary);
+            transition: 0.3s;
+        }
+        .card-toggle.rotated { transform: rotate(180deg); }
         
-        /* ====== دکمه‌ها ====== */
         .btn {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
@@ -213,317 +124,297 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
-            margin: 5px;
+            margin:5px;
         }
         .btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 20px var(--shadow);
+            box-shadow: 0 4px 15px var(--shadow);
         }
-        .btn-small {
-            padding: 6px 15px;
-            font-size: 13px;
+        .btn-sm {
+            padding: 5px 15px;
+            font-size: 14px;
         }
-        
-        /* ====== پیام‌ها ====== */
-        .msg-item {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 15px;
-            background: var(--bg1);
-            border-right: 4px solid var(--primary);
-            transition: 0.3s;
-        }
-        .msg-item.today {
-            background: var(--border);
-            border-right: 4px solid var(--secondary);
-            font-weight: bold;
-        }
-        .msg-date {
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
-        }
-        
-        /* ====== موزیک ====== */
-        .music-player {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: 15px;
-            background: var(--bg1);
-            border-radius: 20px;
-        }
-        .music-player img {
-            width: 80px;
-            height: 80px;
-            border-radius: 15px;
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .music-player .info {
-            flex: 1;
-            min-width: 150px;
-        }
-        .music-player .info h3 {
-            font-size: 1.1em;
+        input, textarea, select {
+            width:100%;
+            padding:12px;
+            border:2px solid var(--border);
+            border-radius:12px;
+            font-size:16px;
+            margin:8px 0;
+            background:white;
             color: var(--text);
         }
-        .music-player .info p {
-            color: var(--secondary);
-            font-size: 0.9em;
-        }
-        .music-player audio {
-            width: 100%;
-            margin-top: 10px;
-        }
+        textarea { min-height:80px; resize:vertical; }
         
+        /* پیام‌ها */
+        .msg-item {
+            padding:12px;
+            margin:8px 0;
+            border-radius:12px;
+            background: var(--bg1);
+            border-right:4px solid var(--primary);
+            opacity:0.7;
+        }
+        .msg-item.today {
+            opacity:1;
+            background: var(--border);
+            border-right:4px solid var(--secondary);
+            font-weight:bold;
+        }
+        .msg-date { font-size:12px; color:var(--text); opacity:0.6; }
+        
+        /* موزیک */
         .music-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px;
-            margin: 8px 0;
-            background: var(--bg1);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .music-item:hover {
-            transform: translateX(-5px);
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:10px;
+            margin:8px 0;
             background: var(--bg2);
+            border-radius:12px;
+            cursor:pointer;
+            transition:0.3s;
         }
+        .music-item:hover { background: var(--border); }
         .music-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
+            width:50px;
+            height:50px;
+            border-radius:8px;
+            object-fit:cover;
+            border:2px solid var(--primary);
         }
-        .music-item .info {
-            flex: 1;
-        }
-        .music-item .info .title {
-            font-weight: bold;
-        }
-        .music-item .info .artist {
-            font-size: 13px;
-            color: var(--secondary);
-        }
-        .music-item .duration {
-            font-size: 12px;
-            color: #888;
-        }
+        .music-info { flex:1; }
+        .music-title { font-weight:bold; font-size:14px; }
+        .music-artist { font-size:12px; color:var(--secondary); }
+        .music-duration { font-size:11px; color:var(--text); opacity:0.6; }
         
-        /* ====== نظرسنجی ====== */
+        .player-container {
+            display:flex;
+            gap:15px;
+            align-items:center;
+            flex-wrap:wrap;
+            background: var(--bg1);
+            padding:15px;
+            border-radius:15px;
+        }
+        .player-container img {
+            width:80px;
+            height:80px;
+            border-radius:12px;
+            object-fit:cover;
+            border:3px solid var(--primary);
+        }
+        .player-info { flex:1; min-width:200px; }
+        .player-info h3 { color: var(--primary); }
+        .player-info p { color: var(--secondary); }
+        audio { width:100%; margin:8px 0; }
+        
+        /* نظرسنجی */
         .poll-option {
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            background: white;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 2px solid transparent;
+            display:block;
+            padding:10px;
+            margin:5px 0;
+            background:white;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+            border:2px solid transparent;
         }
-        .poll-option:hover {
+        .poll-option:hover { border-color: var(--primary); }
+        .poll-option.selected {
             border-color: var(--primary);
-        }
-        .poll-option input[type="radio"] {
-            margin-left: 10px;
-        }
-        
-        .poll-result {
-            margin: 10px 0;
-        }
-        .poll-result .label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-        .poll-result .bar {
-            height: 28px;
             background: var(--bg1);
-            border-radius: 14px;
-            overflow: hidden;
-            position: relative;
         }
-        .poll-result .bar .fill {
-            height: 100%;
+        .poll-result-bar {
+            height:24px;
+            background: var(--bg2);
+            border-radius:12px;
+            margin:5px 0;
+            overflow:hidden;
+        }
+        .poll-result-fill {
+            height:100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 14px;
-            transition: width 0.8s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: white;
-            font-size: 13px;
-            font-weight: bold;
-            min-width: 30px;
+            border-radius:12px;
+            transition:0.5s;
+            color:white;
+            padding:0 10px;
+            line-height:24px;
+            font-size:14px;
         }
         
-        .poll-history {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border);
-        }
-        .poll-history-item {
-            padding: 10px;
-            margin: 5px 0;
-            background: var(--bg1);
-            border-radius: 10px;
-            font-size: 14px;
-        }
-        .poll-history-item .date {
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        /* ====== نظرات ====== */
+        /* نظرات */
         .comment-item {
-            padding: 15px;
-            margin: 10px 0;
-            background: white;
-            border-radius: 15px;
-            border: 1px solid var(--bg2);
+            padding:12px;
+            margin:8px 0;
+            background:white;
+            border-radius:12px;
+            border:1px solid var(--border);
         }
         .comment-reply {
             background: var(--bg1);
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 10px;
-            border-right: 3px solid var(--primary);
+            padding:10px;
+            border-radius:10px;
+            margin-top:8px;
+            border-right:3px solid var(--primary);
         }
         
-        /* ====== پنل مدیریت ====== */
+        /* پنل مدیریت */
         #adminPanel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
+            display:none;
+            background: var(--card-bg);
+            border-radius:20px;
+            padding:25px;
+            margin-top:25px;
+            border:2px solid var(--primary);
         }
-        #adminPanel.show {
-            display: flex;
-        }
-        #adminPanel .modal {
-            background: white;
-            border-radius: 30px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s ease;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(50px) scale(0.9); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        #adminPanel .modal h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        #adminPanel .close-btn {
-            float: left;
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: #999;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        #adminPanel .close-btn:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
+        #adminPanel.show { display:block; }
         
         .admin-section {
-            background: var(--bg1);
-            padding: 15px;
-            border-radius: 15px;
-            margin: 15px 0;
+            background: var(--bg2);
+            padding:15px;
+            border-radius:12px;
+            margin:15px 0;
         }
-        .admin-section h3 {
+        
+        /* هدر */
+        .header {
+            text-align:center;
+            padding:30px 0;
+            position:relative;
+        }
+        .header h1 {
+            font-size:2.8em;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .header .sub {
             color: var(--secondary);
-            margin-bottom: 10px;
+            font-size:20px;
+            margin-top:10px;
+            opacity:0.8;
+        }
+        .header .emoji-float {
+            display:inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
-        /* ====== فوتر ====== */
+        #todayDisplay {
+            color: var(--secondary);
+            font-size:16px;
+            margin-top:10px;
+            opacity:0.7;
+        }
+        
+        /* فوتر */
         .footer {
-            text-align: center;
-            padding: 20px;
+            text-align:center;
+            padding:20px;
             color: var(--text);
-            opacity: 0.7;
-            font-size: 14px;
-            border-top: 1px solid var(--border);
-            margin-top: 30px;
+            opacity:0.5;
+            font-size:14px;
+            border-top:1px solid var(--border);
+            margin-top:30px;
         }
         
-        /* ====== تم سلکتور ====== */
+        /* تم‌ها */
         .theme-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 15px 0;
-            flex-wrap: wrap;
+            display:flex;
+            gap:10px;
+            justify-content:center;
+            margin:15px 0;
+            flex-wrap:wrap;
         }
         .theme-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: 0.3s;
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            border:3px solid transparent;
+            cursor:pointer;
+            transition:0.3s;
         }
-        .theme-btn:hover {
-            transform: scale(1.15);
-        }
-        .theme-btn.active {
-            border-color: var(--primary);
-            transform: scale(1.1);
-        }
-        .theme-btn.rose { background: linear-gradient(135deg, #fce4ec, #e91e63); }
-        .theme-btn.violet { background: linear-gradient(135deg, #ede7f6, #7b1fa2); }
-        .theme-btn.sky { background: linear-gradient(135deg, #e3f2fd, #1565c0); }
-        .theme-btn.sunset { background: linear-gradient(135deg, #fff3e0, #e65100); }
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary); }
+        .theme-btn[data-theme="default"] { background: linear-gradient(135deg, #fce4ec, #f3e5f5); }
+        .theme-btn[data-theme="dark"] { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+        .theme-btn[data-theme="sunset"] { background: linear-gradient(135deg, #ff6b6b, #feca57); }
+        .theme-btn[data-theme="ocean"] { background: linear-gradient(135deg, #00b894, #0984e3); }
         
-        /* ====== مدیریت ====== */
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--bg2);
-            border-radius: 12px;
-            font-size: 16px;
-            margin: 8px 0;
-            background: white;
-            transition: 0.3s;
+        /* دکمه مدیریت کوچک */
+        .admin-trigger {
+            position:fixed;
+            bottom:20px;
+            right:20px;
+            width:50px;
+            height:50px;
+            border-radius:50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color:white;
+            border:none;
+            font-size:24px;
+            cursor:pointer;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition:0.3s;
+            z-index:100;
         }
-        input:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px var(--shadow);
+        .admin-trigger:hover { transform: scale(1.1) rotate(90deg); }
+        
+        /* مودال */
+        .modal {
+            display:none;
+            position:fixed;
+            top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index:1000;
+            justify-content:center;
+            align-items:center;
         }
-        textarea {
-            min-height: 80px;
-            resize: vertical;
+        .modal.show { display:flex; }
+        .modal-content {
+            background: var(--card-bg);
+            padding:30px;
+            border-radius:20px;
+            max-width:400px;
+            width:90%;
+            text-align:center;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity:0; }
+            to { transform: scale(1); opacity:1; }
+        }
+        .modal-content h2 { color: var(--primary); }
+        .modal-content input {
+            margin:15px 0;
+            text-align:center;
         }
         
-        /* ====== Responsive ====== */
-        @media (max-width: 600px) {
-            .container { padding: 0 5px; }
-            .header h1 { font-size: 2em; }
-            .card { padding: 15px; }
-            .tab-btn { font-size: 14px; padding: 10px 15px; min-width: 80px; }
-            .music-player img { width: 60px; height: 60px; }
+        /* بخش‌بندی */
+        .section-label {
+            display:inline-block;
+            background: var(--primary);
+            color:white;
+            padding:2px 12px;
+            border-radius:20px;
+            font-size:12px;
+            margin-bottom:10px;
+        }
+        
+        @media (max-width:600px) {
+            .container { padding:0 10px; }
+            .card { padding:15px; }
+            .header h1 { font-size:2em; }
+            .player-container img { width:60px; height:60px; }
         }
     </style>
 </head>
@@ -532,91 +423,110 @@
 <!-- ====== قلب‌های شناور ====== -->
 <div class="floating-hearts" id="hearts"></div>
 
+<!-- ====== دکمه مدیریت ====== -->
+<button class="admin-trigger" onclick="openAdminModal()">⚙️</button>
+
+<!-- ====== مودال مدیریت ====== -->
+<div class="modal" id="adminModal">
+    <div class="modal-content">
+        <h2>🔐 پنل مدیریت</h2>
+        <p style="color:var(--text); opacity:0.6; font-size:14px;">رمز رو وارد کن عزیزم ❤️</p>
+        <input type="password" id="adminPass" placeholder="رمز مدیریت...">
+        <button class="btn" onclick="checkAdmin()">ورود</button>
+        <button class="btn" onclick="closeAdminModal()" style="background:#999;">بستن</button>
+    </div>
+</div>
+
 <!-- ====== محتوا ====== -->
 <div class="container">
     
     <!-- هدر -->
     <div class="header">
-        <h1>❤️ به سایت عشق خوش اومدی</h1>
-        <p class="sub">🌹 برای عزیزترین آدم زندگی‌ام</p>
-        <div class="greeting" id="greeting"></div>
+        <h1>
+            <span class="emoji-float">❤️</span>
+            به سایت عشق خوش اومدی
+            <span class="emoji-float">🌹</span>
+        </h1>
+        <p class="sub">✨ برای عزیزترین آدم زندگی‌ام ✨</p>
+        <div id="todayDisplay"></div>
         
-        <!-- تم سلکتور -->
+        <!-- انتخاب تم -->
         <div class="theme-selector">
-            <button class="theme-btn rose active" onclick="changeTheme('rose')" title="تم رز"></button>
-            <button class="theme-btn violet" onclick="changeTheme('violet')" title="تم بنفشه"></button>
-            <button class="theme-btn sky" onclick="changeTheme('sky')" title="تم آسمونی"></button>
-            <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="تم شفق"></button>
+            <button class="theme-btn active" data-theme="default" onclick="changeTheme('default')" title="تم پیش‌فرض"></button>
+            <button class="theme-btn" data-theme="dark" onclick="changeTheme('dark')" title="تم تیره"></button>
+            <button class="theme-btn" data-theme="sunset" onclick="changeTheme('sunset')" title="تم غروب"></button>
+            <button class="theme-btn" data-theme="ocean" onclick="changeTheme('ocean')" title="تم اقیانوس"></button>
         </div>
-    </div>
-    
-    <!-- ====== تب‌ها ====== -->
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-messages">📝 پیام‌ها</button>
-        <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
-        <button class="tab-btn" data-tab="tab-poll">📊 نظرسنجی</button>
-        <button class="tab-btn" data-tab="tab-comments">💬 نظرات</button>
     </div>
     
     <!-- ====== بخش ۱: پیام‌ها ====== -->
-    <div class="card active" id="tab-messages">
-        <h2>📝 پیام‌های امروز</h2>
-        <div id="messageList"></div>
+    <div class="card active" id="messagesCard">
+        <div class="card-header" onclick="toggleCard('messagesCard')">
+            <h2>📝 پیام‌های امروز</h2>
+            <span class="card-toggle">▼</span>
+        </div>
+        <div class="card-body">
+            <div id="messageList"></div>
+        </div>
     </div>
     
     <!-- ====== بخش ۲: موزیک ====== -->
-    <div class="card" id="tab-music">
-        <h2>🎵 آهنگ‌های مخصوص تو</h2>
-        <div id="playerArea">
-            <div class="music-player" id="currentPlayer">
-                <img id="currentCover" src="https://via.placeholder.com/80" alt="کاور">
-                <div class="info">
-                    <h3 id="currentTitle">انتخاب کن...</h3>
-                    <p id="currentArtist">♥</p>
-                    <audio controls id="audioPlayer" style="width:100%;"></audio>
-                    <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
+    <div class="card active" id="musicCard">
+        <div class="card-header" onclick="toggleCard('musicCard')">
+            <h2>🎵 آهنگ‌های مخصوص تو</h2>
+            <span class="card-toggle">▼</span>
+        </div>
+        <div class="card-body">
+            <div id="playerArea">
+                <div class="player-container">
+                    <img id="currentCover" src="https://via.placeholder.com/80" alt="کاور">
+                    <div class="player-info">
+                        <h3 id="currentTitle">انتخاب کن...</h3>
+                        <p id="currentArtist">♥</p>
+                        <audio controls id="audioPlayer" style="width:100%;"></audio>
+                        <button class="btn btn-sm" onclick="downloadCurrentSong()">⬇️ دانلود</button>
+                    </div>
                 </div>
             </div>
+            <hr style="margin:15px 0; border-color:var(--border);">
+            <div id="playlist"></div>
         </div>
-        <hr style="margin:20px 0; border-color:var(--border);">
-        <div id="playlist"></div>
     </div>
     
     <!-- ====== بخش ۳: نظرسنجی ====== -->
-    <div class="card" id="tab-poll">
-        <h2>📊 نظرسنجی امروز</h2>
-        <p id="pollQuestion" style="font-size:18px; margin-bottom:15px;"></p>
-        <div id="pollOptions"></div>
-        <button class="btn" onclick="submitVote()">🗳️ رای بده</button>
-        <div id="pollResults" style="margin-top:20px;"></div>
-        <div class="poll-history" id="pollHistory"></div>
+    <div class="card active" id="pollCard">
+        <div class="card-header" onclick="toggleCard('pollCard')">
+            <h2>📊 نظرسنجی روزانه</h2>
+            <span class="card-toggle">▼</span>
+        </div>
+        <div class="card-body">
+            <p id="pollQuestion" style="font-size:18px; margin-bottom:15px;"></p>
+            <div id="pollOptions"></div>
+            <button class="btn" onclick="submitVote()">🗳️ رای بده</button>
+            <div id="pollResults" style="margin-top:15px;"></div>
+            <p id="pollStatus" style="font-size:14px; opacity:0.6; margin-top:10px;"></p>
+        </div>
     </div>
     
     <!-- ====== بخش ۴: نظرات ====== -->
-    <div class="card" id="tab-comments">
-        <h2>💬 سوال یا حرف داری؟</h2>
-        <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
-        <button class="btn" onclick="sendComment()">📤 ارسال</button>
-        <div id="commentsList" style="margin-top:15px;"></div>
+    <div class="card active" id="commentsCard">
+        <div class="card-header" onclick="toggleCard('commentsCard')">
+            <h2>💬 سوال یا حرف داری؟</h2>
+            <span class="card-toggle">▼</span>
+        </div>
+        <div class="card-body">
+            <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
+            <button class="btn" onclick="sendComment()">📤 ارسال</button>
+            <div id="commentsList" style="margin-top:15px;"></div>
+        </div>
     </div>
     
-    <!-- ====== فوتر ====== -->
-    <div class="footer" id="footer"></div>
-    
-    <!-- ====== دکمه مدیریت (کوچک پایین) ====== -->
-    <button class="btn btn-small" onclick="toggleAdmin()" style="position:fixed; bottom:20px; right:20px; z-index:100; padding:8px 16px; font-size:14px; box-shadow:0 4px 20px var(--shadow);">
-        ⚙️
-    </button>
-    
-    <!-- ====== پنل مدیریت (مودال) ====== -->
+    <!-- ====== پنل مدیریت (مخفی) ====== -->
     <div id="adminPanel">
-        <div class="modal">
-            <button class="close-btn" onclick="toggleAdmin()">✕</button>
+        <div class="card" style="display:block;">
             <h2>🔐 پنل مدیریت</h2>
-            <input type="password" id="adminPass" placeholder="رمز مدیریت را وارد کن...">
-            <button class="btn" onclick="checkAdmin()" style="width:100%;">ورود</button>
             
-            <div id="adminContent" style="display:none; margin-top:20px;">
+            <div id="adminContent">
                 <!-- افزودن پیام -->
                 <div class="admin-section">
                     <h3>➕ افزودن پیام جدید</h3>
@@ -640,6 +550,7 @@
                     <input id="newPollQuestion" placeholder="سوال نظرسنجی">
                     <input id="newPollOptions" placeholder="گزینه‌ها (با کاما جدا کن)">
                     <button class="btn" onclick="updatePoll()">بروزرسانی نظرسنجی</button>
+                    <button class="btn" onclick="resetPollVotes()" style="background:#f44336;">🔄 ریست آرای امروز</button>
                 </div>
                 
                 <!-- پاسخ به نظرات -->
@@ -653,6 +564,12 @@
         </div>
     </div>
     
+    <!-- ====== فوتر ====== -->
+    <div class="footer">
+        <p>❤️ با عشق ساخته شد برای عزیزترین آدم زندگی ❤️</p>
+        <p id="footerDate"></p>
+    </div>
+    
 </div>
 
 <script>
@@ -661,104 +578,17 @@
 // ============================================================
 const BIN_ID = "6a39af83f5f4af5e291fb234";
 const API_KEY = "$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm";
-const ADMIN_PASSWORD = "AY_NAY";
+const ADMIN_PASSWORD = "AY_NI";
 
 // ============================================================
 // ====== متغیرها ======
 // ============================================================
 let data = null;
 let currentSongIndex = 0;
+let adminLoggedIn = false;
 
 // ============================================================
-// ====== تم ======
-// ============================================================
-function changeTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.classList.contains(theme));
-    });
-}
-
-// بارگذاری تم ذخیره شده
-const savedTheme = localStorage.getItem('theme') || 'rose';
-changeTheme(savedTheme);
-
-// ============================================================
-// ====== قلب‌های شناور ======
-// ============================================================
-function createHearts() {
-    const container = document.getElementById('hearts');
-    const emojis = ['❤️', '💖', '💗', '💕', '♥️', '💘', '🌹'];
-    for(let i=0; i<20; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDuration = (6 + Math.random() * 10) + 's';
-        heart.style.animationDelay = (Math.random() * 10) + 's';
-        heart.style.fontSize = (15 + Math.random() * 35) + 'px';
-        container.appendChild(heart);
-    }
-}
-createHearts();
-
-// ============================================================
-// ====== تایپینگ افکت ======
-// ============================================================
-function typeGreeting() {
-    const texts = [
-        '🌹 به عزیزترین آدم زندگی خوش اومدی...',
-        '❤️ اینجا همه چیز برای توست...',
-        '💕 امیدوارم لحظات قشنگی رو اینجا داشته باشی...',
-        '🌟 تو بهترین اتفاق زندگی منی...'
-    ];
-    const el = document.getElementById('greeting');
-    let index = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    
-    function type() {
-        const current = texts[index];
-        if(!isDeleting) {
-            el.innerHTML = current.substring(0, charIndex) + '<span class="typing-cursor"></span>';
-            charIndex++;
-            if(charIndex > current.length) {
-                isDeleting = true;
-                setTimeout(type, 2000);
-                return;
-            }
-            setTimeout(type, 50);
-        } else {
-            el.innerHTML = current.substring(0, charIndex) + '<span class="typing-cursor"></span>';
-            charIndex--;
-            if(charIndex < 0) {
-                isDeleting = false;
-                index = (index + 1) % texts.length;
-                setTimeout(type, 500);
-                return;
-            }
-            setTimeout(type, 30);
-        }
-    }
-    type();
-}
-typeGreeting();
-
-// ============================================================
-// ====== تب‌ها ======
-// ============================================================
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        document.getElementById(this.dataset.tab).classList.add('active');
-    });
-});
-
-// ============================================================
-// ====== ارتباط با JSONBin ======
+// ====== توابع ارتباط با JSONBin ======
 // ============================================================
 async function loadData() {
     try {
@@ -769,18 +599,18 @@ async function loadData() {
         data = json.record;
         renderAll();
     } catch(e) {
-        console.error('خطا:', e);
+        console.error('خطا در بارگیری:', e);
         if(!data) {
             data = {
                 messages: [{ id:1, text:"❤️ امروز عاشقتم بیشتر از دیروز", date: new Date().toISOString().split('T')[0] }],
                 music: [
-                    { id:1, title:"بی تو", artist:"محسن چاوشی", cover:"https://via.placeholder.com/80", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+                    { id:1, title:"بی تو", artist:"محسن چاوشی", cover:"https://via.placeholder.com/100", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
                 ],
                 polls: {
                     question: "حالت چطوره امروز؟",
                     options: ["عالی 😍", "خوب 😊", "معمولی 😐"],
                     votes: {},
-                    history: {}
+                    date: new Date().toISOString().split('T')[0]
                 },
                 comments: []
             };
@@ -799,14 +629,65 @@ async function saveData() {
             },
             body: JSON.stringify(data)
         });
+        console.log('✅ اطلاعات ذخیره شد');
     } catch(e) {
         console.error('خطا در ذخیره:', e);
-        alert('❌ خطا در ذخیره!');
+        alert('❌ خطا در ذخیره اطلاعات!');
     }
 }
 
 // ============================================================
-// ====== رندر ======
+// ====== قلب‌های شناور ======
+// ============================================================
+function createHearts() {
+    const container = document.getElementById('hearts');
+    const emojis = ['❤️', '💖', '💗', '💕', '♥️', '💘', '🌹', '✨'];
+    for(let i=0; i<15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (6 + Math.random() * 8) + 's';
+        heart.style.animationDelay = (Math.random() * 8) + 's';
+        heart.style.fontSize = (15 + Math.random() * 30) + 'px';
+        container.appendChild(heart);
+    }
+}
+createHearts();
+
+// ============================================================
+// ====== تم ======
+// ============================================================
+function changeTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+    });
+}
+
+// بارگذاری تم ذخیره شده
+const savedTheme = localStorage.getItem('theme') || 'default';
+changeTheme(savedTheme);
+
+// ============================================================
+// ====== بخش‌بندی ======
+// ============================================================
+function toggleCard(id) {
+    const card = document.getElementById(id);
+    const body = card.querySelector('.card-body');
+    const toggle = card.querySelector('.card-toggle');
+    if(body.style.display === 'none') {
+        body.style.display = 'block';
+        toggle.classList.remove('rotated');
+    } else {
+        body.style.display = 'none';
+        toggle.classList.add('rotated');
+    }
+}
+
+// ============================================================
+// ====== رندر کردن همه بخش‌ها ======
 // ============================================================
 function renderAll() {
     if(!data) return;
@@ -814,20 +695,20 @@ function renderAll() {
     renderPlaylist();
     renderPoll();
     renderComments();
-    updateFooter();
+    updateTodayDisplay();
+    updateFooterDate();
 }
 
-// ---------- فوتر ----------
-function updateFooter() {
+function updateTodayDisplay() {
     const now = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    const persian = now.toLocaleDateString('fa-IR', options);
-    const gregorian = now.toLocaleDateString('en-US', options);
-    document.getElementById('footer').innerHTML = `
-        ❤️ با عشق ساخته شده | 
-        📅 ${persian} | 
-        🌍 ${gregorian}
-    `;
+    document.getElementById('todayDisplay').textContent = 
+        `📅 ${now.toLocaleDateString('fa-IR')} - ${now.toLocaleTimeString('fa-IR')}`;
+}
+
+function updateFooterDate() {
+    const now = new Date();
+    document.getElementById('footerDate').textContent = 
+        `© ${now.toLocaleDateString('fa-IR')} | ${now.toLocaleTimeString('fa-IR')}`;
 }
 
 // ---------- پیام‌ها ----------
@@ -837,10 +718,10 @@ function renderMessages() {
     list.innerHTML = '';
     const msgs = data.messages || [];
     if(msgs.length === 0) {
-        list.innerHTML = '<p style="color:#888;">هنوز پیامی نذاشتی عزیزم ❤️</p>';
+        list.innerHTML = '<p style="opacity:0.6;">هنوز پیامی نذاشتی عزیزم ❤️</p>';
         return;
     }
-    msgs.slice().reverse().forEach(msg => {
+    msgs.forEach(msg => {
         const div = document.createElement('div');
         div.className = 'msg-item' + (msg.date === today ? ' today' : '');
         div.innerHTML = `
@@ -857,7 +738,7 @@ function renderPlaylist() {
     const music = data.music || [];
     list.innerHTML = '';
     if(music.length === 0) {
-        list.innerHTML = '<p style="color:#888;">آهنگ‌ها رو از پنل مدیریت اضافه کن 🎶</p>';
+        list.innerHTML = '<p style="opacity:0.6;">آهنگ‌ها رو از پنل مدیریت اضافه کن 🎶</p>';
         return;
     }
     music.forEach((song, index) => {
@@ -865,11 +746,12 @@ function renderPlaylist() {
         div.className = 'music-item';
         div.innerHTML = `
             <img src="${song.cover || 'https://via.placeholder.com/50'}" alt="کاور" onerror="this.src='https://via.placeholder.com/50'">
-            <div class="info">
-                <div class="title">${song.title}</div>
-                <div class="artist">${song.artist || 'بی‌نام'}</div>
+            <div class="music-info">
+                <div class="music-title">${song.title}</div>
+                <div class="music-artist">🎤 ${song.artist || 'بی‌نام'}</div>
+                <div class="music-duration">🎵 ${index+1}</div>
             </div>
-            <button class="btn btn-small" onclick="playSong(${index})">▶️ پخش</button>
+            <button class="btn btn-sm" onclick="playSong(${index})">▶️</button>
         `;
         list.appendChild(div);
     });
@@ -911,12 +793,11 @@ function renderPoll() {
     const poll = data.polls || { 
         question: 'حالت چطوره؟', 
         options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
-        votes: {},
-        history: {}
+        votes: {}, 
+        date: '' 
     };
-    
-    // سوال و گزینه‌ها
     document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره امروز؟';
+    
     const container = document.getElementById('pollOptions');
     container.innerHTML = '';
     const today = new Date().toISOString().split('T')[0];
@@ -935,59 +816,32 @@ function renderPoll() {
         container.appendChild(label);
     });
     
-    // نتایج امروز
+    // نتایج
     const results = document.getElementById('pollResults');
-    if(poll.votes && poll.votes[today]) {
-        const todayVotes = poll.votes[today];
+    if(poll.votes && Object.keys(poll.votes).length > 0) {
+        const votes = poll.votes || {};
+        const todayVotes = votes[today] || {};
         const total = Object.values(todayVotes).reduce((a,b) => a + b, 0);
         results.innerHTML = '<h4>📊 نتایج امروز:</h4>';
         if(total === 0) {
-            results.innerHTML += '<p style="color:#888;">هنوز رایی ثبت نشده 😊</p>';
+            results.innerHTML += '<p style="opacity:0.6;">هنوز رایی ثبت نشده 😊</p>';
         } else {
             (poll.options || []).forEach(opt => {
                 const count = todayVotes[opt] || 0;
                 const percent = total > 0 ? Math.round((count/total)*100) : 0;
                 results.innerHTML += `
-                    <div class="poll-result">
-                        <div class="label">
-                            <span>${opt}</span>
-                            <span>${count} رای (${percent}%)</span>
-                        </div>
-                        <div class="bar">
-                            <div class="fill" style="width:${percent}%">${percent}%</div>
-                        </div>
+                    <div style="margin-top:5px;">${opt}</div>
+                    <div class="poll-result-bar">
+                        <div class="poll-result-fill" style="width:${percent}%">${percent}% (${count} رای)</div>
                     </div>
                 `;
             });
         }
     } else {
-        results.innerHTML = '<p style="color:#888;">هنوز رایی ثبت نشده، اولین نفر باش 😍</p>';
+        results.innerHTML = '<p style="opacity:0.6;">هنوز رایی ثبت نشده، اولین نفر باش 😍</p>';
     }
     
-    // تاریخچه نظرسنجی
-    const historyDiv = document.getElementById('pollHistory');
-    historyDiv.innerHTML = '<h4>📜 تاریخچه نظرسنجی:</h4>';
-    if(poll.history && Object.keys(poll.history).length > 0) {
-        const sortedDates = Object.keys(poll.history).sort().reverse();
-        sortedDates.forEach(date => {
-            if(date === today) return; // امروز رو بالا نشون دادیم
-            const dayVotes = poll.history[date];
-            const total = Object.values(dayVotes).reduce((a,b) => a + b, 0);
-            const div = document.createElement('div');
-            div.className = 'poll-history-item';
-            let details = Object.entries(dayVotes)
-                .map(([opt, count]) => `${opt}: ${count} (${Math.round((count/total)*100)}%)`)
-                .join(' | ');
-            div.innerHTML = `
-                <div class="date">📅 ${date}</div>
-                <div style="font-size:13px;">${details}</div>
-                <div style="font-size:12px; color:#888;">مجموع: ${total} رای</div>
-            `;
-            historyDiv.appendChild(div);
-        });
-    } else {
-        historyDiv.innerHTML += '<p style="color:#888;">هنوز نظرسنجی قبلی ثبت نشده</p>';
-    }
+    document.getElementById('pollStatus').textContent = hasVoted ? '✅ امروز رای دادی! ❤️' : '⭐ امروز رو انتخاب کن';
 }
 
 function submitVote() {
@@ -1005,11 +859,6 @@ function submitVote() {
     }
     if(!poll.votes[today]) poll.votes[today] = {};
     poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
-    
-    // ذخیره در تاریخچه
-    if(!poll.history) poll.history = {};
-    poll.history[today] = {...poll.votes[today]};
-    
     data.polls = poll;
     saveData();
     renderPoll();
@@ -1021,16 +870,17 @@ function renderComments() {
     const comments = data.comments || [];
     list.innerHTML = '';
     if(comments.length === 0) {
-        list.innerHTML = '<p style="color:#888;">هنوز نظری نیست، اولین نفر باش 💬</p>';
+        list.innerHTML = '<p style="opacity:0.6;">هنوز نظری نیست، اولین نفر باش 💬</p>';
         return;
     }
-    comments.slice().reverse().forEach(c => {
+    const sorted = [...comments].reverse();
+    sorted.forEach(c => {
         const div = document.createElement('div');
         div.className = 'comment-item';
         div.innerHTML = `
             <div>💬 ${c.text}</div>
-            ${c.reply ? `<div class="comment-reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:#888;font-size:14px;">⏳ در انتظار پاسخ...</div>'}
-            <div style="font-size:11px;color:#aaa;margin-top:5px;">${c.date || ''}</div>
+            ${c.reply ? `<div class="comment-reply">💝 پاسخ: ${c.reply}</div>` : '<div style="opacity:0.6;font-size:14px;">⏳ در انتظار پاسخ...</div>'}
+            <div style="font-size:11px;opacity:0.5;margin-top:5px;">${c.date || ''}</div>
         `;
         list.appendChild(div);
     });
@@ -1056,28 +906,30 @@ function sendComment() {
     updateCommentSelect();
 }
 
-// ============================================================
-// ====== پنل مدیریت ======
-// ============================================================
-function toggleAdmin() {
-    const panel = document.getElementById('adminPanel');
-    panel.classList.toggle('show');
-    if(panel.classList.contains('show')) {
-        document.getElementById('adminPass').value = '';
-        document.getElementById('adminContent').style.display = 'none';
-        updateCommentSelect();
-    }
+// ---------- پنل مدیریت ----------
+function openAdminModal() {
+    document.getElementById('adminModal').classList.add('show');
+    document.getElementById('adminPass').value = '';
+    document.getElementById('adminPass').focus();
+}
+
+function closeAdminModal() {
+    document.getElementById('adminModal').classList.remove('show');
 }
 
 function checkAdmin() {
     const pass = document.getElementById('adminPass').value;
     if(pass === ADMIN_PASSWORD) {
-        document.getElementById('adminContent').style.display = 'block';
-        document.getElementById('adminPass').value = '';
-        alert('✅ به پنل مدیریت خوش اومدی عزیزم! ❤️');
+        adminLoggedIn = true;
+        closeAdminModal();
+        document.getElementById('adminPanel').classList.add('show');
+        document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
         updateCommentSelect();
+        alert('✅ به پنل مدیریت خوش اومدی عزیزم! ❤️');
     } else {
         alert('❌ رمز اشتباهه!');
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminPass').focus();
     }
 }
 
@@ -1129,7 +981,7 @@ function addMusic() {
         id: Date.now(), 
         title, 
         artist: artist || 'بی‌نام', 
-        cover: cover || 'https://via.placeholder.com/80', 
+        cover: cover || 'https://via.placeholder.com/100', 
         src 
     });
     document.getElementById('newSongTitle').value = '';
@@ -1152,7 +1004,7 @@ function updatePoll() {
         question: question,
         options: options,
         votes: {},
-        history: data.polls?.history || {}
+        date: new Date().toISOString().split('T')[0]
     };
     document.getElementById('newPollQuestion').value = '';
     document.getElementById('newPollOptions').value = '';
@@ -1161,7 +1013,18 @@ function updatePoll() {
     alert('✅ نظرسنجی بروزرسانی شد!');
 }
 
-// ---------- مدیریت: پاسخ ----------
+function resetPollVotes() {
+    if(!data.polls) return;
+    const today = new Date().toISOString().split('T')[0];
+    if(data.polls.votes) {
+        delete data.polls.votes[today];
+    }
+    saveData();
+    renderPoll();
+    alert('🔄 آرای امروز ریست شد!');
+}
+
+// ---------- مدیریت: پاسخ به نظر ----------
 function replyComment() {
     const sel = document.getElementById('commentSelect');
     const reply = document.getElementById('replyInput').value.trim();
@@ -1184,13 +1047,16 @@ function replyComment() {
 // ====== بارگذاری اولیه ======
 // ============================================================
 loadData();
-setInterval(loadData, 30000);
-setInterval(updateFooter, 60000);
 
-// کلیک خارج از مودال برای بستن
-document.getElementById('adminPanel').addEventListener('click', function(e) {
-    if(e.target === this) toggleAdmin();
-});
+// هر ۳۰ ثانیه یک‌بار رفرش
+setInterval(loadData, 30000);
+
+// هر دقیقه تاریخ رو بروز کن
+setInterval(() => {
+    updateTodayDisplay();
+    updateFooterDate();
+}, 60000);
+
 </script>
 </body>
-                                                                   </html>
+                </html>
