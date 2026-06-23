@@ -235,6 +235,75 @@
             letter-spacing: 0.5px;
         }
 
+        /* ====== TIMER ====== */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .timer-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .timer-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-3px);
+        }
+
+        .timer-item .label {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .timer-item .numbers {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-item .numbers .unit {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 8px 12px;
+            border-radius: 12px;
+            min-width: 50px;
+        }
+
+        .timer-item .numbers .unit .num {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #ec407a;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .timer-item .numbers .unit .lbl {
+            font-size: 0.6em;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer-item .expired {
+            color: #f44336;
+            font-size: 1.2em;
+            font-weight: 600;
+            padding: 10px 0;
+        }
+
+        .timer-item .expired .heart-emoji {
+            animation: heartBeat 1.2s infinite;
+            display: inline-block;
+        }
+
         /* ====== BUTTONS ====== */
         .btn {
             background: linear-gradient(135deg, #ec407a, #ab47bc);
@@ -266,17 +335,6 @@
         .btn-small {
             padding: 6px 16px;
             font-size: 13px;
-        }
-
-        .btn-icon {
-            padding: 6px 12px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .btn-icon:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(1.05);
         }
 
         /* ====== INPUTS ====== */
@@ -350,11 +408,6 @@
             font-size: 12px;
             color: rgba(255, 255, 255, 0.3);
             white-space: nowrap;
-        }
-
-        .msg-item .actions {
-            display: flex;
-            gap: 6px;
         }
 
         /* ====== MUSIC ====== */
@@ -459,11 +512,6 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
-        .music-item .actions {
-            display: flex;
-            gap: 6px;
-        }
-
         /* ====== POLL ====== */
         .poll-option {
             display: flex;
@@ -562,12 +610,6 @@
             font-size: 12px;
             color: rgba(255, 255, 255, 0.25);
             margin-top: 6px;
-        }
-
-        .comment-item .actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
         }
 
         /* ====== ADMIN MODAL ====== */
@@ -783,695 +825,846 @@
                 width: 100%;
                 margin-top: 4px;
             }
+            .timer-item .numbers .unit {
+                min-width: 35px;
+                padding: 5px 8px;
+            }
+            .timer-item .numbers .unit .num {
+                font-size: 1.2em;
+            }
+            .timer-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- ====== FLOATING HEARTS ====== -->
-<div class="floating-hearts" id="hearts"></div>
+    <!-- ====== FLOATING HEARTS ====== -->
+    <div class="floating-hearts" id="hearts"></div>
 
-<!-- ====== CONTAINER ====== -->
-<div class="container">
+    <!-- ====== CONTAINER ====== -->
+    <div class="container">
 
-    <!-- ====== HEADER ====== -->
-    <div class="header">
-        <h1>❤️ عشق من</h1>
-        <p class="sub">برای تو که بهترینی 🌹</p>
-        <div class="greeting" id="greeting">
-            <span class="heart-beat">❤️</span> هر روز با تو زیباترینه...
-        </div>
-        <div class="theme-selector">
-            <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
-            <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
-            <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
-            <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
-            <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
-        </div>
-    </div>
-
-    <!-- ====== TABS ====== -->
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-messages">📝 پیام‌ها</button>
-        <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
-        <button class="tab-btn" data-tab="tab-poll">📊 نظرسنجی</button>
-        <button class="tab-btn" data-tab="tab-comments">💬 نظرات</button>
-    </div>
-
-    <!-- ====== TAB: MESSAGES ====== -->
-    <div class="card active" id="tab-messages">
-        <h2>📝 پیام‌های امروز</h2>
-        <div id="messageList"></div>
-    </div>
-
-    <!-- ====== TAB: MUSIC ====== -->
-    <div class="card" id="tab-music">
-        <h2>🎵 آهنگ‌های مخصوص تو</h2>
-        <div class="music-player" id="currentPlayer">
-            <img class="cover" id="currentCover" src="https://via.placeholder.com/100/1a1a1a/ec407a?text=♥" alt="کاور">
-            <div class="info">
-                <div class="title" id="currentTitle">هیچی پخش نشده</div>
-                <div class="artist" id="currentArtist">♥</div>
-                <audio controls id="audioPlayer" style="width:100%;"></audio>
-                <div class="controls">
-                    <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
-                    <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
-                    <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
-                </div>
+        <!-- ====== HEADER ====== -->
+        <div class="header">
+            <h1>❤️ عشق من</h1>
+            <p class="sub">برای تو که بهترینی 🌹</p>
+            <div class="greeting" id="greeting">
+                <span class="heart-beat">❤️</span> هر روز با تو زیباترینه...
+            </div>
+            <div class="theme-selector">
+                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
+                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
+                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
+                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
+                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
             </div>
         </div>
-        <div class="music-list" id="playlist"></div>
-    </div>
 
-    <!-- ====== TAB: POLL ====== -->
-    <div class="card" id="tab-poll">
-        <h2>📊 نظرسنجی امروز</h2>
-        <p id="pollQuestion" style="font-size:1.1em; margin-bottom:16px; color:rgba(255,255,255,0.7);"></p>
-        <div id="pollOptions"></div>
-        <button class="btn" onclick="submitVote()" style="margin-top:8px;">🗳️ رای بده</button>
-        <div id="pollResults" style="margin-top:20px;"></div>
-        <div class="poll-history" id="pollHistory"></div>
-    </div>
-
-    <!-- ====== TAB: COMMENTS ====== -->
-    <div class="card" id="tab-comments">
-        <h2>💬 سوال یا حرف داری؟</h2>
-        <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
-        <button class="btn" onclick="sendComment()">📤 ارسال</button>
-        <div id="commentsList" style="margin-top:16px;"></div>
-    </div>
-
-    <!-- ====== FOOTER ====== -->
-    <div class="footer" id="footer"></div>
-
-</div>
-
-<!-- ====== ADMIN FAB ====== -->
-<button class="admin-fab" onclick="toggleAdmin()" title="مدیریت">⚙️</button>
-
-<!-- ====== ADMIN MODAL ====== -->
-<div id="adminPanel">
-    <div class="modal">
-        <div class="header-modal">
-            <h2>🔐 مدیریت</h2>
-            <button class="close-btn" onclick="toggleAdmin()">✕</button>
+        <!-- ====== TABS ====== -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tab-messages">📝 پیام‌ها</button>
+            <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
+            <button class="tab-btn" data-tab="tab-poll">📊 نظرسنجی</button>
+            <button class="tab-btn" data-tab="tab-comments">💬 نظرات</button>
+            <button class="tab-btn" data-tab="tab-timer">⏳ زمان‌ها</button>
         </div>
 
-        <input type="password" id="adminPass" placeholder="رمز مدیریت...">
-        <button class="btn" onclick="checkAdmin()" style="width:100%;">ورود</button>
-
-        <div id="adminContent" style="display:none; margin-top:20px;">
-
-            <!-- Messages -->
-            <div class="admin-section">
-                <h3>📝 مدیریت پیام‌ها</h3>
-                <textarea id="newMsg" placeholder="متن پیام جدید..."></textarea>
-                <button class="btn" onclick="addMessage()">➕ افزودن</button>
-                <div id="adminMsgList" style="margin-top:10px;"></div>
-            </div>
-
-            <!-- Music -->
-            <div class="admin-section">
-                <h3>🎵 مدیریت آهنگ‌ها</h3>
-                <input id="newSongTitle" placeholder="عنوان آهنگ">
-                <input id="newSongArtist" placeholder="خواننده">
-                <input id="newSongCover" placeholder="آدرس کاور (اختیاری)">
-                <input id="newSongSrc" placeholder="آدرس MP3">
-                <button class="btn" onclick="addMusic()">➕ افزودن</button>
-                <div id="adminMusicList" style="margin-top:10px;"></div>
-            </div>
-
-            <!-- Poll -->
-            <div class="admin-section">
-                <h3>📊 مدیریت نظرسنجی</h3>
-                <input id="newPollQuestion" placeholder="سوال نظرسنجی">
-                <input id="newPollOptions" placeholder="گزینه‌ها (با کاما جدا کن)">
-                <button class="btn" onclick="updatePoll()">بروزرسانی</button>
-            </div>
-
-            <!-- Comments -->
-            <div class="admin-section">
-                <h3>💬 مدیریت نظرات</h3>
-                <select id="commentSelect"></select>
-                <input id="replyInput" placeholder="پاسخ...">
-                <button class="btn" onclick="replyComment()">ارسال پاسخ</button>
-                <div id="adminCommentList" style="margin-top:10px;"></div>
-            </div>
-
+        <!-- ====== TAB: MESSAGES ====== -->
+        <div class="card active" id="tab-messages">
+            <h2>📝 پیام‌های امروز</h2>
+            <div id="messageList"></div>
         </div>
-    </div>
-</div>
 
-<script>
-    // ============================================================
-    // ====== CONFIG ======
-    // ============================================================
-    const BIN_ID = "6a39af83f5f4af5e291fb234";
-    const API_KEY = "$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm";
-    const ADMIN_PASSWORD = "AZ_NI";
-
-    let data = null;
-    let currentSongIndex = 0;
-
-    // ============================================================
-    // ====== THEME ======
-    // ============================================================
-    function changeTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.classList.contains(theme));
-        });
-        applyTheme(theme);
-    }
-
-    function applyTheme(theme) {
-        const themes = {
-            rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
-            violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c' },
-            sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1' },
-            sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
-            dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' }
-        };
-        const t = themes[theme] || themes.rose;
-        document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
-        document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2').forEach(el => {
-            el.style.color = t.primary;
-        });
-        document.querySelectorAll('.btn:not(.btn-danger):not(.btn-icon)').forEach(el => {
-            el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-        });
-        document.querySelectorAll('.tab-btn.active').forEach(el => {
-            el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-        });
-        document.querySelectorAll('.poll-result .bar .fill').forEach(el => {
-            el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
-        });
-        document.querySelectorAll('.msg-item.today').forEach(el => {
-            el.style.borderRightColor = t.secondary;
-            el.style.background = `${t.primary}15`;
-        });
-    }
-
-    const savedTheme = localStorage.getItem('theme') || 'rose';
-    changeTheme(savedTheme);
-
-    // ============================================================
-    // ====== HEARTS ======
-    // ============================================================
-    function createHearts() {
-        const container = document.getElementById('hearts');
-        const emojis = ['❤️', '💖', '💗', '♥️', '💘'];
-        for (let i = 0; i < 18; i++) {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (10 + Math.random() * 15) + 's';
-            heart.style.animationDelay = (Math.random() * 15) + 's';
-            heart.style.fontSize = (14 + Math.random() * 30) + 'px';
-            container.appendChild(heart);
-        }
-    }
-    createHearts();
-
-    // ============================================================
-    // ====== TABS ======
-    // ============================================================
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            document.getElementById(this.dataset.tab).classList.add('active');
-        });
-    });
-
-    // ============================================================
-    // ====== JSONBIN ======
-    // ============================================================
-    async function loadData() {
-        try {
-            const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-            const json = await res.json();
-            data = json.record;
-            renderAll();
-        } catch (e) {
-            console.error('خطا:', e);
-            if (!data) {
-                data = {
-                    messages: [{ id: 1, text: '❤️ امروز عاشقتم', date: new Date().toISOString().split('T')[0] }],
-                    music: [{ id: 1, title: 'آهنگ عاشقانه', artist: 'بی‌نام', cover: '',
-                        src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }],
-                    polls: { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
-                    history: {} },
-                    comments: []
-                };
-                renderAll();
-            }
-        }
-    }
-
-    async function saveData() {
-        try {
-            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                body: JSON.stringify(data)
-            });
-        } catch (e) {
-            console.error('خطا:', e);
-            alert('❌ خطا در ذخیره!');
-        }
-    }
-
-    // ============================================================
-    // ====== RENDER ======
-    // ============================================================
-    function renderAll() {
-        if (!data) return;
-        renderMessages();
-        renderPlaylist();
-        renderPoll();
-        renderComments();
-        renderAdminLists();
-        updateFooter();
-    }
-
-    function updateFooter() {
-        const now = new Date();
-        const persian = now.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
-        const gregorian = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('footer').textContent = `❤️ با عشق | ${persian} | ${gregorian}`;
-    }
-
-    // ---------- MESSAGES ----------
-    function renderMessages() {
-        const list = document.getElementById('messageList');
-        const today = new Date().toISOString().split('T')[0];
-        list.innerHTML = '';
-        const msgs = data.messages || [];
-        if (!msgs.length) {
-            list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز پیامی نیست ❤️</p>';
-            return;
-        }
-        msgs.slice().reverse().forEach(msg => {
-            const div = document.createElement('div');
-            div.className = 'msg-item' + (msg.date === today ? ' today' : '');
-            div.innerHTML = `
-                <div class="text">${msg.text}</div>
-                <div class="date">${msg.date} ${msg.date === today ? '⭐' : ''}</div>
-            `;
-            list.appendChild(div);
-        });
-    }
-
-    function addMessage() {
-        const text = document.getElementById('newMsg').value.trim();
-        if (!text) { alert('متن رو بنویس!'); return; }
-        if (!data.messages) data.messages = [];
-        data.messages.push({ id: Date.now(), text, date: new Date().toISOString().split('T')[0] });
-        document.getElementById('newMsg').value = '';
-        saveData();
-        renderAll();
-        alert('✅ پیام اضافه شد!');
-    }
-
-    function deleteMessage(id) {
-        if (!confirm('حذف کنم؟')) return;
-        data.messages = data.messages.filter(m => m.id !== id);
-        saveData();
-        renderAll();
-    }
-
-    // ---------- MUSIC ----------
-    function renderPlaylist() {
-        const list = document.getElementById('playlist');
-        const music = data.music || [];
-        list.innerHTML = '';
-        if (!music.length) {
-            list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هیچ آهنگی نیست 🎶</p>';
-            return;
-        }
-        music.forEach((song, index) => {
-            const div = document.createElement('div');
-            div.className = 'music-item' + (index === currentSongIndex ? ' active' : '');
-            div.innerHTML = `
-                <img src="${song.cover || 'https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'">
+        <!-- ====== TAB: MUSIC ====== -->
+        <div class="card" id="tab-music">
+            <h2>🎵 آهنگ‌های مخصوص تو</h2>
+            <div class="music-player" id="currentPlayer">
+                <img class="cover" id="currentCover" src="https://via.placeholder.com/100/1a1a1a/ec407a?text=♥" alt="کاور">
                 <div class="info">
-                    <div class="title">${song.title}</div>
-                    <div class="artist">${song.artist || 'بی‌نام'}</div>
-                </div>
-                <div class="actions">
-                    <button class="btn btn-small" onclick="playSong(${index})">▶️</button>
-                </div>
-            `;
-            list.appendChild(div);
-        });
-        if (music.length && !document.getElementById('audioPlayer').src) {
-            playSong(0);
-        }
-    }
-
-    function playSong(index) {
-        const music = data.music || [];
-        if (!music[index]) return;
-        currentSongIndex = index;
-        const song = music[index];
-        document.getElementById('currentCover').src = song.cover || 'https://via.placeholder.com/100/1a1a1a/ec407a?text=♥';
-        document.getElementById('currentTitle').textContent = song.title;
-        document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
-        const audio = document.getElementById('audioPlayer');
-        audio.src = song.src || '';
-        audio.load();
-        audio.play().catch(() => {});
-        renderPlaylist();
-    }
-
-    function prevSong() {
-        const music = data.music || [];
-        if (!music.length) return;
-        const idx = (currentSongIndex - 1 + music.length) % music.length;
-        playSong(idx);
-    }
-
-    function nextSong() {
-        const music = data.music || [];
-        if (!music.length) return;
-        const idx = (currentSongIndex + 1) % music.length;
-        playSong(idx);
-    }
-
-    function downloadCurrentSong() {
-        const src = document.getElementById('audioPlayer').src;
-        if (src && src !== '') {
-            const a = document.createElement('a');
-            a.href = src;
-            a.download = 'آهنگ_عاشقانه.mp3';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        } else {
-            alert('اول یه آهنگ انتخاب کن! 🎵');
-        }
-    }
-
-    function addMusic() {
-        const title = document.getElementById('newSongTitle').value.trim();
-        const artist = document.getElementById('newSongArtist').value.trim();
-        const cover = document.getElementById('newSongCover').value.trim();
-        const src = document.getElementById('newSongSrc').value.trim();
-        if (!title || !src) { alert('عنوان و لینک MP3 الزامی!'); return; }
-        if (!data.music) data.music = [];
-        data.music.push({ id: Date.now(), title, artist: artist || 'بی‌نام', cover: cover || '',
-        src });
-        document.getElementById('newSongTitle').value = '';
-        document.getElementById('newSongArtist').value = '';
-        document.getElementById('newSongCover').value = '';
-        document.getElementById('newSongSrc').value = '';
-        saveData();
-        renderAll();
-        alert('✅ آهنگ اضافه شد!');
-    }
-
-    function deleteMusic(id) {
-        if (!confirm('حذف کنم؟')) return;
-        data.music = data.music.filter(m => m.id !== id);
-        if (currentSongIndex >= data.music.length) currentSongIndex = 0;
-        saveData();
-        renderAll();
-        if (data.music.length) playSong(0);
-    }
-
-    // ---------- POLL ----------
-    function renderPoll() {
-        const poll = data.polls || { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
-            history: {} };
-        document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره؟';
-
-        const container = document.getElementById('pollOptions');
-        container.innerHTML = '';
-        const today = new Date().toISOString().split('T')[0];
-        const hasVoted = poll.votes && poll.votes[today];
-
-        (poll.options || []).forEach(opt => {
-            const label = document.createElement('label');
-            label.className = 'poll-option';
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = 'poll';
-            radio.value = opt;
-            radio.disabled = !!hasVoted;
-            label.appendChild(radio);
-            label.appendChild(document.createTextNode(' ' + opt));
-            container.appendChild(label);
-        });
-
-        // Results today
-        const results = document.getElementById('pollResults');
-        if (poll.votes && poll.votes[today]) {
-            const todayVotes = poll.votes[today];
-            const total = Object.values(todayVotes).reduce((a, b) => a + b, 0);
-            results.innerHTML = '<h4 style="color:rgba(255,255,255,0.6); margin-bottom:10px;">📊 نتایج امروز:</h4>';
-            if (total === 0) {
-                results.innerHTML += '<p style="color:rgba(255,255,255,0.3);">هنوز رایی نیست</p>';
-            } else {
-                (poll.options || []).forEach(opt => {
-                    const count = todayVotes[opt] || 0;
-                    const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-                    results.innerHTML += `
-                        <div class="poll-result">
-                            <div class="label"><span>${opt}</span><span>${count} (${percent}%)</span></div>
-                            <div class="bar"><div class="fill" style="width:${percent}%">${percent}%</div></div>
-                        </div>
-                    `;
-                });
-            }
-        } else {
-            results.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز رای ندادی 😊</p>';
-        }
-
-        // History
-        const historyDiv = document.getElementById('pollHistory');
-        historyDiv.innerHTML = '<h4 style="color:rgba(255,255,255,0.6);">📜 تاریخچه:</h4>';
-        if (poll.history && Object.keys(poll.history).length > 0) {
-            const sorted = Object.keys(poll.history).sort().reverse();
-            sorted.forEach(date => {
-                if (date === today) return;
-                const dayVotes = poll.history[date];
-                const total = Object.values(dayVotes).reduce((a, b) => a + b, 0);
-                const div = document.createElement('div');
-                div.className = 'poll-history-item';
-                div.innerHTML = `
-                    <div class="date">📅 ${date}</div>
-                    <div style="font-size:13px; color:rgba(255,255,255,0.5);">
-                        ${Object.entries(dayVotes).map(([opt,count]) => `${opt}: ${count}`).join(' | ')}
+                    <div class="title" id="currentTitle">هیچی پخش نشده</div>
+                    <div class="artist" id="currentArtist">♥</div>
+                    <audio controls id="audioPlayer" style="width:100%;"></audio>
+                    <div class="controls">
+                        <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
+                        <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
+                        <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
                     </div>
-                `;
-                historyDiv.appendChild(div);
+                </div>
+            </div>
+            <div class="music-list" id="playlist"></div>
+        </div>
+
+        <!-- ====== TAB: POLL ====== -->
+        <div class="card" id="tab-poll">
+            <h2>📊 نظرسنجی امروز</h2>
+            <p id="pollQuestion" style="font-size:1.1em; margin-bottom:16px; color:rgba(255,255,255,0.7);"></p>
+            <div id="pollOptions"></div>
+            <button class="btn" onclick="submitVote()" style="margin-top:8px;">🗳️ رای بده</button>
+            <div id="pollResults" style="margin-top:20px;"></div>
+            <div class="poll-history" id="pollHistory"></div>
+        </div>
+
+        <!-- ====== TAB: COMMENTS ====== -->
+        <div class="card" id="tab-comments">
+            <h2>💬 سوال یا حرف داری؟</h2>
+            <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
+            <button class="btn" onclick="sendComment()">📤 ارسال</button>
+            <div id="commentsList" style="margin-top:16px;"></div>
+        </div>
+
+        <!-- ====== TAB: TIMER ====== -->
+        <div class="card" id="tab-timer">
+            <h2>⏳ زمان‌های مهم</h2>
+            <div class="timer-grid" id="timerGrid"></div>
+        </div>
+
+        <!-- ====== FOOTER ====== -->
+        <div class="footer" id="footer"></div>
+
+    </div>
+
+    <!-- ====== ADMIN FAB ====== -->
+    <button class="admin-fab" onclick="toggleAdmin()" title="مدیریت">⚙️</button>
+
+    <!-- ====== ADMIN MODAL ====== -->
+    <div id="adminPanel">
+        <div class="modal">
+            <div class="header-modal">
+                <h2>🔐 مدیریت</h2>
+                <button class="close-btn" onclick="toggleAdmin()">✕</button>
+            </div>
+
+            <input type="password" id="adminPass" placeholder="رمز مدیریت...">
+            <button class="btn" onclick="checkAdmin()" style="width:100%;">ورود</button>
+
+            <div id="adminContent" style="display:none; margin-top:20px;">
+
+                <!-- Messages -->
+                <div class="admin-section">
+                    <h3>📝 مدیریت پیام‌ها</h3>
+                    <textarea id="newMsg" placeholder="متن پیام جدید..."></textarea>
+                    <button class="btn" onclick="addMessage()">➕ افزودن</button>
+                    <div id="adminMsgList" style="margin-top:10px;"></div>
+                </div>
+
+                <!-- Music -->
+                <div class="admin-section">
+                    <h3>🎵 مدیریت آهنگ‌ها</h3>
+                    <input id="newSongTitle" placeholder="عنوان آهنگ">
+                    <input id="newSongArtist" placeholder="خواننده">
+                    <input id="newSongCover" placeholder="آدرس کاور (اختیاری)">
+                    <input id="newSongSrc" placeholder="آدرس MP3">
+                    <button class="btn" onclick="addMusic()">➕ افزودن</button>
+                    <div id="adminMusicList" style="margin-top:10px;"></div>
+                </div>
+
+                <!-- Poll -->
+                <div class="admin-section">
+                    <h3>📊 مدیریت نظرسنجی</h3>
+                    <input id="newPollQuestion" placeholder="سوال نظرسنجی">
+                    <input id="newPollOptions" placeholder="گزینه‌ها (با کاما جدا کن)">
+                    <button class="btn" onclick="updatePoll()">بروزرسانی</button>
+                </div>
+
+                <!-- Comments -->
+                <div class="admin-section">
+                    <h3>💬 مدیریت نظرات</h3>
+                    <select id="commentSelect"></select>
+                    <input id="replyInput" placeholder="پاسخ...">
+                    <button class="btn" onclick="replyComment()">ارسال پاسخ</button>
+                    <div id="adminCommentList" style="margin-top:10px;"></div>
+                </div>
+
+                <!-- Timer -->
+                <div class="admin-section">
+                    <h3>⏳ مدیریت تایمرها</h3>
+                    <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
+                    <input id="newTimerDate" type="date" placeholder="تاریخ">
+                    <button class="btn" onclick="addTimer()">➕ افزودن تایمر</button>
+                    <div id="adminTimerList" style="margin-top:10px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ====== CONFIG ======
+        // ============================================================
+        const BIN_ID = "6a39af83f5f4af5e291fb234";
+        const API_KEY = "$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm";
+        const ADMIN_PASSWORD = "AZ_NI";
+
+        let data = null;
+        let currentSongIndex = 0;
+        let timerInterval = null;
+
+        // ============================================================
+        // ====== THEME ======
+        // ============================================================
+        function changeTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.classList.contains(theme));
             });
-        } else {
-            historyDiv.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز تاریخچه‌ای نیست</p>';
+            applyTheme(theme);
         }
-    }
 
-    function submitVote() {
-        const poll = data.polls || {};
-        const today = new Date().toISOString().split('T')[0];
-        if (!poll.votes) poll.votes = {};
-        if (poll.votes[today]) { alert('امروز رای دادی! 😊'); return; }
-        const selected = document.querySelector('input[name="poll"]:checked');
-        if (!selected) { alert('یه گزینه انتخاب کن!'); return; }
-        if (!poll.votes[today]) poll.votes[today] = {};
-        poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
-        if (!poll.history) poll.history = {};
-        poll.history[today] = { ...poll.votes[today] };
-        data.polls = poll;
-        saveData();
-        renderPoll();
-        alert('✅ رای ثبت شد!');
-    }
-
-    function updatePoll() {
-        const question = document.getElementById('newPollQuestion').value.trim();
-        const optionsRaw = document.getElementById('newPollOptions').value.trim();
-        if (!question || !optionsRaw) { alert('سوال و گزینه‌ها رو پر کن!'); return; }
-        const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s);
-        if (options.length < 2) { alert('حداقل ۲ گزینه!'); return; }
-        data.polls = { question, options, votes: {}, history: data.polls?.history || {} };
-        document.getElementById('newPollQuestion').value = '';
-        document.getElementById('newPollOptions').value = '';
-        saveData();
-        renderPoll();
-        alert('✅ نظرسنجی بروزرسانی شد!');
-    }
-
-    // ---------- COMMENTS ----------
-    function renderComments() {
-        const list = document.getElementById('commentsList');
-        const comments = data.comments || [];
-        list.innerHTML = '';
-        if (!comments.length) {
-            list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز نظری نیست 💬</p>';
-            return;
+        function applyTheme(theme) {
+            const themes = {
+                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
+                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c' },
+                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1' },
+                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
+                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' }
+            };
+            const t = themes[theme] || themes.rose;
+            document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
+            document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2').forEach(el => {
+                el.style.color = t.primary;
+            });
+            document.querySelectorAll('.btn:not(.btn-danger)').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+            });
+            document.querySelectorAll('.tab-btn.active').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+            });
+            document.querySelectorAll('.poll-result .bar .fill').forEach(el => {
+                el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
+            });
+            document.querySelectorAll('.msg-item.today').forEach(el => {
+                el.style.borderRightColor = t.secondary;
+                el.style.background = `${t.primary}15`;
+            });
+            document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
+                el.style.color = t.primary;
+            });
         }
-        comments.slice().reverse().forEach(c => {
-            const div = document.createElement('div');
-            div.className = 'comment-item';
-            div.innerHTML = `
-                <div>💬 ${c.text}</div>
-                ${c.reply ? `<div class="reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:rgba(255,255,255,0.3);font-size:14px;">⏳ در انتظار پاسخ...</div>'}
-                <div class="meta">${c.date || ''}</div>
-            `;
-            list.appendChild(div);
+
+        const savedTheme = localStorage.getItem('theme') || 'rose';
+        changeTheme(savedTheme);
+
+        // ============================================================
+        // ====== HEARTS ======
+        // ============================================================
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const emojis = ['❤️', '💖', '💗', '♥️', '💘'];
+            for (let i = 0; i < 18; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (10 + Math.random() * 15) + 's';
+                heart.style.animationDelay = (Math.random() * 15) + 's';
+                heart.style.fontSize = (14 + Math.random() * 30) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // ============================================================
+        // ====== TABS ======
+        // ============================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
         });
-    }
 
-    function sendComment() {
-        const input = document.getElementById('commentInput');
-        const text = input.value.trim();
-        if (!text) { alert('یه چیزی بنویس! ❤️'); return; }
-        if (!data.comments) data.comments = [];
-        data.comments.push({ id: Date.now(), text, date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date()
-                .toLocaleTimeString('fa-IR'), reply: '' });
-        input.value = '';
-        saveData();
-        renderAll();
-        alert('✅ نظرت ثبت شد!');
-    }
-
-    function deleteComment(id) {
-        if (!confirm('حذف کنم؟')) return;
-        data.comments = data.comments.filter(c => c.id !== id);
-        saveData();
-        renderAll();
-    }
-
-    // ---------- ADMIN LISTS ----------
-    function renderAdminLists() {
-        // Messages
-        const msgList = document.getElementById('adminMsgList');
-        if (msgList) {
-            msgList.innerHTML = '';
-            (data.messages || []).slice().reverse().forEach(msg => {
-                const div = document.createElement('div');
-                div.className = 'item-row';
-                div.innerHTML = `
-                    <span class="label">${msg.text} (${msg.date})</span>
-                    <button class="btn btn-danger btn-small" onclick="deleteMessage(${msg.id})">🗑️</button>
-                `;
-                msgList.appendChild(div);
-            });
+        // ============================================================
+        // ====== JSONBIN ======
+        // ============================================================
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const json = await res.json();
+                data = json.record;
+                // اطمینان از وجود timers
+                if (!data.timers) {
+                    data.timers = [
+                        { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
+                        { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
+                        { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-01' }
+                    ];
+                }
+                renderAll();
+            } catch (e) {
+                console.error('خطا:', e);
+                if (!data) {
+                    data = {
+                        messages: [{ id: 1, text: '❤️ امروز عاشقتم', date: new Date().toISOString().split('T')[0] }],
+                        music: [{ id: 1, title: 'آهنگ عاشقانه', artist: 'بی‌نام', cover: '',
+                            src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }],
+                        polls: { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
+                            history: {} },
+                        comments: [],
+                        timers: [
+                            { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
+                            { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
+                            { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-01' }
+                        ]
+                    };
+                    renderAll();
+                }
+            }
         }
 
-        // Music
-        const musicList = document.getElementById('adminMusicList');
-        if (musicList) {
-            musicList.innerHTML = '';
-            (data.music || []).forEach(song => {
-                const div = document.createElement('div');
-                div.className = 'item-row';
-                div.innerHTML = `
-                    <span class="label">${song.title} - ${song.artist || 'بی‌نام'}</span>
-                    <button class="btn btn-danger btn-small" onclick="deleteMusic(${song.id})">🗑️</button>
-                `;
-                musicList.appendChild(div);
-            });
+        async function saveData() {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(data)
+                });
+            } catch (e) {
+                console.error('خطا:', e);
+                alert('❌ خطا در ذخیره!');
+            }
         }
 
-        // Comments for admin
-        const commentList = document.getElementById('adminCommentList');
-        if (commentList) {
-            commentList.innerHTML = '';
-            (data.comments || []).slice().reverse().forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'item-row';
-                div.innerHTML = `
-                    <span class="label">${c.text.substring(0, 30)}${c.text.length > 30 ? '...' : ''}</span>
-                    <button class="btn btn-danger btn-small" onclick="deleteComment(${c.id})">🗑️</button>
-                `;
-                commentList.appendChild(div);
-            });
-        }
-
-        updateCommentSelect();
-    }
-
-    // ---------- ADMIN MODAL ----------
-    function toggleAdmin() {
-        const panel = document.getElementById('adminPanel');
-        panel.classList.toggle('show');
-        if (panel.classList.contains('show')) {
-            document.getElementById('adminPass').value = '';
-            document.getElementById('adminContent').style.display = 'none';
+        // ============================================================
+        // ====== RENDER ======
+        // ============================================================
+        function renderAll() {
+            if (!data) return;
+            renderMessages();
+            renderPlaylist();
+            renderPoll();
+            renderComments();
+            renderTimers();
             renderAdminLists();
+            updateFooter();
         }
-    }
 
-    function checkAdmin() {
-        const pass = document.getElementById('adminPass').value;
-        if (pass === ADMIN_PASSWORD) {
-            document.getElementById('adminContent').style.display = 'block';
-            document.getElementById('adminPass').value = '';
-            renderAdminLists();
-            alert('✅ خوش اومدی عزیزم! ❤️');
-        } else {
-            alert('❌ رمز اشتباهه!');
+        function updateFooter() {
+            const now = new Date();
+            const persian = now.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
+            const gregorian = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('footer').textContent = `❤️ با عشق | ${persian} | ${gregorian}`;
         }
-    }
 
-    function updateCommentSelect() {
-        const sel = document.getElementById('commentSelect');
-        if (!sel) return;
-        sel.innerHTML = '';
-        const noReply = (data.comments || []).filter(c => !c.reply);
-        if (!noReply.length) {
-            const opt = document.createElement('option');
-            opt.textContent = '❗ نظری برای پاسخ نیست';
-            opt.disabled = true;
-            sel.appendChild(opt);
-        } else {
-            noReply.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.textContent = c.text.substring(0, 40) + (c.text.length > 40 ? '...' : '');
-                sel.appendChild(opt);
+        // ---------- TIMERS ----------
+        function renderTimers() {
+            const grid = document.getElementById('timerGrid');
+            grid.innerHTML = '';
+            const timers = data.timers || [];
+            if (!timers.length) {
+                grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هیچ تایمری تعریف نشده ⏳</p>';
+                return;
+            }
+
+            const now = new Date().getTime();
+
+            timers.forEach(timer => {
+                const target = new Date(timer.date + 'T00:00:00').getTime();
+                const diff = target - now;
+                const isExpired = diff <= 0;
+
+                const div = document.createElement('div');
+                div.className = 'timer-item';
+
+                let content = '';
+                if (isExpired) {
+                    content = `
+                            <div class="label">${timer.label}</div>
+                            <div class="expired">
+                                <span class="heart-emoji">❤️</span> رسید! 
+                                <span style="font-size:0.7em;color:rgba(255,255,255,0.3);">(${timer.date})</span>
+                            </div>
+                        `;
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    content = `
+                            <div class="label">${timer.label}</div>
+                            <div class="numbers">
+                                <div class="unit">
+                                    <span class="num">${String(days).padStart(2, '0')}</span>
+                                    <span class="lbl">روز</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(hours).padStart(2, '0')}</span>
+                                    <span class="lbl">ساعت</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(minutes).padStart(2, '0')}</span>
+                                    <span class="lbl">دقیقه</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(seconds).padStart(2, '0')}</span>
+                                    <span class="lbl">ثانیه</span>
+                                </div>
+                            </div>
+                            <div style="font-size:0.7em;color:rgba(255,255,255,0.15);margin-top:6px;">${timer.date}</div>
+                        `;
+                }
+
+                div.innerHTML = content;
+                grid.appendChild(div);
             });
         }
-    }
 
-    function replyComment() {
-        const sel = document.getElementById('commentSelect');
-        const reply = document.getElementById('replyInput').value.trim();
-        if (!reply) { alert('پاسخ رو بنویس!'); return; }
-        const id = parseInt(sel.value);
-        const comment = (data.comments || []).find(c => c.id === id);
-        if (comment) {
-            comment.reply = reply;
-            document.getElementById('replyInput').value = '';
+        // ---------- MESSAGES ----------
+        function renderMessages() {
+            const list = document.getElementById('messageList');
+            const today = new Date().toISOString().split('T')[0];
+            list.innerHTML = '';
+            const msgs = data.messages || [];
+            if (!msgs.length) {
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز پیامی نیست ❤️</p>';
+                return;
+            }
+            msgs.slice().reverse().forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'msg-item' + (msg.date === today ? ' today' : '');
+                div.innerHTML = `
+                        <div class="text">${msg.text}</div>
+                        <div class="date">${msg.date} ${msg.date === today ? '⭐' : ''}</div>
+                    `;
+                list.appendChild(div);
+            });
+        }
+
+        function addMessage() {
+            const text = document.getElementById('newMsg').value.trim();
+            if (!text) { alert('متن رو بنویس!'); return; }
+            if (!data.messages) data.messages = [];
+            data.messages.push({ id: Date.now(), text, date: new Date().toISOString().split('T')[0] });
+            document.getElementById('newMsg').value = '';
             saveData();
             renderAll();
-            alert('✅ پاسخ ارسال شد! 💝');
-        } else {
-            alert('❗ نظری برای پاسخ نیست!');
+            alert('✅ پیام اضافه شد!');
         }
-    }
 
-    // ============================================================
-    // ====== CLOSE MODAL ON OUTSIDE CLICK ======
-    // ============================================================
-    document.getElementById('adminPanel').addEventListener('click', function(e) {
-        if (e.target === this) toggleAdmin();
-    });
+        function deleteMessage(id) {
+            if (!confirm('حذف کنم؟')) return;
+            data.messages = data.messages.filter(m => m.id !== id);
+            saveData();
+            renderAll();
+        }
 
-    // ============================================================
-    // ====== INIT ======
-    // ============================================================
-    loadData();
-    setInterval(loadData, 30000);
-    setInterval(updateFooter, 60000);
-</script>
+        // ---------- MUSIC ----------
+        function renderPlaylist() {
+            const list = document.getElementById('playlist');
+            const music = data.music || [];
+            list.innerHTML = '';
+            if (!music.length) {
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هیچ آهنگی نیست 🎶</p>';
+                return;
+            }
+            music.forEach((song, index) => {
+                const div = document.createElement('div');
+                div.className = 'music-item' + (index === currentSongIndex ? ' active' : '');
+                div.innerHTML = `
+                        <img src="${song.cover || 'https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'">
+                        <div class="info">
+                            <div class="title">${song.title}</div>
+                            <div class="artist">${song.artist || 'بی‌نام'}</div>
+                        </div>
+                        <button class="btn btn-small" onclick="playSong(${index})">▶️</button>
+                    `;
+                list.appendChild(div);
+            });
+            if (music.length && !document.getElementById('audioPlayer').src) {
+                playSong(0);
+            }
+        }
+
+        function playSong(index) {
+            const music = data.music || [];
+            if (!music[index]) return;
+            currentSongIndex = index;
+            const song = music[index];
+            document.getElementById('currentCover').src = song.cover || 'https://via.placeholder.com/100/1a1a1a/ec407a?text=♥';
+            document.getElementById('currentTitle').textContent = song.title;
+            document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
+            const audio = document.getElementById('audioPlayer');
+            audio.src = song.src || '';
+            audio.load();
+            audio.play().catch(() => {});
+            renderPlaylist();
+        }
+
+        function prevSong() {
+            const music = data.music || [];
+            if (!music.length) return;
+            const idx = (currentSongIndex - 1 + music.length) % music.length;
+            playSong(idx);
+        }
+
+        function nextSong() {
+            const music = data.music || [];
+            if (!music.length) return;
+            const idx = (currentSongIndex + 1) % music.length;
+            playSong(idx);
+        }
+
+        function downloadCurrentSong() {
+            const src = document.getElementById('audioPlayer').src;
+            if (src && src !== '') {
+                const a = document.createElement('a');
+                a.href = src;
+                a.download = 'آهنگ_عاشقانه.mp3';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                alert('اول یه آهنگ انتخاب کن! 🎵');
+            }
+        }
+
+        function addMusic() {
+            const title = document.getElementById('newSongTitle').value.trim();
+            const artist = document.getElementById('newSongArtist').value.trim();
+            const cover = document.getElementById('newSongCover').value.trim();
+            const src = document.getElementById('newSongSrc').value.trim();
+            if (!title || !src) { alert('عنوان و لینک MP3 الزامی!'); return; }
+            if (!data.music) data.music = [];
+            data.music.push({ id: Date.now(), title, artist: artist || 'بی‌نام', cover: cover || '',
+                src });
+            document.getElementById('newSongTitle').value = '';
+            document.getElementById('newSongArtist').value = '';
+            document.getElementById('newSongCover').value = '';
+            document.getElementById('newSongSrc').value = '';
+            saveData();
+            renderAll();
+            alert('✅ آهنگ اضافه شد!');
+        }
+
+        function deleteMusic(id) {
+            if (!confirm('حذف کنم؟')) return;
+            data.music = data.music.filter(m => m.id !== id);
+            if (currentSongIndex >= data.music.length) currentSongIndex = 0;
+            saveData();
+            renderAll();
+            if (data.music.length) playSong(0);
+        }
+
+        // ---------- POLL ----------
+        function renderPoll() {
+            const poll = data.polls || { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
+                history: {} };
+            document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره؟';
+
+            const container = document.getElementById('pollOptions');
+            container.innerHTML = '';
+            const today = new Date().toISOString().split('T')[0];
+            const hasVoted = poll.votes && poll.votes[today];
+
+            (poll.options || []).forEach(opt => {
+                const label = document.createElement('label');
+                label.className = 'poll-option';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'poll';
+                radio.value = opt;
+                radio.disabled = !!hasVoted;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(' ' + opt));
+                container.appendChild(label);
+            });
+
+            const results = document.getElementById('pollResults');
+            if (poll.votes && poll.votes[today]) {
+                const todayVotes = poll.votes[today];
+                const total = Object.values(todayVotes).reduce((a, b) => a + b, 0);
+                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.6); margin-bottom:10px;">📊 نتایج امروز:</h4>';
+                if (total === 0) {
+                    results.innerHTML += '<p style="color:rgba(255,255,255,0.3);">هنوز رایی نیست</p>';
+                } else {
+                    (poll.options || []).forEach(opt => {
+                        const count = todayVotes[opt] || 0;
+                        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                        results.innerHTML += `
+                                <div class="poll-result">
+                                    <div class="label"><span>${opt}</span><span>${count} (${percent}%)</span></div>
+                                    <div class="bar"><div class="fill" style="width:${percent}%">${percent}%</div></div>
+                                </div>
+                            `;
+                    });
+                }
+            } else {
+                results.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز رای ندادی 😊</p>';
+            }
+
+            const historyDiv = document.getElementById('pollHistory');
+            historyDiv.innerHTML = '<h4 style="color:rgba(255,255,255,0.6);">📜 تاریخچه:</h4>';
+            if (poll.history && Object.keys(poll.history).length > 0) {
+                const sorted = Object.keys(poll.history).sort().reverse();
+                sorted.forEach(date => {
+                    if (date === today) return;
+                    const dayVotes = poll.history[date];
+                    const total = Object.values(dayVotes).reduce((a, b) => a + b, 0);
+                    const div = document.createElement('div');
+                    div.className = 'poll-history-item';
+                    div.innerHTML = `
+                            <div class="date">📅 ${date}</div>
+                            <div style="font-size:13px; color:rgba(255,255,255,0.5);">
+                                ${Object.entries(dayVotes).map(([opt,count]) => `${opt}: ${count}`).join(' | ')}
+                            </div>
+                        `;
+                    historyDiv.appendChild(div);
+                });
+            } else {
+                historyDiv.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز تاریخچه‌ای نیست</p>';
+            }
+        }
+
+        function submitVote() {
+            const poll = data.polls || {};
+            const today = new Date().toISOString().split('T')[0];
+            if (!poll.votes) poll.votes = {};
+            if (poll.votes[today]) { alert('امروز رای دادی! 😊'); return; }
+            const selected = document.querySelector('input[name="poll"]:checked');
+            if (!selected) { alert('یه گزینه انتخاب کن!'); return; }
+            if (!poll.votes[today]) poll.votes[today] = {};
+            poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
+            if (!poll.history) poll.history = {};
+            poll.history[today] = { ...poll.votes[today] };
+            data.polls = poll;
+            saveData();
+            renderPoll();
+            alert('✅ رای ثبت شد!');
+        }
+
+        function updatePoll() {
+            const question = document.getElementById('newPollQuestion').value.trim();
+            const optionsRaw = document.getElementById('newPollOptions').value.trim();
+            if (!question || !optionsRaw) { alert('سوال و گزینه‌ها رو پر کن!'); return; }
+            const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s);
+            if (options.length < 2) { alert('حداقل ۲ گزینه!'); return; }
+            data.polls = { question, options, votes: {}, history: data.polls?.history || {} };
+            document.getElementById('newPollQuestion').value = '';
+            document.getElementById('newPollOptions').value = '';
+            saveData();
+            renderPoll();
+            alert('✅ نظرسنجی بروزرسانی شد!');
+        }
+
+        // ---------- COMMENTS ----------
+        function renderComments() {
+            const list = document.getElementById('commentsList');
+            const comments = data.comments || [];
+            list.innerHTML = '';
+            if (!comments.length) {
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز نظری نیست 💬</p>';
+                return;
+            }
+            comments.slice().reverse().forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `
+                        <div>💬 ${c.text}</div>
+                        ${c.reply ? `<div class="reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:rgba(255,255,255,0.3);font-size:14px;">⏳ در انتظار پاسخ...</div>'}
+                        <div class="meta">${c.date || ''}</div>
+                    `;
+                list.appendChild(div);
+            });
+        }
+
+        function sendComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+            if (!text) { alert('یه چیزی بنویس! ❤️'); return; }
+            if (!data.comments) data.comments = [];
+            data.comments.push({ id: Date.now(), text, date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date()
+                    .toLocaleTimeString('fa-IR'), reply: '' });
+            input.value = '';
+            saveData();
+            renderAll();
+            alert('✅ نظرت ثبت شد!');
+        }
+
+        function deleteComment(id) {
+            if (!confirm('حذف کنم؟')) return;
+            data.comments = data.comments.filter(c => c.id !== id);
+            saveData();
+            renderAll();
+        }
+
+        // ---------- TIMER MANAGEMENT ----------
+        function addTimer() {
+            const label = document.getElementById('newTimerLabel').value.trim();
+            const date = document.getElementById('newTimerDate').value;
+            if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
+            if (!data.timers) data.timers = [];
+            data.timers.push({ id: Date.now(), label, date });
+            document.getElementById('newTimerLabel').value = '';
+            document.getElementById('newTimerDate').value = '';
+            saveData();
+            renderAll();
+            alert('✅ تایمر اضافه شد!');
+        }
+
+        function deleteTimer(id) {
+            if (!confirm('حذف کنم؟')) return;
+            data.timers = data.timers.filter(t => t.id !== id);
+            saveData();
+            renderAll();
+        }
+
+        // ---------- ADMIN LISTS ----------
+        function renderAdminLists() {
+            // Messages
+            const msgList = document.getElementById('adminMsgList');
+            if (msgList) {
+                msgList.innerHTML = '';
+                (data.messages || []).slice().reverse().forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'item-row';
+                    div.innerHTML = `
+                            <span class="label">${msg.text} (${msg.date})</span>
+                            <button class="btn btn-danger btn-small" onclick="deleteMessage(${msg.id})">🗑️</button>
+                        `;
+                    msgList.appendChild(div);
+                });
+            }
+
+            // Music
+            const musicList = document.getElementById('adminMusicList');
+            if (musicList) {
+                musicList.innerHTML = '';
+                (data.music || []).forEach(song => {
+                    const div = document.createElement('div');
+                    div.className = 'item-row';
+                    div.innerHTML = `
+                            <span class="label">${song.title} - ${song.artist || 'بی‌نام'}</span>
+                            <button class="btn btn-danger btn-small" onclick="deleteMusic(${song.id})">🗑️</button>
+                        `;
+                    musicList.appendChild(div);
+                });
+            }
+
+            // Comments
+            const commentList = document.getElementById('adminCommentList');
+            if (commentList) {
+                commentList.innerHTML = '';
+                (data.comments || []).slice().reverse().forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'item-row';
+                    div.innerHTML = `
+                            <span class="label">${c.text.substring(0, 30)}${c.text.length > 30 ? '...' : ''}</span>
+                            <button class="btn btn-danger btn-small" onclick="deleteComment(${c.id})">🗑️</button>
+                        `;
+                    commentList.appendChild(div);
+                });
+            }
+
+            // Timers
+            const timerList = document.getElementById('adminTimerList');
+            if (timerList) {
+                timerList.innerHTML = '';
+                (data.timers || []).forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'item-row';
+                    div.innerHTML = `
+                            <span class="label">${t.label} (${t.date})</span>
+                            <button class="btn btn-danger btn-small" onclick="deleteTimer(${t.id})">🗑️</button>
+                        `;
+                    timerList.appendChild(div);
+                });
+            }
+
+            updateCommentSelect();
+        }
+
+        // ---------- ADMIN MODAL ----------
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('show');
+            if (panel.classList.contains('show')) {
+                document.getElementById('adminPass').value = '';
+                document.getElementById('adminContent').style.display = 'none';
+                renderAdminLists();
+            }
+        }
+
+        function checkAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('adminContent').style.display = 'block';
+                document.getElementById('adminPass').value = '';
+                renderAdminLists();
+                alert('✅ خوش اومدی عزیزم! ❤️');
+            } else {
+                alert('❌ رمز اشتباهه!');
+            }
+        }
+
+        function updateCommentSelect() {
+            const sel = document.getElementById('commentSelect');
+            if (!sel) return;
+            sel.innerHTML = '';
+            const noReply = (data.comments || []).filter(c => !c.reply);
+            if (!noReply.length) {
+                const opt = document.createElement('option');
+                opt.textContent = '❗ نظری برای پاسخ نیست';
+                opt.disabled = true;
+                sel.appendChild(opt);
+            } else {
+                noReply.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.text.substring(0, 40) + (c.text.length > 40 ? '...' : '');
+                    sel.appendChild(opt);
+                });
+            }
+        }
+
+        function replyComment() {
+            const sel = document.getElementById('commentSelect');
+            const reply = document.getElementById('replyInput').value.trim();
+            if (!reply) { alert('پاسخ رو بنویس!'); return; }
+            const id = parseInt(sel.value);
+            const comment = (data.comments || []).find(c => c.id === id);
+            if (comment) {
+                comment.reply = reply;
+                document.getElementById('replyInput').value = '';
+                saveData();
+                renderAll();
+                alert('✅ پاسخ ارسال شد! 💝');
+            } else {
+                alert('❗ نظری برای پاسخ نیست!');
+            }
+        }
+
+        // ============================================================
+        // ====== TIMER LOOP ======
+        // ============================================================
+        function startTimerLoop() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                renderTimers();
+            }, 1000);
+        }
+
+        // ============================================================
+        // ====== CLOSE MODAL ON OUTSIDE CLICK ======
+        // ============================================================
+        document.getElementById('adminPanel').addEventListener('click', function(e) {
+            if (e.target === this) toggleAdmin();
+        });
+
+        // ============================================================
+        // ====== INIT ======
+        // ============================================================
+        loadData();
+        startTimerLoop();
+        setInterval(loadData, 30000);
+        setInterval(updateFooter, 60000);
+    </script>
 </body>
     </html>
