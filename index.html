@@ -14,16 +14,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #0a0a0a;
+            background: #0d0d0d;
             color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             padding: 20px;
-            background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(236, 64, 122, 0.06), transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(171, 71, 188, 0.06), transparent 60%),
-                radial-gradient(ellipse at 50% 0%, rgba(236, 64, 122, 0.03), transparent 50%);
+            background-image: radial-gradient(circle at 20% 30%, #1a0a1a, #0d0d0d);
             transition: all 0.5s ease;
         }
 
@@ -35,11 +32,11 @@
         /* ====== HEADER ====== */
         .header {
             text-align: center;
-            padding: 45px 20px 35px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
+            padding: 35px 20px 25px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
             border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
@@ -53,8 +50,8 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 60% 30%, rgba(236, 64, 122, 0.05), transparent 60%);
-            animation: rotateGlow 25s linear infinite;
+            background: radial-gradient(circle at 70% 30%, rgba(233, 30, 99, 0.08), transparent 60%);
+            animation: rotateGlow 20s linear infinite;
         }
 
         @keyframes rotateGlow {
@@ -67,32 +64,30 @@
         }
 
         .header h1 {
-            font-size: 3.2em;
+            font-size: 2.8em;
             background: linear-gradient(135deg, #f06292, #ec407a, #ab47bc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
             z-index: 1;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .header .sub {
-            color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 1.1em;
             margin: 6px 0;
             position: relative;
             z-index: 1;
-            letter-spacing: 2px;
         }
 
         .header .greeting {
             font-size: 1.15em;
             color: rgba(255, 255, 255, 0.5);
-            margin-top: 14px;
+            margin-top: 12px;
             position: relative;
             z-index: 1;
             min-height: 36px;
-            font-weight: 300;
         }
 
         .header .greeting .heart-beat {
@@ -120,30 +115,82 @@
             }
         }
 
+        /* ====== THEME SELECTOR IN HEADER ====== */
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-btn.active {
+            border-color: #ec407a;
+            box-shadow: 0 0 25px rgba(236, 64, 122, 0.25);
+        }
+
+        .theme-btn.rose {
+            background: linear-gradient(135deg, #fce4ec, #e91e63);
+        }
+        .theme-btn.violet {
+            background: linear-gradient(135deg, #ede7f6, #7b1fa2);
+        }
+        .theme-btn.sky {
+            background: linear-gradient(135deg, #e3f2fd, #1565c0);
+        }
+        .theme-btn.sunset {
+            background: linear-gradient(135deg, #fff3e0, #e65100);
+        }
+        .theme-btn.dark {
+            background: linear-gradient(135deg, #263238, #000000);
+        }
+        .theme-btn.ocean {
+            background: linear-gradient(135deg, #e0f7fa, #00695c);
+        }
+        .theme-btn.lavender {
+            background: linear-gradient(135deg, #f3e5f5, #6a1b9a);
+        }
+
         /* ====== TABS ====== */
         .tabs {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 28px;
+            margin-bottom: 25px;
             justify-content: center;
         }
 
         .tab-btn {
-            padding: 13px 30px;
+            padding: 12px 26px;
             border: none;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.04);
             color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.05);
             font-weight: 500;
             flex: 1;
-            min-width: 110px;
-            max-width: 190px;
-            letter-spacing: 0.5px;
+            min-width: 90px;
+            max-width: 170px;
         }
 
         .tab-btn:hover {
@@ -154,7 +201,7 @@
         .tab-btn.active {
             background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
-            box-shadow: 0 8px 35px rgba(236, 64, 122, 0.25);
+            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.25);
             border-color: transparent;
         }
 
@@ -163,7 +210,7 @@
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border-radius: 30px;
-            padding: 30px;
+            padding: 28px;
             margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -187,13 +234,87 @@
         }
 
         .card h2 {
-            font-size: 1.5em;
+            font-size: 1.4em;
             color: #ec407a;
             border-bottom: 1px solid rgba(236, 64, 122, 0.12);
-            padding-bottom: 14px;
-            margin-bottom: 22px;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
             font-weight: 600;
+        }
+
+        /* ====== TIMER ====== */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .timer-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 20px 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .timer-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .timer-item .label {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .timer-item .numbers {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .timer-item .numbers .unit {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 10px;
+            border-radius: 12px;
+            min-width: 44px;
+        }
+
+        .timer-item .numbers .unit .num {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #ec407a;
+            display: block;
+            line-height: 1.2;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-item .numbers .unit .lbl {
+            font-size: 0.55em;
+            color: rgba(255, 255, 255, 0.15);
+            text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        .timer-item .expired {
+            color: #f44336;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 8px 0;
+        }
+
+        .timer-item .expired .heart-emoji {
+            animation: heartBeat 1.2s infinite;
+            display: inline-block;
+        }
+
+        .timer-item .date-label {
+            font-size: 0.65em;
+            color: rgba(255, 255, 255, 0.12);
+            margin-top: 6px;
         }
 
         /* ====== BUTTONS ====== */
@@ -201,7 +322,7 @@
             background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
             border: none;
-            padding: 10px 26px;
+            padding: 10px 24px;
             border-radius: 30px;
             cursor: pointer;
             font-size: 15px;
@@ -225,19 +346,8 @@
         }
 
         .btn-small {
-            padding: 6px 16px;
-            font-size: 13px;
-        }
-
-        .btn-icon {
             padding: 6px 14px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-icon:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
+            font-size: 13px;
         }
 
         /* ====== INPUTS ====== */
@@ -245,7 +355,7 @@
         textarea,
         select {
             width: 100%;
-            padding: 14px 18px;
+            padding: 13px 16px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 16px;
             font-size: 15px;
@@ -282,15 +392,15 @@
 
         /* ====== MESSAGES ====== */
         .msg-item {
-            padding: 16px 20px;
+            padding: 14px 18px;
             margin: 10px 0;
-            border-radius: 18px;
+            border-radius: 16px;
             background: rgba(255, 255, 255, 0.03);
             border-right: 4px solid #ec407a;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             transition: 0.3s;
         }
 
@@ -313,26 +423,26 @@
             white-space: nowrap;
         }
 
-        /* ====== MUSIC PLAYER ====== */
+        /* ====== MUSIC ====== */
         .music-player {
-            padding: 28px;
+            padding: 24px;
             background: rgba(255, 255, 255, 0.04);
-            border-radius: 28px;
+            border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .music-player .top {
             display: flex;
-            gap: 28px;
+            gap: 24px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .music-player .cover {
-            width: 140px;
-            height: 140px;
-            border-radius: 24px;
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
             object-fit: cover;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
@@ -341,11 +451,11 @@
 
         .music-player .info {
             flex: 1;
-            min-width: 200px;
+            min-width: 180px;
         }
 
         .music-player .info .title {
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: 700;
             color: #fff;
             margin-bottom: 2px;
@@ -353,8 +463,8 @@
 
         .music-player .info .artist {
             color: rgba(255, 255, 255, 0.4);
-            font-size: 1em;
-            margin-bottom: 14px;
+            font-size: 0.95em;
+            margin-bottom: 12px;
         }
 
         .music-player .info audio {
@@ -363,31 +473,26 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        .music-player .info audio::-webkit-media-controls-panel {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
         .music-player .controls {
             display: flex;
-            gap: 10px;
-            margin-top: 14px;
+            gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
 
-        /* ====== MUSIC LIST ====== */
         .music-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .music-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 14px 18px;
+            gap: 14px;
+            padding: 12px 16px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 18px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s;
             border: 1px solid transparent;
@@ -404,9 +509,9 @@
         }
 
         .music-item img {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             object-fit: cover;
             flex-shrink: 0;
         }
@@ -417,11 +522,11 @@
 
         .music-item .info .title {
             font-weight: 500;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
 
         .music-item .info .artist {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: rgba(255, 255, 255, 0.3);
         }
 
@@ -429,10 +534,10 @@
         .poll-option {
             display: flex;
             align-items: center;
-            padding: 14px 18px;
-            margin: 8px 0;
+            padding: 12px 16px;
+            margin: 6px 0;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
             transition: 0.3s;
             border: 1px solid transparent;
@@ -445,55 +550,55 @@
 
         .poll-option input[type="radio"] {
             width: auto;
-            margin: 0 14px 0 0;
+            margin: 0 12px 0 0;
             accent-color: #ec407a;
         }
 
         .poll-result {
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .poll-result .label {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             color: rgba(255, 255, 255, 0.5);
         }
 
         .poll-result .bar {
-            height: 32px;
+            height: 28px;
             background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
         }
 
         .poll-result .bar .fill {
             height: 100%;
             background: linear-gradient(90deg, #ec407a, #ab47bc);
-            border-radius: 16px;
+            border-radius: 14px;
             transition: width 0.8s ease;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 16px;
+            padding-right: 14px;
             color: #fff;
             font-size: 13px;
             font-weight: 600;
-            min-width: 40px;
+            min-width: 36px;
         }
 
         .poll-history {
-            margin-top: 25px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .poll-history-item {
-            padding: 12px 16px;
-            margin: 6px 0;
+            padding: 10px 14px;
+            margin: 4px 0;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 14px;
         }
 
@@ -504,25 +609,25 @@
 
         /* ====== COMMENTS ====== */
         .comment-item {
-            padding: 16px 20px;
-            margin: 10px 0;
+            padding: 14px 18px;
+            margin: 8px 0;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 18px;
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .comment-item .reply {
             background: rgba(236, 64, 122, 0.05);
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 8px;
             border-right: 3px solid #ec407a;
         }
 
         .comment-item .meta {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.15);
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         /* ====== ADMIN MODAL ====== */
@@ -547,7 +652,7 @@
 
         #adminPanel .modal {
             background: #141414;
-            border-radius: 32px;
+            border-radius: 30px;
             padding: 35px;
             max-width: 640px;
             width: 100%;
@@ -578,7 +683,7 @@
 
         #adminPanel .modal .header-modal h2 {
             color: #ec407a;
-            font-size: 1.5em;
+            font-size: 1.4em;
             margin: 0;
         }
 
@@ -597,18 +702,39 @@
             transform: rotate(90deg);
         }
 
+        /* ====== ADMIN LOGIN ====== */
+        #adminLogin {
+            margin-bottom: 20px;
+        }
+
+        #adminLogin .login-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #adminLogin .login-row input {
+            flex: 1;
+            margin: 0;
+        }
+
+        #adminLogin .login-row .btn {
+            margin: 0;
+            white-space: nowrap;
+        }
+
         .admin-section {
             background: rgba(255, 255, 255, 0.02);
-            padding: 18px;
-            border-radius: 18px;
-            margin: 14px 0;
+            padding: 16px;
+            border-radius: 16px;
+            margin: 12px 0;
             border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .admin-section h3 {
             color: rgba(255, 255, 255, 0.6);
-            font-size: 1em;
-            margin-bottom: 10px;
+            font-size: 0.95em;
+            margin-bottom: 8px;
             font-weight: 500;
         }
 
@@ -617,7 +743,7 @@
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
-            padding: 6px 0;
+            padding: 4px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
 
@@ -630,60 +756,11 @@
         /* ====== FOOTER ====== */
         .footer {
             text-align: center;
-            padding: 30px 20px 20px;
-            color: rgba(255, 255, 255, 0.12);
-            font-size: 13px;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            margin-top: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        .footer .theme-selector {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .footer .theme-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.06);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .footer .theme-btn:hover {
-            transform: scale(1.12);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .footer .theme-btn.active {
-            border-color: #ec407a;
-            box-shadow: 0 0 25px rgba(236, 64, 122, 0.2);
-        }
-
-        .footer .theme-btn.rose {
-            background: linear-gradient(135deg, #fce4ec, #e91e63);
-        }
-        .footer .theme-btn.violet {
-            background: linear-gradient(135deg, #ede7f6, #7b1fa2);
-        }
-        .footer .theme-btn.sky {
-            background: linear-gradient(135deg, #e3f2fd, #1565c0);
-        }
-        .footer .theme-btn.sunset {
-            background: linear-gradient(135deg, #fff3e0, #e65100);
-        }
-        .footer .theme-btn.dark {
-            background: linear-gradient(135deg, #263238, #000000);
-        }
-
-        .footer .footer-text {
-            opacity: 0.5;
+            padding: 25px 20px 15px;
+            color: rgba(255, 255, 255, 0.1);
             font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            margin-top: 10px;
         }
 
         /* ====== FLOATING HEARTS ====== */
@@ -722,14 +799,14 @@
             bottom: 24px;
             right: 24px;
             z-index: 100;
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             border: none;
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
             color: rgba(255, 255, 255, 0.3);
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.04);
@@ -762,29 +839,48 @@
                 padding: 12px;
             }
             .header h1 {
-                font-size: 2.2em;
+                font-size: 2em;
             }
             .card {
-                padding: 18px;
+                padding: 16px;
             }
             .tab-btn {
-                font-size: 13px;
-                padding: 10px 14px;
-                min-width: 70px;
+                font-size: 12px;
+                padding: 8px 12px;
+                min-width: 60px;
             }
             .music-player .cover {
-                width: 90px;
-                height: 90px;
+                width: 80px;
+                height: 80px;
             }
             .music-player .info .title {
-                font-size: 1.2em;
+                font-size: 1.1em;
             }
             #adminPanel .modal {
-                padding: 20px;
-                margin: 10px;
+                padding: 18px;
+                margin: 8px;
             }
             .music-player .top {
-                gap: 16px;
+                gap: 14px;
+            }
+            .timer-item .numbers .unit {
+                min-width: 32px;
+                padding: 5px 6px;
+            }
+            .timer-item .numbers .unit .num {
+                font-size: 1.2em;
+            }
+            .timer-grid {
+                grid-template-columns: 1fr;
+            }
+            #adminLogin .login-row {
+                flex-direction: column;
+            }
+            #adminLogin .login-row input {
+                width: 100%;
+            }
+            #adminLogin .login-row .btn {
+                width: 100%;
             }
         }
     </style>
@@ -804,6 +900,15 @@
             <div class="greeting" id="greeting">
                 <span class="heart-beat">❤️</span> هر روز با تو زیباترینه...
             </div>
+            <div class="theme-selector">
+                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
+                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
+                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
+                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
+                <button class="theme-btn ocean" onclick="changeTheme('ocean')" title="اقیانوس"></button>
+                <button class="theme-btn lavender" onclick="changeTheme('lavender')" title="اسطوخودوس"></button>
+                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
+            </div>
         </div>
 
         <!-- ====== TABS ====== -->
@@ -812,6 +917,7 @@
             <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
             <button class="tab-btn" data-tab="tab-poll">📊 نظرسنجی</button>
             <button class="tab-btn" data-tab="tab-comments">💬 نظرات</button>
+            <button class="tab-btn" data-tab="tab-timer">⏳ زمان‌ها</button>
         </div>
 
         <!-- ====== TAB: MESSAGES ====== -->
@@ -825,7 +931,7 @@
             <h2>🎵 آهنگ‌های مخصوص تو</h2>
             <div class="music-player" id="currentPlayer">
                 <div class="top">
-                    <img class="cover" id="currentCover" src="https://via.placeholder.com/140/1a1a1a/ec407a?text=♥" alt="کاور">
+                    <img class="cover" id="currentCover" src="https://via.placeholder.com/120/1a1a1a/ec407a?text=♥" alt="کاور">
                     <div class="info">
                         <div class="title" id="currentTitle">هیچی پخش نشده</div>
                         <div class="artist" id="currentArtist">♥</div>
@@ -844,10 +950,10 @@
         <!-- ====== TAB: POLL ====== -->
         <div class="card" id="tab-poll">
             <h2>📊 نظرسنجی امروز</h2>
-            <p id="pollQuestion" style="font-size:1.1em; margin-bottom:16px; color:rgba(255,255,255,0.5);"></p>
+            <p id="pollQuestion" style="font-size:1.05em; margin-bottom:14px; color:rgba(255,255,255,0.5);"></p>
             <div id="pollOptions"></div>
-            <button class="btn" onclick="submitVote()" style="margin-top:8px;">🗳️ رای بده</button>
-            <div id="pollResults" style="margin-top:20px;"></div>
+            <button class="btn" onclick="submitVote()" style="margin-top:6px;">🗳️ رای بده</button>
+            <div id="pollResults" style="margin-top:16px;"></div>
             <div class="poll-history" id="pollHistory"></div>
         </div>
 
@@ -856,20 +962,17 @@
             <h2>💬 سوال یا حرف داری؟</h2>
             <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
             <button class="btn" onclick="sendComment()">📤 ارسال</button>
-            <div id="commentsList" style="margin-top:16px;"></div>
+            <div id="commentsList" style="margin-top:14px;"></div>
+        </div>
+
+        <!-- ====== TAB: TIMER ====== -->
+        <div class="card" id="tab-timer">
+            <h2>⏳ زمان‌های مهم</h2>
+            <div class="timer-grid" id="timerGrid"></div>
         </div>
 
         <!-- ====== FOOTER ====== -->
-        <div class="footer">
-            <div class="theme-selector">
-                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
-                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
-                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
-                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
-                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
-            </div>
-            <div class="footer-text" id="footer"></div>
-        </div>
+        <div class="footer" id="footer"></div>
 
     </div>
 
@@ -884,17 +987,23 @@
                 <button class="close-btn" onclick="toggleAdmin()">✕</button>
             </div>
 
-            <input type="password" id="adminPass" placeholder="رمز مدیریت...">
-            <button class="btn" onclick="checkAdmin()" style="width:100%;">ورود</button>
+            <!-- Login -->
+            <div id="adminLogin">
+                <div class="login-row">
+                    <input type="password" id="adminPass" placeholder="رمز مدیریت...">
+                    <button class="btn" onclick="checkAdmin()">ورود</button>
+                </div>
+            </div>
 
-            <div id="adminContent" style="display:none; margin-top:20px;">
+            <!-- Admin Content (hidden until login) -->
+            <div id="adminContent" style="display:none; margin-top:16px;">
 
                 <!-- Messages -->
                 <div class="admin-section">
                     <h3>📝 مدیریت پیام‌ها</h3>
                     <textarea id="newMsg" placeholder="متن پیام جدید..."></textarea>
                     <button class="btn" onclick="addMessage()">➕ افزودن</button>
-                    <div id="adminMsgList" style="margin-top:10px;"></div>
+                    <div id="adminMsgList" style="margin-top:8px;"></div>
                 </div>
 
                 <!-- Music -->
@@ -905,7 +1014,7 @@
                     <input id="newSongCover" placeholder="آدرس کاور (اختیاری)">
                     <input id="newSongSrc" placeholder="آدرس MP3">
                     <button class="btn" onclick="addMusic()">➕ افزودن</button>
-                    <div id="adminMusicList" style="margin-top:10px;"></div>
+                    <div id="adminMusicList" style="margin-top:8px;"></div>
                 </div>
 
                 <!-- Poll -->
@@ -922,7 +1031,16 @@
                     <select id="commentSelect"></select>
                     <input id="replyInput" placeholder="پاسخ...">
                     <button class="btn" onclick="replyComment()">ارسال پاسخ</button>
-                    <div id="adminCommentList" style="margin-top:10px;"></div>
+                    <div id="adminCommentList" style="margin-top:8px;"></div>
+                </div>
+
+                <!-- Timer -->
+                <div class="admin-section">
+                    <h3>⏳ مدیریت تایمرها</h3>
+                    <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
+                    <input id="newTimerDate" type="date" placeholder="تاریخ">
+                    <button class="btn" onclick="addTimer()">➕ افزودن تایمر</button>
+                    <div id="adminTimerList" style="margin-top:8px;"></div>
                 </div>
 
             </div>
@@ -939,6 +1057,7 @@
 
         let data = null;
         let currentSongIndex = 0;
+        let timerInterval = null;
 
         // ============================================================
         // ====== THEME ======
@@ -954,28 +1073,20 @@
 
         function applyTheme(theme) {
             const themes = {
-                rose: { bg1: '#0a0a0a', bg2: 'rgba(236,64,122,0.06)', bg3: 'rgba(171,71,188,0.06)', primary: '#ec407a',
-                    secondary: '#ab47bc' },
-                violet: { bg1: '#08060d', bg2: 'rgba(123,31,162,0.06)', bg3: 'rgba(74,20,140,0.06)',
-                    primary: '#7b1fa2', secondary: '#4a148c' },
-                sky: { bg1: '#060a12', bg2: 'rgba(30,136,229,0.06)', bg3: 'rgba(13,71,161,0.06)',
-                    primary: '#1e88e5', secondary: '#0d47a1' },
-                sunset: { bg1: '#0d0806', bg2: 'rgba(230,81,0,0.06)', bg3: 'rgba(191,54,12,0.06)',
-                    primary: '#e65100', secondary: '#bf360c' },
-                dark: { bg1: '#050505', bg2: 'rgba(120,144,156,0.05)', bg3: 'rgba(55,71,79,0.05)',
-                    primary: '#78909c', secondary: '#37474f' }
+                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
+                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c' },
+                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1' },
+                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
+                ocean: { bg: '#0a1212', primary: '#00695c', secondary: '#004d40' },
+                lavender: { bg: '#0d0a14', primary: '#6a1b9a', secondary: '#4a148c' },
+                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' }
             };
             const t = themes[theme] || themes.rose;
-            document.body.style.background = `
-                    radial-gradient(ellipse at 20% 50%, ${t.bg2}, transparent 60%),
-                    radial-gradient(ellipse at 80% 50%, ${t.bg3}, transparent 60%),
-                    radial-gradient(ellipse at 50% 0%, ${t.bg2}, transparent 50%),
-                    ${t.bg1}
-                `;
+            document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2').forEach(el => {
                 el.style.color = t.primary;
             });
-            document.querySelectorAll('.btn:not(.btn-danger):not(.btn-icon)').forEach(el => {
+            document.querySelectorAll('.btn:not(.btn-danger)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
             });
             document.querySelectorAll('.tab-btn.active').forEach(el => {
@@ -986,7 +1097,7 @@
             });
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
-                el.style.background = `${t.primary}08`;
+                el.style.background = `${t.primary}15`;
             });
             document.querySelectorAll('.msg-item').forEach(el => {
                 el.style.borderRightColor = t.primary;
@@ -995,9 +1106,12 @@
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
+            document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
+                el.style.color = t.primary;
+            });
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme') || 'rose';
         changeTheme(savedTheme);
 
         // ============================================================
@@ -1041,6 +1155,13 @@
                 });
                 const json = await res.json();
                 data = json.record;
+                if (!data.timers) {
+                    data.timers = [
+                        { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
+                        { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
+                        { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-15' }
+                    ];
+                }
                 renderAll();
             } catch (e) {
                 console.error('خطا:', e);
@@ -1051,7 +1172,12 @@
                             src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }],
                         polls: { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
                             history: {} },
-                        comments: []
+                        comments: [],
+                        timers: [
+                            { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
+                            { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
+                            { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-15' }
+                        ]
                     };
                     renderAll();
                 }
@@ -1080,6 +1206,7 @@
             renderPlaylist();
             renderPoll();
             renderComments();
+            renderTimers();
             renderAdminLists();
             updateFooter();
         }
@@ -1089,6 +1216,70 @@
             const persian = now.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
             const gregorian = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('footer').textContent = `❤️ با عشق | ${persian} | ${gregorian}`;
+        }
+
+        // ---------- TIMERS ----------
+        function renderTimers() {
+            const grid = document.getElementById('timerGrid');
+            grid.innerHTML = '';
+            const timers = data.timers || [];
+            if (!timers.length) {
+                grid.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هیچ تایمری تعریف نشده ⏳</p>';
+                return;
+            }
+
+            const now = new Date().getTime();
+
+            timers.forEach(timer => {
+                const target = new Date(timer.date + 'T00:00:00').getTime();
+                const diff = target - now;
+                const isExpired = diff <= 0;
+
+                const div = document.createElement('div');
+                div.className = 'timer-item';
+
+                let content = '';
+                if (isExpired) {
+                    content = `
+                            <div class="label">${timer.label}</div>
+                            <div class="expired">
+                                <span class="heart-emoji">❤️</span> رسید! 
+                            </div>
+                            <div class="date-label">${timer.date}</div>
+                        `;
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    content = `
+                            <div class="label">${timer.label}</div>
+                            <div class="numbers">
+                                <div class="unit">
+                                    <span class="num">${String(days).padStart(2, '0')}</span>
+                                    <span class="lbl">روز</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(hours).padStart(2, '0')}</span>
+                                    <span class="lbl">ساعت</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(minutes).padStart(2, '0')}</span>
+                                    <span class="lbl">دقیقه</span>
+                                </div>
+                                <div class="unit">
+                                    <span class="num">${String(seconds).padStart(2, '0')}</span>
+                                    <span class="lbl">ثانیه</span>
+                                </div>
+                            </div>
+                            <div class="date-label">${timer.date}</div>
+                        `;
+                }
+
+                div.innerHTML = content;
+                grid.appendChild(div);
+            });
         }
 
         // ---------- MESSAGES ----------
@@ -1143,7 +1334,7 @@
                 const div = document.createElement('div');
                 div.className = 'music-item' + (index === currentSongIndex ? ' active' : '');
                 div.innerHTML = `
-                        <img src="${song.cover || 'https://via.placeholder.com/52/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/52/1a1a1a/ec407a?text=♥'">
+                        <img src="${song.cover || 'https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'">
                         <div class="info">
                             <div class="title">${song.title}</div>
                             <div class="artist">${song.artist || 'بی‌نام'}</div>
@@ -1163,7 +1354,7 @@
             currentSongIndex = index;
             const song = music[index];
             document.getElementById('currentCover').src = song.cover ||
-                'https://via.placeholder.com/140/1a1a1a/ec407a?text=♥';
+                'https://via.placeholder.com/120/1a1a1a/ec407a?text=♥';
             document.getElementById('currentTitle').textContent = song.title;
             document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
             const audio = document.getElementById('audioPlayer');
@@ -1209,7 +1400,7 @@
             if (!title || !src) { alert('عنوان و لینک MP3 الزامی!'); return; }
             if (!data.music) data.music = [];
             data.music.push({ id: Date.now(), title, artist: artist || 'بی‌نام', cover: cover || '',
-            src });
+                src });
             document.getElementById('newSongTitle').value = '';
             document.getElementById('newSongArtist').value = '';
             document.getElementById('newSongCover').value = '';
@@ -1256,7 +1447,7 @@
             if (poll.votes && poll.votes[today]) {
                 const todayVotes = poll.votes[today];
                 const total = Object.values(todayVotes).reduce((a, b) => a + b, 0);
-                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.4); margin-bottom:10px;">📊 نتایج امروز:</h4>';
+                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.4); margin-bottom:8px;">📊 نتایج امروز:</h4>';
                 if (total === 0) {
                     results.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز رایی نیست</p>';
                 } else {
@@ -1370,6 +1561,27 @@
             renderAll();
         }
 
+        // ---------- TIMER MANAGEMENT ----------
+        function addTimer() {
+            const label = document.getElementById('newTimerLabel').value.trim();
+            const date = document.getElementById('newTimerDate').value;
+            if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
+            if (!data.timers) data.timers = [];
+            data.timers.push({ id: Date.now(), label, date });
+            document.getElementById('newTimerLabel').value = '';
+            document.getElementById('newTimerDate').value = '';
+            saveData();
+            renderAll();
+            alert('✅ تایمر اضافه شد!');
+        }
+
+        function deleteTimer(id) {
+            if (!confirm('حذف کنم؟')) return;
+            data.timers = data.timers.filter(t => t.id !== id);
+            saveData();
+            renderAll();
+        }
+
         // ---------- ADMIN LISTS ----------
         function renderAdminLists() {
             const msgList = document.getElementById('adminMsgList');
@@ -1414,6 +1626,20 @@
                 });
             }
 
+            const timerList = document.getElementById('adminTimerList');
+            if (timerList) {
+                timerList.innerHTML = '';
+                (data.timers || []).forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'item-row';
+                    div.innerHTML = `
+                            <span class="label">${t.label} (${t.date})</span>
+                            <button class="btn btn-danger btn-small" onclick="deleteTimer(${t.id})">🗑️</button>
+                        `;
+                    timerList.appendChild(div);
+                });
+            }
+
             updateCommentSelect();
         }
 
@@ -1431,6 +1657,7 @@
         function checkAdmin() {
             const pass = document.getElementById('adminPass').value;
             if (pass === ADMIN_PASSWORD) {
+                document.getElementById('adminLogin').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
                 document.getElementById('adminPass').value = '';
                 renderAdminLists();
@@ -1478,6 +1705,16 @@
         }
 
         // ============================================================
+        // ====== TIMER LOOP ======
+        // ============================================================
+        function startTimerLoop() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                renderTimers();
+            }, 1000);
+        }
+
+        // ============================================================
         // ====== CLOSE MODAL ON OUTSIDE CLICK ======
         // ============================================================
         document.getElementById('adminPanel').addEventListener('click', function(e) {
@@ -1488,6 +1725,7 @@
         // ====== INIT ======
         // ============================================================
         loadData();
+        startTimerLoop();
         setInterval(loadData, 30000);
         setInterval(updateFooter, 60000);
     </script>
