@@ -14,28 +14,32 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #0d0d0d;
+            background: #0a0a0a;
             color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             padding: 20px;
-            background-image: radial-gradient(circle at 20% 30%, #1a0a1a, #0d0d0d);
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(236, 64, 122, 0.06), transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(171, 71, 188, 0.06), transparent 60%),
+                radial-gradient(ellipse at 50% 0%, rgba(236, 64, 122, 0.03), transparent 50%);
+            transition: all 0.5s ease;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 920px;
             width: 100%;
         }
 
         /* ====== HEADER ====== */
         .header {
             text-align: center;
-            padding: 40px 20px 30px;
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(12px);
+            padding: 45px 20px 35px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
             border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             margin-bottom: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
@@ -49,8 +53,8 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 70% 30%, rgba(233, 30, 99, 0.08), transparent 60%);
-            animation: rotateGlow 20s linear infinite;
+            background: radial-gradient(circle at 60% 30%, rgba(236, 64, 122, 0.05), transparent 60%);
+            animation: rotateGlow 25s linear infinite;
         }
 
         @keyframes rotateGlow {
@@ -63,35 +67,38 @@
         }
 
         .header h1 {
-            font-size: 3em;
+            font-size: 3.2em;
             background: linear-gradient(135deg, #f06292, #ec407a, #ab47bc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
             z-index: 1;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .header .sub {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.35);
             font-size: 1.1em;
-            margin: 8px 0;
+            margin: 6px 0;
             position: relative;
             z-index: 1;
+            letter-spacing: 2px;
         }
 
         .header .greeting {
-            font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 15px;
+            font-size: 1.15em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 14px;
             position: relative;
             z-index: 1;
-            min-height: 40px;
+            min-height: 36px;
+            font-weight: 300;
         }
 
         .header .greeting .heart-beat {
             display: inline-block;
-            animation: heartBeat 1.2s infinite;
+            animation: heartBeat 1.4s infinite;
+            color: #ec407a;
         }
 
         @keyframes heartBeat {
@@ -100,7 +107,7 @@
                 transform: scale(1);
             }
             14% {
-                transform: scale(1.2);
+                transform: scale(1.25);
             }
             28% {
                 transform: scale(1);
@@ -113,101 +120,55 @@
             }
         }
 
-        /* ====== THEME SELECTOR ====== */
-        .theme-selector {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 18px;
-            position: relative;
-            z-index: 1;
-            flex-wrap: wrap;
-        }
-
-        .theme-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .theme-btn:hover {
-            transform: scale(1.15);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .theme-btn.active {
-            border-color: #ec407a;
-            box-shadow: 0 0 20px rgba(236, 64, 122, 0.4);
-        }
-
-        .theme-btn.rose {
-            background: linear-gradient(135deg, #fce4ec, #e91e63);
-        }
-        .theme-btn.violet {
-            background: linear-gradient(135deg, #ede7f6, #7b1fa2);
-        }
-        .theme-btn.sky {
-            background: linear-gradient(135deg, #e3f2fd, #1565c0);
-        }
-        .theme-btn.sunset {
-            background: linear-gradient(135deg, #fff3e0, #e65100);
-        }
-        .theme-btn.dark {
-            background: linear-gradient(135deg, #263238, #000000);
-        }
-
         /* ====== TABS ====== */
         .tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             justify-content: center;
         }
 
         .tab-btn {
-            padding: 12px 28px;
+            padding: 13px 30px;
             border: none;
             border-radius: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             font-size: 15px;
             transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             font-weight: 500;
             flex: 1;
-            min-width: 100px;
-            max-width: 180px;
+            min-width: 110px;
+            max-width: 190px;
+            letter-spacing: 0.5px;
         }
 
         .tab-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .tab-btn.active {
             background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
-            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.3);
+            box-shadow: 0 8px 35px rgba(236, 64, 122, 0.25);
             border-color: transparent;
         }
 
         /* ====== CARDS ====== */
         .card {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border-radius: 30px;
-            padding: 28px;
+            padding: 30px;
             margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             display: none;
-            animation: fadeSlide 0.5s ease;
+            animation: fadeSlide 0.4s ease;
         }
 
         .card.active {
@@ -217,7 +178,7 @@
         @keyframes fadeSlide {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(18px);
             }
             to {
                 opacity: 1;
@@ -228,80 +189,11 @@
         .card h2 {
             font-size: 1.5em;
             color: #ec407a;
-            border-bottom: 2px solid rgba(236, 64, 122, 0.15);
+            border-bottom: 1px solid rgba(236, 64, 122, 0.12);
             padding-bottom: 14px;
             margin-bottom: 22px;
             font-weight: 600;
             letter-spacing: 0.5px;
-        }
-
-        /* ====== TIMER ====== */
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-
-        .timer-item {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
-        }
-
-        .timer-item:hover {
-            background: rgba(255, 255, 255, 0.07);
-            transform: translateY(-3px);
-        }
-
-        .timer-item .label {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .timer-item .numbers {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .timer-item .numbers .unit {
-            background: rgba(255, 255, 255, 0.06);
-            padding: 8px 12px;
-            border-radius: 12px;
-            min-width: 50px;
-        }
-
-        .timer-item .numbers .unit .num {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #ec407a;
-            display: block;
-            line-height: 1.2;
-        }
-
-        .timer-item .numbers .unit .lbl {
-            font-size: 0.6em;
-            color: rgba(255, 255, 255, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .timer-item .expired {
-            color: #f44336;
-            font-size: 1.2em;
-            font-weight: 600;
-            padding: 10px 0;
-        }
-
-        .timer-item .expired .heart-emoji {
-            animation: heartBeat 1.2s infinite;
-            display: inline-block;
         }
 
         /* ====== BUTTONS ====== */
@@ -320,16 +212,16 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.35);
+            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.3);
         }
 
         .btn-danger {
-            background: rgba(244, 67, 54, 0.8);
+            background: rgba(244, 67, 54, 0.7);
         }
 
         .btn-danger:hover {
             background: #f44336;
-            box-shadow: 0 8px 30px rgba(244, 67, 54, 0.4);
+            box-shadow: 0 8px 30px rgba(244, 67, 54, 0.35);
         }
 
         .btn-small {
@@ -337,17 +229,28 @@
             font-size: 13px;
         }
 
+        .btn-icon {
+            padding: 6px 14px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
         /* ====== INPUTS ====== */
         input,
         textarea,
         select {
             width: 100%;
-            padding: 13px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 16px;
             font-size: 15px;
             margin: 8px 0;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             color: #fff;
             transition: all 0.3s;
             font-family: inherit;
@@ -355,7 +258,7 @@
 
         input::placeholder,
         textarea::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
         }
 
         input:focus,
@@ -363,8 +266,8 @@
         select:focus {
             outline: none;
             border-color: #ec407a;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.06);
         }
 
         select option {
@@ -382,7 +285,7 @@
             padding: 16px 20px;
             margin: 10px 0;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             border-right: 4px solid #ec407a;
             display: flex;
             justify-content: space-between;
@@ -392,11 +295,11 @@
         }
 
         .msg-item:hover {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .msg-item.today {
-            background: rgba(236, 64, 122, 0.08);
+            background: rgba(236, 64, 122, 0.06);
             border-right-color: #ab47bc;
         }
 
@@ -406,62 +309,72 @@
 
         .msg-item .date {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
             white-space: nowrap;
         }
 
-        /* ====== MUSIC ====== */
+        /* ====== MUSIC PLAYER ====== */
         .music-player {
+            padding: 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .music-player .top {
             display: flex;
-            gap: 20px;
+            gap: 28px;
             align-items: center;
             flex-wrap: wrap;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 20px;
         }
 
         .music-player .cover {
-            width: 100px;
-            height: 100px;
-            border-radius: 20px;
+            width: 140px;
+            height: 140px;
+            border-radius: 24px;
             object-fit: cover;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .music-player .info {
             flex: 1;
-            min-width: 150px;
+            min-width: 200px;
         }
 
         .music-player .info .title {
-            font-size: 1.2em;
-            font-weight: 600;
+            font-size: 1.5em;
+            font-weight: 700;
             color: #fff;
+            margin-bottom: 2px;
         }
 
         .music-player .info .artist {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.95em;
-            margin-top: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1em;
+            margin-bottom: 14px;
         }
 
         .music-player .info audio {
             width: 100%;
-            margin-top: 12px;
             border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .music-player .info audio::-webkit-media-controls-panel {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .music-player .controls {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 14px;
             flex-wrap: wrap;
         }
 
+        /* ====== MUSIC LIST ====== */
         .music-list {
             display: flex;
             flex-direction: column;
@@ -471,29 +384,29 @@
         .music-item {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
+            gap: 16px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 18px;
             cursor: pointer;
             transition: all 0.3s;
             border: 1px solid transparent;
         }
 
         .music-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         .music-item.active {
-            background: rgba(236, 64, 122, 0.08);
-            border-color: rgba(236, 64, 122, 0.2);
+            background: rgba(236, 64, 122, 0.06);
+            border-color: rgba(236, 64, 122, 0.12);
         }
 
         .music-item img {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             object-fit: cover;
             flex-shrink: 0;
         }
@@ -509,7 +422,7 @@
 
         .music-item .info .artist {
             font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.3);
         }
 
         /* ====== POLL ====== */
@@ -518,7 +431,7 @@
             align-items: center;
             padding: 14px 18px;
             margin: 8px 0;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 16px;
             cursor: pointer;
             transition: 0.3s;
@@ -526,13 +439,13 @@
         }
 
         .poll-option:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.06);
         }
 
         .poll-option input[type="radio"] {
             width: auto;
-            margin: 0 12px 0 0;
+            margin: 0 14px 0 0;
             accent-color: #ec407a;
         }
 
@@ -545,25 +458,25 @@
             justify-content: space-between;
             font-size: 14px;
             margin-bottom: 4px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .poll-result .bar {
-            height: 30px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 15px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
             overflow: hidden;
         }
 
         .poll-result .bar .fill {
             height: 100%;
             background: linear-gradient(90deg, #ec407a, #ab47bc);
-            border-radius: 15px;
+            border-radius: 16px;
             transition: width 0.8s ease;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 14px;
+            padding-right: 16px;
             color: #fff;
             font-size: 13px;
             font-weight: 600;
@@ -573,13 +486,13 @@
         .poll-history {
             margin-top: 25px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .poll-history-item {
             padding: 12px 16px;
             margin: 6px 0;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
             font-size: 14px;
         }
@@ -593,13 +506,13 @@
         .comment-item {
             padding: 16px 20px;
             margin: 10px 0;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .comment-item .reply {
-            background: rgba(236, 64, 122, 0.06);
+            background: rgba(236, 64, 122, 0.05);
             padding: 12px 16px;
             border-radius: 14px;
             margin-top: 10px;
@@ -608,7 +521,7 @@
 
         .comment-item .meta {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.15);
             margin-top: 6px;
         }
 
@@ -620,8 +533,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(14px);
             z-index: 999;
             justify-content: center;
             align-items: center;
@@ -633,22 +546,22 @@
         }
 
         #adminPanel .modal {
-            background: #1a1a1a;
-            border-radius: 30px;
+            background: #141414;
+            border-radius: 32px;
             padding: 35px;
-            max-width: 620px;
+            max-width: 640px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-            animation: slideUp 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            animation: slideUp 0.35s ease;
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(40px) scale(0.95);
+                transform: translateY(30px) scale(0.96);
             }
             to {
                 opacity: 1;
@@ -672,7 +585,7 @@
         #adminPanel .modal .close-btn {
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 28px;
             cursor: pointer;
             transition: 0.3s;
@@ -685,15 +598,15 @@
         }
 
         .admin-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             padding: 18px;
             border-radius: 18px;
             margin: 14px 0;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .admin-section h3 {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 1em;
             margin-bottom: 10px;
             font-weight: 500;
@@ -701,27 +614,76 @@
 
         .admin-section .item-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
             padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .admin-section .item-row .label {
             flex: 1;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.4);
         }
 
         /* ====== FOOTER ====== */
         .footer {
             text-align: center;
-            padding: 25px;
-            color: rgba(255, 255, 255, 0.2);
+            padding: 30px 20px 20px;
+            color: rgba(255, 255, 255, 0.12);
             font-size: 13px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            margin-top: 15px;
             letter-spacing: 0.5px;
+        }
+
+        .footer .theme-selector {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .footer .theme-btn:hover {
+            transform: scale(1.12);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .footer .theme-btn.active {
+            border-color: #ec407a;
+            box-shadow: 0 0 25px rgba(236, 64, 122, 0.2);
+        }
+
+        .footer .theme-btn.rose {
+            background: linear-gradient(135deg, #fce4ec, #e91e63);
+        }
+        .footer .theme-btn.violet {
+            background: linear-gradient(135deg, #ede7f6, #7b1fa2);
+        }
+        .footer .theme-btn.sky {
+            background: linear-gradient(135deg, #e3f2fd, #1565c0);
+        }
+        .footer .theme-btn.sunset {
+            background: linear-gradient(135deg, #fff3e0, #e65100);
+        }
+        .footer .theme-btn.dark {
+            background: linear-gradient(135deg, #263238, #000000);
+        }
+
+        .footer .footer-text {
+            opacity: 0.5;
+            font-size: 12px;
         }
 
         /* ====== FLOATING HEARTS ====== */
@@ -738,15 +700,15 @@
 
         .floating-hearts .heart {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             animation: floatUp linear infinite;
-            opacity: 0.15;
+            opacity: 0.08;
         }
 
         @keyframes floatUp {
             0% {
-                transform: translateY(100vh) rotate(0deg) scale(0.5);
-                opacity: 0.15;
+                transform: translateY(100vh) rotate(0deg) scale(0.4);
+                opacity: 0.08;
             }
             100% {
                 transform: translateY(-10vh) rotate(720deg) scale(1);
@@ -764,34 +726,34 @@
             height: 50px;
             border-radius: 50%;
             border: none;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 22px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .admin-fab:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.07);
+            transform: scale(1.08);
             color: #fff;
         }
 
         /* ====== SCROLLBAR ====== */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* ====== RESPONSIVE ====== */
@@ -800,40 +762,29 @@
                 padding: 12px;
             }
             .header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             .card {
                 padding: 18px;
             }
             .tab-btn {
                 font-size: 13px;
-                padding: 10px 16px;
+                padding: 10px 14px;
                 min-width: 70px;
             }
             .music-player .cover {
-                width: 70px;
-                height: 70px;
+                width: 90px;
+                height: 90px;
+            }
+            .music-player .info .title {
+                font-size: 1.2em;
             }
             #adminPanel .modal {
                 padding: 20px;
                 margin: 10px;
             }
-            .msg-item {
-                flex-wrap: wrap;
-            }
-            .msg-item .date {
-                width: 100%;
-                margin-top: 4px;
-            }
-            .timer-item .numbers .unit {
-                min-width: 35px;
-                padding: 5px 8px;
-            }
-            .timer-item .numbers .unit .num {
-                font-size: 1.2em;
-            }
-            .timer-grid {
-                grid-template-columns: 1fr;
+            .music-player .top {
+                gap: 16px;
             }
         }
     </style>
@@ -853,13 +804,6 @@
             <div class="greeting" id="greeting">
                 <span class="heart-beat">❤️</span> هر روز با تو زیباترینه...
             </div>
-            <div class="theme-selector">
-                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
-                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
-                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
-                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
-                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
-            </div>
         </div>
 
         <!-- ====== TABS ====== -->
@@ -868,7 +812,6 @@
             <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
             <button class="tab-btn" data-tab="tab-poll">📊 نظرسنجی</button>
             <button class="tab-btn" data-tab="tab-comments">💬 نظرات</button>
-            <button class="tab-btn" data-tab="tab-timer">⏳ زمان‌ها</button>
         </div>
 
         <!-- ====== TAB: MESSAGES ====== -->
@@ -881,15 +824,17 @@
         <div class="card" id="tab-music">
             <h2>🎵 آهنگ‌های مخصوص تو</h2>
             <div class="music-player" id="currentPlayer">
-                <img class="cover" id="currentCover" src="https://via.placeholder.com/100/1a1a1a/ec407a?text=♥" alt="کاور">
-                <div class="info">
-                    <div class="title" id="currentTitle">هیچی پخش نشده</div>
-                    <div class="artist" id="currentArtist">♥</div>
-                    <audio controls id="audioPlayer" style="width:100%;"></audio>
-                    <div class="controls">
-                        <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
-                        <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
-                        <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
+                <div class="top">
+                    <img class="cover" id="currentCover" src="https://via.placeholder.com/140/1a1a1a/ec407a?text=♥" alt="کاور">
+                    <div class="info">
+                        <div class="title" id="currentTitle">هیچی پخش نشده</div>
+                        <div class="artist" id="currentArtist">♥</div>
+                        <audio controls id="audioPlayer" style="width:100%;"></audio>
+                        <div class="controls">
+                            <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
+                            <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
+                            <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -899,7 +844,7 @@
         <!-- ====== TAB: POLL ====== -->
         <div class="card" id="tab-poll">
             <h2>📊 نظرسنجی امروز</h2>
-            <p id="pollQuestion" style="font-size:1.1em; margin-bottom:16px; color:rgba(255,255,255,0.7);"></p>
+            <p id="pollQuestion" style="font-size:1.1em; margin-bottom:16px; color:rgba(255,255,255,0.5);"></p>
             <div id="pollOptions"></div>
             <button class="btn" onclick="submitVote()" style="margin-top:8px;">🗳️ رای بده</button>
             <div id="pollResults" style="margin-top:20px;"></div>
@@ -914,14 +859,17 @@
             <div id="commentsList" style="margin-top:16px;"></div>
         </div>
 
-        <!-- ====== TAB: TIMER ====== -->
-        <div class="card" id="tab-timer">
-            <h2>⏳ زمان‌های مهم</h2>
-            <div class="timer-grid" id="timerGrid"></div>
-        </div>
-
         <!-- ====== FOOTER ====== -->
-        <div class="footer" id="footer"></div>
+        <div class="footer">
+            <div class="theme-selector">
+                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
+                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
+                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
+                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
+                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
+            </div>
+            <div class="footer-text" id="footer"></div>
+        </div>
 
     </div>
 
@@ -977,15 +925,6 @@
                     <div id="adminCommentList" style="margin-top:10px;"></div>
                 </div>
 
-                <!-- Timer -->
-                <div class="admin-section">
-                    <h3>⏳ مدیریت تایمرها</h3>
-                    <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
-                    <input id="newTimerDate" type="date" placeholder="تاریخ">
-                    <button class="btn" onclick="addTimer()">➕ افزودن تایمر</button>
-                    <div id="adminTimerList" style="margin-top:10px;"></div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -1000,7 +939,6 @@
 
         let data = null;
         let currentSongIndex = 0;
-        let timerInterval = null;
 
         // ============================================================
         // ====== THEME ======
@@ -1016,18 +954,28 @@
 
         function applyTheme(theme) {
             const themes = {
-                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
-                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c' },
-                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1' },
-                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
-                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' }
+                rose: { bg1: '#0a0a0a', bg2: 'rgba(236,64,122,0.06)', bg3: 'rgba(171,71,188,0.06)', primary: '#ec407a',
+                    secondary: '#ab47bc' },
+                violet: { bg1: '#08060d', bg2: 'rgba(123,31,162,0.06)', bg3: 'rgba(74,20,140,0.06)',
+                    primary: '#7b1fa2', secondary: '#4a148c' },
+                sky: { bg1: '#060a12', bg2: 'rgba(30,136,229,0.06)', bg3: 'rgba(13,71,161,0.06)',
+                    primary: '#1e88e5', secondary: '#0d47a1' },
+                sunset: { bg1: '#0d0806', bg2: 'rgba(230,81,0,0.06)', bg3: 'rgba(191,54,12,0.06)',
+                    primary: '#e65100', secondary: '#bf360c' },
+                dark: { bg1: '#050505', bg2: 'rgba(120,144,156,0.05)', bg3: 'rgba(55,71,79,0.05)',
+                    primary: '#78909c', secondary: '#37474f' }
             };
             const t = themes[theme] || themes.rose;
-            document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
+            document.body.style.background = `
+                    radial-gradient(ellipse at 20% 50%, ${t.bg2}, transparent 60%),
+                    radial-gradient(ellipse at 80% 50%, ${t.bg3}, transparent 60%),
+                    radial-gradient(ellipse at 50% 0%, ${t.bg2}, transparent 50%),
+                    ${t.bg1}
+                `;
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2').forEach(el => {
                 el.style.color = t.primary;
             });
-            document.querySelectorAll('.btn:not(.btn-danger)').forEach(el => {
+            document.querySelectorAll('.btn:not(.btn-danger):not(.btn-icon)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
             });
             document.querySelectorAll('.tab-btn.active').forEach(el => {
@@ -1038,14 +986,18 @@
             });
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
-                el.style.background = `${t.primary}15`;
+                el.style.background = `${t.primary}08`;
             });
-            document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
-                el.style.color = t.primary;
+            document.querySelectorAll('.msg-item').forEach(el => {
+                el.style.borderRightColor = t.primary;
+            });
+            document.querySelectorAll('.comment-item .reply').forEach(el => {
+                el.style.borderRightColor = t.primary;
+                el.style.background = `${t.primary}05`;
             });
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'rose';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         changeTheme(savedTheme);
 
         // ============================================================
@@ -1054,14 +1006,14 @@
         function createHearts() {
             const container = document.getElementById('hearts');
             const emojis = ['❤️', '💖', '💗', '♥️', '💘'];
-            for (let i = 0; i < 18; i++) {
+            for (let i = 0; i < 20; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
                 heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (10 + Math.random() * 15) + 's';
-                heart.style.animationDelay = (Math.random() * 15) + 's';
-                heart.style.fontSize = (14 + Math.random() * 30) + 'px';
+                heart.style.animationDuration = (12 + Math.random() * 18) + 's';
+                heart.style.animationDelay = (Math.random() * 18) + 's';
+                heart.style.fontSize = (14 + Math.random() * 28) + 'px';
                 container.appendChild(heart);
             }
         }
@@ -1089,14 +1041,6 @@
                 });
                 const json = await res.json();
                 data = json.record;
-                // اطمینان از وجود timers
-                if (!data.timers) {
-                    data.timers = [
-                        { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
-                        { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
-                        { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-01' }
-                    ];
-                }
                 renderAll();
             } catch (e) {
                 console.error('خطا:', e);
@@ -1107,12 +1051,7 @@
                             src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }],
                         polls: { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
                             history: {} },
-                        comments: [],
-                        timers: [
-                            { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
-                            { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
-                            { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-01' }
-                        ]
+                        comments: []
                     };
                     renderAll();
                 }
@@ -1141,7 +1080,6 @@
             renderPlaylist();
             renderPoll();
             renderComments();
-            renderTimers();
             renderAdminLists();
             updateFooter();
         }
@@ -1153,70 +1091,6 @@
             document.getElementById('footer').textContent = `❤️ با عشق | ${persian} | ${gregorian}`;
         }
 
-        // ---------- TIMERS ----------
-        function renderTimers() {
-            const grid = document.getElementById('timerGrid');
-            grid.innerHTML = '';
-            const timers = data.timers || [];
-            if (!timers.length) {
-                grid.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هیچ تایمری تعریف نشده ⏳</p>';
-                return;
-            }
-
-            const now = new Date().getTime();
-
-            timers.forEach(timer => {
-                const target = new Date(timer.date + 'T00:00:00').getTime();
-                const diff = target - now;
-                const isExpired = diff <= 0;
-
-                const div = document.createElement('div');
-                div.className = 'timer-item';
-
-                let content = '';
-                if (isExpired) {
-                    content = `
-                            <div class="label">${timer.label}</div>
-                            <div class="expired">
-                                <span class="heart-emoji">❤️</span> رسید! 
-                                <span style="font-size:0.7em;color:rgba(255,255,255,0.3);">(${timer.date})</span>
-                            </div>
-                        `;
-                } else {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                    content = `
-                            <div class="label">${timer.label}</div>
-                            <div class="numbers">
-                                <div class="unit">
-                                    <span class="num">${String(days).padStart(2, '0')}</span>
-                                    <span class="lbl">روز</span>
-                                </div>
-                                <div class="unit">
-                                    <span class="num">${String(hours).padStart(2, '0')}</span>
-                                    <span class="lbl">ساعت</span>
-                                </div>
-                                <div class="unit">
-                                    <span class="num">${String(minutes).padStart(2, '0')}</span>
-                                    <span class="lbl">دقیقه</span>
-                                </div>
-                                <div class="unit">
-                                    <span class="num">${String(seconds).padStart(2, '0')}</span>
-                                    <span class="lbl">ثانیه</span>
-                                </div>
-                            </div>
-                            <div style="font-size:0.7em;color:rgba(255,255,255,0.15);margin-top:6px;">${timer.date}</div>
-                        `;
-                }
-
-                div.innerHTML = content;
-                grid.appendChild(div);
-            });
-        }
-
         // ---------- MESSAGES ----------
         function renderMessages() {
             const list = document.getElementById('messageList');
@@ -1224,7 +1098,7 @@
             list.innerHTML = '';
             const msgs = data.messages || [];
             if (!msgs.length) {
-                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز پیامی نیست ❤️</p>';
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هنوز پیامی نیست ❤️</p>';
                 return;
             }
             msgs.slice().reverse().forEach(msg => {
@@ -1262,14 +1136,14 @@
             const music = data.music || [];
             list.innerHTML = '';
             if (!music.length) {
-                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هیچ آهنگی نیست 🎶</p>';
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هیچ آهنگی نیست 🎶</p>';
                 return;
             }
             music.forEach((song, index) => {
                 const div = document.createElement('div');
                 div.className = 'music-item' + (index === currentSongIndex ? ' active' : '');
                 div.innerHTML = `
-                        <img src="${song.cover || 'https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/48/1a1a1a/ec407a?text=♥'">
+                        <img src="${song.cover || 'https://via.placeholder.com/52/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/52/1a1a1a/ec407a?text=♥'">
                         <div class="info">
                             <div class="title">${song.title}</div>
                             <div class="artist">${song.artist || 'بی‌نام'}</div>
@@ -1288,7 +1162,8 @@
             if (!music[index]) return;
             currentSongIndex = index;
             const song = music[index];
-            document.getElementById('currentCover').src = song.cover || 'https://via.placeholder.com/100/1a1a1a/ec407a?text=♥';
+            document.getElementById('currentCover').src = song.cover ||
+                'https://via.placeholder.com/140/1a1a1a/ec407a?text=♥';
             document.getElementById('currentTitle').textContent = song.title;
             document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
             const audio = document.getElementById('audioPlayer');
@@ -1334,7 +1209,7 @@
             if (!title || !src) { alert('عنوان و لینک MP3 الزامی!'); return; }
             if (!data.music) data.music = [];
             data.music.push({ id: Date.now(), title, artist: artist || 'بی‌نام', cover: cover || '',
-                src });
+            src });
             document.getElementById('newSongTitle').value = '';
             document.getElementById('newSongArtist').value = '';
             document.getElementById('newSongCover').value = '';
@@ -1381,9 +1256,9 @@
             if (poll.votes && poll.votes[today]) {
                 const todayVotes = poll.votes[today];
                 const total = Object.values(todayVotes).reduce((a, b) => a + b, 0);
-                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.6); margin-bottom:10px;">📊 نتایج امروز:</h4>';
+                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.4); margin-bottom:10px;">📊 نتایج امروز:</h4>';
                 if (total === 0) {
-                    results.innerHTML += '<p style="color:rgba(255,255,255,0.3);">هنوز رایی نیست</p>';
+                    results.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز رایی نیست</p>';
                 } else {
                     (poll.options || []).forEach(opt => {
                         const count = todayVotes[opt] || 0;
@@ -1397,11 +1272,11 @@
                     });
                 }
             } else {
-                results.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز رای ندادی 😊</p>';
+                results.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هنوز رای ندادی 😊</p>';
             }
 
             const historyDiv = document.getElementById('pollHistory');
-            historyDiv.innerHTML = '<h4 style="color:rgba(255,255,255,0.6);">📜 تاریخچه:</h4>';
+            historyDiv.innerHTML = '<h4 style="color:rgba(255,255,255,0.4);">📜 تاریخچه:</h4>';
             if (poll.history && Object.keys(poll.history).length > 0) {
                 const sorted = Object.keys(poll.history).sort().reverse();
                 sorted.forEach(date => {
@@ -1412,14 +1287,14 @@
                     div.className = 'poll-history-item';
                     div.innerHTML = `
                             <div class="date">📅 ${date}</div>
-                            <div style="font-size:13px; color:rgba(255,255,255,0.5);">
+                            <div style="font-size:13px; color:rgba(255,255,255,0.3);">
                                 ${Object.entries(dayVotes).map(([opt,count]) => `${opt}: ${count}`).join(' | ')}
                             </div>
                         `;
                     historyDiv.appendChild(div);
                 });
             } else {
-                historyDiv.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز تاریخچه‌ای نیست</p>';
+                historyDiv.innerHTML += '<p style="color:rgba(255,255,255,0.1);">هنوز تاریخچه‌ای نیست</p>';
             }
         }
 
@@ -1460,7 +1335,7 @@
             const comments = data.comments || [];
             list.innerHTML = '';
             if (!comments.length) {
-                list.innerHTML = '<p style="color:rgba(255,255,255,0.3);">هنوز نظری نیست 💬</p>';
+                list.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هنوز نظری نیست 💬</p>';
                 return;
             }
             comments.slice().reverse().forEach(c => {
@@ -1468,7 +1343,7 @@
                 div.className = 'comment-item';
                 div.innerHTML = `
                         <div>💬 ${c.text}</div>
-                        ${c.reply ? `<div class="reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:rgba(255,255,255,0.3);font-size:14px;">⏳ در انتظار پاسخ...</div>'}
+                        ${c.reply ? `<div class="reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:rgba(255,255,255,0.2);font-size:14px;">⏳ در انتظار پاسخ...</div>'}
                         <div class="meta">${c.date || ''}</div>
                     `;
                 list.appendChild(div);
@@ -1495,30 +1370,8 @@
             renderAll();
         }
 
-        // ---------- TIMER MANAGEMENT ----------
-        function addTimer() {
-            const label = document.getElementById('newTimerLabel').value.trim();
-            const date = document.getElementById('newTimerDate').value;
-            if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
-            if (!data.timers) data.timers = [];
-            data.timers.push({ id: Date.now(), label, date });
-            document.getElementById('newTimerLabel').value = '';
-            document.getElementById('newTimerDate').value = '';
-            saveData();
-            renderAll();
-            alert('✅ تایمر اضافه شد!');
-        }
-
-        function deleteTimer(id) {
-            if (!confirm('حذف کنم؟')) return;
-            data.timers = data.timers.filter(t => t.id !== id);
-            saveData();
-            renderAll();
-        }
-
         // ---------- ADMIN LISTS ----------
         function renderAdminLists() {
-            // Messages
             const msgList = document.getElementById('adminMsgList');
             if (msgList) {
                 msgList.innerHTML = '';
@@ -1533,7 +1386,6 @@
                 });
             }
 
-            // Music
             const musicList = document.getElementById('adminMusicList');
             if (musicList) {
                 musicList.innerHTML = '';
@@ -1548,7 +1400,6 @@
                 });
             }
 
-            // Comments
             const commentList = document.getElementById('adminCommentList');
             if (commentList) {
                 commentList.innerHTML = '';
@@ -1560,21 +1411,6 @@
                             <button class="btn btn-danger btn-small" onclick="deleteComment(${c.id})">🗑️</button>
                         `;
                     commentList.appendChild(div);
-                });
-            }
-
-            // Timers
-            const timerList = document.getElementById('adminTimerList');
-            if (timerList) {
-                timerList.innerHTML = '';
-                (data.timers || []).forEach(t => {
-                    const div = document.createElement('div');
-                    div.className = 'item-row';
-                    div.innerHTML = `
-                            <span class="label">${t.label} (${t.date})</span>
-                            <button class="btn btn-danger btn-small" onclick="deleteTimer(${t.id})">🗑️</button>
-                        `;
-                    timerList.appendChild(div);
                 });
             }
 
@@ -1642,16 +1478,6 @@
         }
 
         // ============================================================
-        // ====== TIMER LOOP ======
-        // ============================================================
-        function startTimerLoop() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                renderTimers();
-            }, 1000);
-        }
-
-        // ============================================================
         // ====== CLOSE MODAL ON OUTSIDE CLICK ======
         // ============================================================
         document.getElementById('adminPanel').addEventListener('click', function(e) {
@@ -1662,7 +1488,6 @@
         // ====== INIT ======
         // ============================================================
         loadData();
-        startTimerLoop();
         setInterval(loadData, 30000);
         setInterval(updateFooter, 60000);
     </script>
