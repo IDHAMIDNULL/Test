@@ -3,261 +3,751 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نمالیش اطلاعات JSON</title>
+    <title>❤️ سایت عشق من</title>
     <style>
-        /* تمام استایل‌های قبلی را همینجا قرار دهید */
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            margin: 20px;
+            font-family: 'Vazir', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5, #e8eaf6);
+            min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: #4a148c;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        .container { max-width: 800px; margin:0 auto; position:relative; z-index:1; }
+        
+        .floating-hearts {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            pointer-events:none; z-index:0; overflow:hidden;
         }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 3px solid #e74c3c;
-            padding-bottom: 10px;
-            margin-top: 0;
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 8s linear infinite;
+            opacity:0.5;
         }
-        .meta-info {
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity:0.7; }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(720deg); opacity:0; }
         }
-        .section {
-            margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            background: #fafafa;
-        }
-        .section h2 {
-            margin-top: 0;
-            color: #2980b9;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 8px;
-        }
-        .item {
-            background: #fff;
-            padding: 12px 15px;
-            margin-bottom: 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-right: 4px solid #3498db;
-        }
-        .item strong {
-            color: #e74c3c;
-        }
-        .chat-item {
-            display: flex;
-            justify-content: space-between;
-            background: #fff;
-            padding: 10px 15px;
-            margin-bottom: 8px;
+        
+        .card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(233,30,99,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        .chat-user {
-            background: #d4edda;
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
+        h2 {
+            color: #e91e63;
+            border-bottom: 2px solid #f8bbd0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
-        .chat-admin {
-            background: #cce5ff;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-        .chat-sender {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .chat-text {
-            margin: 0 10px;
-        }
-        .chat-time {
-            color: #7f8c8d;
-            font-size: 0.8em;
-        }
-        .vote-option {
-            display: inline-block;
-            background: #e9ecef;
-            padding: 5px 12px;
-            margin: 3px 5px 3px 0;
-            border-radius: 15px;
-            font-size: 0.9em;
-        }
-        .vote-count {
-            background: #2c3e50;
+        .btn {
+            background: linear-gradient(45deg, #e91e63, #9c27b0);
             color: white;
-            border-radius: 50%;
-            padding: 0 8px;
-            margin-right: 5px;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin:5px;
         }
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 0.85em;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(233,30,99,0.4);
         }
-        .badge {
-            display: inline-block;
-            background: #2ecc71;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            margin-right: 8px;
+        input, textarea, select {
+            width:100%;
+            padding:12px;
+            border:2px solid #f3e5f5;
+            border-radius:12px;
+            font-size:16px;
+            margin:8px 0;
+            background:white;
         }
-        .badge-off {
-            background: #e74c3c;
+        textarea { min-height:80px; resize:vertical; }
+        
+        .msg-item {
+            padding:12px;
+            margin:8px 0;
+            border-radius:12px;
+            background:#fce4ec;
+            border-right:4px solid #e91e63;
         }
-        .error-box {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #f5c6cb;
-            margin-bottom: 20px;
+        .msg-item.today {
+            background:#f8bbd0;
+            border-right:4px solid #c2185b;
+            font-weight:bold;
         }
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 1.2em;
-            color: #3498db;
+        .msg-date { font-size:12px; color:#888; }
+        
+        .music-item {
+            display:flex;
+            align-items:center;
+            gap:15px;
+            padding:12px;
+            margin:8px 0;
+            background:#f3e5f5;
+            border-radius:12px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .music-item:hover { background:#e1bee7; }
+        .music-item img {
+            width:60px; height:60px;
+            border-radius:10px;
+            object-fit:cover;
+        }
+        .music-info { flex:1; }
+        .music-title { font-weight:bold; }
+        .music-artist { font-size:14px; color:#7b1fa2; }
+        
+        .poll-option {
+            display:block;
+            padding:10px;
+            margin:5px 0;
+            background:white;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+            border:2px solid transparent;
+        }
+        .poll-option:hover { border-color:#e91e63; }
+        .poll-option.selected {
+            border-color:#e91e63;
+            background:#fce4ec;
+        }
+        .poll-result-bar {
+            height:24px;
+            background:#f3e5f5;
+            border-radius:12px;
+            margin:5px 0;
+            overflow:hidden;
+        }
+        .poll-result-fill {
+            height:100%;
+            background:linear-gradient(90deg, #e91e63, #9c27b0);
+            border-radius:12px;
+            transition:0.5s;
+            color:white;
+            padding:0 10px;
+            line-height:24px;
+            font-size:14px;
+        }
+        
+        .comment-item {
+            padding:12px;
+            margin:8px 0;
+            background:white;
+            border-radius:12px;
+            border:1px solid #f3e5f5;
+        }
+        .comment-reply {
+            background:#fce4ec;
+            padding:10px;
+            border-radius:10px;
+            margin-top:8px;
+            border-right:3px solid #e91e63;
+        }
+        
+        #adminPanel {
+            display:none;
+            background:rgba(255,255,255,0.95);
+            border-radius:20px;
+            padding:25px;
+            margin-top:25px;
+            border:2px solid #e91e63;
+        }
+        #adminPanel.show { display:block; }
+        
+        .admin-section {
+            background:#fafafa;
+            padding:15px;
+            border-radius:12px;
+            margin:15px 0;
+        }
+        
+        .header {
+            text-align:center;
+            padding:30px 0;
+        }
+        .header h1 {
+            font-size:2.5em;
+            background:linear-gradient(45deg, #e91e63, #9c27b0);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+        .header .sub {
+            color:#7b1fa2;
+            font-size:18px;
+        }
+        
+        #todayDisplay {
+            color:#9c27b0;
+            font-size:16px;
+            margin-top:10px;
+        }
+        
+        /* برای موبایل */
+        @media (max-width:600px) {
+            .container { padding:0 10px; }
+            .card { padding:15px; }
+            .header h1 { font-size:1.8em; }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <h1>💌 اطلاعات سایت</h1>
-        
-        <div v-if="loading" class="loading">
-            ⏳ در حال بارگیری اطلاعات...
-        </div>
 
-        <div v-if="error" class="error-box">
-            ⚠️ {{ error }}
-        </div>
+<!-- ====== قلب‌های شناور ====== -->
+<div class="floating-hearts" id="hearts"></div>
 
-        <template v-if="!loading && !error && data.meta">
-            <!-- بخش متا -->
-            <div class="meta-info">
-                <h3 style="margin-top:0;">📋 متا اطلاعات</h3>
-                <p><strong>نام سایت:</strong> {{ data.meta.siteName }}</p>
-                <p><strong>ورژن:</strong> {{ data.meta.version }}</p>
-                <p><strong>آخرین بروزرسانی:</strong> {{ data.meta.lastUpdate }}</p>
-            </div>
-
-            <!-- بخش تنظیمات -->
-            <div class="section" v-if="data.settings">
-                <h2>⚙️ تنظیمات</h2>
-                <p>
-                    <span v-for="(value, key) in data.settings" :key="key" style="margin-left: 20px;">
-                        <strong>{{ key }}:</strong> 
-                        <span :class="['badge', { 'badge-off': !value }]">{{ value ? 'فعال' : 'غیرفعال' }}</span>
-                    </span>
-                </p>
-            </div>
-
-            <!-- بخش پیام‌ها -->
-            <div class="section" v-if="data.messages && data.messages.length">
-                <h2>💬 پیام‌ها</h2>
-                <div class="item" v-for="msg in data.messages" :key="msg.id">
-                    <strong>{{ msg.date }}:</strong> {{ msg.text }}
-                </div>
-            </div>
-
-            <!-- بخش موسیقی -->
-            <div class="section" v-if="data.music && data.music.length">
-                <h2>🎵 موسیقی</h2>
-                <div class="item" v-for="song in data.music" :key="song.id">
-                    <strong>{{ song.name }}</strong> - {{ song.artist }}
-                    <span style="margin-right: 15px; font-size: 0.9em;">
-                        <a :href="song.play" target="_blank">▶ پخش</a> | 
-                        <a :href="song.download" target="_blank">⬇ دانلود</a>
-                    </span>
-                </div>
-            </div>
-
-            <!-- بخش نظرسنجی‌ها -->
-            <div class="section" v-if="data.polls && data.polls.length">
-                <h2>📊 نظرسنجی</h2>
-                <div v-for="poll in data.polls" :key="poll.id" class="item">
-                    <h4 style="margin-top:0;">{{ poll.question }}</h4>
-                    <div>
-                        <span class="vote-option" v-for="opt in poll.options" :key="opt.text">
-                            {{ opt.text }} <span class="vote-count">{{ opt.votes }}</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- بخش چت -->
-            <div class="section" v-if="data.chat && data.chat.length">
-                <h2>💬 چت</h2>
-                <div v-for="msg in data.chat" :key="msg.id" 
-                     :class="['chat-item', msg.sender === 'user' ? 'chat-user' : 'chat-admin']">
-                    <span class="chat-sender">{{ msg.sender === 'user' ? '👤 کاربر' : '🛡 ادمین' }}</span>
-                    <span class="chat-text">{{ msg.text }}</span>
-                    <span class="chat-time">{{ msg.time }}</span>
-                </div>
-            </div>
-
-            <div class="footer">
-                اطلاعات از فایل JSON دریافت شده | آخرین بروزرسانی: {{ data.meta?.lastUpdate || 'نامشخص' }}
-            </div>
-        </template>
+<!-- ====== محتوا ====== -->
+<div class="container">
+    
+    <!-- هدر -->
+    <div class="header">
+        <h1>❤️ به سایت عشق خوش اومدی</h1>
+        <p class="sub">🌹 برای عزیزترین آدم زندگی‌ام</p>
+        <div id="todayDisplay"></div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                data: {},
-                loading: true,
-                error: null
-            },
-            mounted() {
-                // استفاده از پروکسی CORS
-                const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                const targetUrl = 'https://tk-server.ir/json/hbhsjdj.json';
+    
+    <!-- ====== بخش ۱: پیام‌ها ====== -->
+    <div class="card" id="messagesSection">
+        <h2>📝 پیام‌های امروز</h2>
+        <div id="messageList"></div>
+    </div>
+    
+    <!-- ====== بخش ۲: موزیک ====== -->
+    <div class="card" id="musicSection">
+        <h2>🎵 آهنگ‌های مخصوص تو</h2>
+        <div id="playerArea">
+            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <img id="currentCover" src="https://via.placeholder.com/120" style="border-radius:15px; width:120px; height:120px; object-fit:cover;">
+                <div style="flex:1;">
+                    <h3 id="currentTitle">انتخاب کن...</h3>
+                    <p id="currentArtist" style="color:#7b1fa2;">♥</p>
+                    <audio controls id="audioPlayer" style="width:100%;"></audio>
+                    <button class="btn" onclick="downloadCurrentSong()">⬇️ دانلود آهنگ</button>
+                </div>
+            </div>
+        </div>
+        <hr style="margin:20px 0; border-color:#f3e5f5;">
+        <div id="playlist"></div>
+    </div>
+    
+    <!-- ====== بخش ۳: نظرسنجی ====== -->
+    <div class="card" id="pollSection">
+        <h2>📊 نظرسنجی امروز</h2>
+        <p id="pollQuestion" style="font-size:18px; margin-bottom:15px;"></p>
+        <div id="pollOptions"></div>
+        <button class="btn" onclick="submitVote()">🗳️ رای بده</button>
+        <div id="pollResults" style="margin-top:15px;"></div>
+        <p id="pollStatus" style="font-size:14px; color:#888; margin-top:10px;"></p>
+    </div>
+    
+    <!-- ====== بخش ۴: نظرات ====== -->
+    <div class="card" id="commentsSection">
+        <h2>💬 سوال یا حرف داری؟</h2>
+        <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
+        <button class="btn" onclick="sendComment()">📤 ارسال</button>
+        <div id="commentsList" style="margin-top:15px;"></div>
+    </div>
+    
+    <!-- ====== دکمه مدیریت ====== -->
+    <button class="btn" onclick="toggleAdmin()" style="width:100%;">⚙️ پنل مدیریت</button>
+    
+    <!-- ====== پنل مدیریت ====== -->
+    <div id="adminPanel">
+        <div class="card">
+            <h2>🔐 پنل مدیریت</h2>
+            <p style="color:#888; font-size:14px;">رمز: AY_NAY</p>
+            <input type="password" id="adminPass" placeholder="رمز مدیریت را وارد کن...">
+            <button class="btn" onclick="checkAdmin()">ورود</button>
+            
+            <div id="adminContent" style="display:none;">
+                <!-- افزودن پیام -->
+                <div class="admin-section">
+                    <h3>➕ افزودن پیام جدید</h3>
+                    <textarea id="newMsg" placeholder="متن پیام..."></textarea>
+                    <button class="btn" onclick="addMessage()">ذخیره پیام</button>
+                </div>
                 
-                fetch(proxyUrl + encodeURIComponent(targetUrl))
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('خطا در دریافت اطلاعات از سرور');
-                        }
-                        return response.json();
-                    })
-                    .then(jsonData => {
-                        this.data = jsonData;
-                        this.loading = false;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching JSON:', error);
-                        this.error = 'خطا در بارگیری اطلاعات. لطفاً اتصال اینترنت خود را بررسی کنید.';
-                        this.loading = false;
-                        // داده‌های پیش‌فرض برای نمایش
-                        this.data = {
-                            meta: { siteName: 'خطا در دریافت', version: '?', lastUpdate: 'نامشخص' },
-                            settings: { messagesEnabled: false, musicEnabled: false, pollEnabled: false, chatEnabled: false },
-                            messages: [{ id: 0, date: '---', text: 'خطا در بارگیری اطلاعات' }]
-                        };
-                    });
-            }
+                <!-- افزودن آهنگ -->
+                <div class="admin-section">
+                    <h3>➕ افزودن آهنگ جدید</h3>
+                    <input id="newSongTitle" placeholder="عنوان آهنگ">
+                    <input id="newSongArtist" placeholder="نام خواننده">
+                    <input id="newSongCover" placeholder="آدرس کاور (تصویر)">
+                    <input id="newSongSrc" placeholder="آدرس فایل MP3">
+                    <button class="btn" onclick="addMusic()">ذخیره آهنگ</button>
+                </div>
+                
+                <!-- مدیریت نظرسنجی -->
+                <div class="admin-section">
+                    <h3>📊 مدیریت نظرسنجی</h3>
+                    <input id="newPollQuestion" placeholder="سوال نظرسنجی">
+                    <input id="newPollOptions" placeholder="گزینه‌ها (با کاما جدا کن) مثال: عالی,خوب,معمولی">
+                    <button class="btn" onclick="updatePoll()">بروزرسانی نظرسنجی</button>
+                    <button class="btn" onclick="resetPollVotes()" style="background:#f44336;">🔄 ریست آرای امروز</button>
+                </div>
+                
+                <!-- پاسخ به نظرات -->
+                <div class="admin-section">
+                    <h3>💬 پاسخ به نظرات</h3>
+                    <select id="commentSelect"></select>
+                    <input id="replyInput" placeholder="پاسخ تو...">
+                    <button class="btn" onclick="replyComment()">ارسال پاسخ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+// ============================================================
+// ====== تنظیمات JSONBin (با اطلاعات تو) ======
+// ============================================================
+const BIN_ID = "6a39af83f5f4af5e291fb234";
+const API_KEY = "$2a$10$T5EPBDRRV0x0N1tvvwV8S.6tmn7B5tKzbke49eZNVhBe7g2mdzNKm";
+const ADMIN_PASSWORD = "AY_NAY";
+
+// ============================================================
+// ====== متغیرها ======
+// ============================================================
+let data = null;
+let currentSongIndex = 0;
+
+// ============================================================
+// ====== توابع ارتباط با JSONBin ======
+// ============================================================
+async function loadData() {
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            headers: { 'X-Master-Key': API_KEY }
         });
-    </script>
+        const json = await res.json();
+        data = json.record;
+        renderAll();
+    } catch(e) {
+        console.error('خطا در بارگیری:', e);
+        // اگر خطا بود، دیتای پیش‌فرض می‌ذاریم
+        if(!data) {
+            data = {
+                messages: [{ id:1, text:"❤️ امروز عاشقتم بیشتر از دیروز", date: new Date().toISOString().split('T')[0] }],
+                music: [
+                    { id:1, title:"بی تو", artist:"محسن چاوشی", cover:"https://via.placeholder.com/100", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+                ],
+                polls: {
+                    question: "حالت چطوره امروز؟",
+                    options: ["عالی 😍", "خوب 😊", "معمولی 😐"],
+                    votes: {},
+                    date: new Date().toISOString().split('T')[0]
+                },
+                comments: []
+            };
+            renderAll();
+        }
+    }
+}
+
+async function saveData() {
+    try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify(data)
+        });
+        console.log('✅ اطلاعات ذخیره شد');
+    } catch(e) {
+        console.error('خطا در ذخیره:', e);
+        alert('❌ خطا در ذخیره اطلاعات!');
+    }
+}
+
+// ============================================================
+// ====== تولید قلب‌های شناور ======
+// ============================================================
+function createHearts() {
+    const container = document.getElementById('hearts');
+    const emojis = ['❤️', '💖', '💗', '💕', '♥️', '💘', '🌹'];
+    for(let i=0; i<15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (6 + Math.random() * 8) + 's';
+        heart.style.animationDelay = (Math.random() * 8) + 's';
+        heart.style.fontSize = (15 + Math.random() * 30) + 'px';
+        container.appendChild(heart);
+    }
+}
+createHearts();
+
+// ============================================================
+// ====== رندر کردن همه بخش‌ها ======
+// ============================================================
+function renderAll() {
+    if(!data) return;
+    renderMessages();
+    renderPlaylist();
+    renderPoll();
+    renderComments();
+    updateTodayDisplay();
+}
+
+// ---------- تاریخ امروز ----------
+function updateTodayDisplay() {
+    const now = new Date();
+    document.getElementById('todayDisplay').textContent = 
+        `📅 ${now.toLocaleDateString('fa-IR')} - ${now.toLocaleTimeString('fa-IR')}`;
+}
+
+// ---------- پیام‌ها ----------
+function renderMessages() {
+    const list = document.getElementById('messageList');
+    const today = new Date().toISOString().split('T')[0];
+    list.innerHTML = '';
+    const msgs = data.messages || [];
+    if(msgs.length === 0) {
+        list.innerHTML = '<p style="color:#888;">هنوز پیامی نذاشتی عزیزم ❤️</p>';
+        return;
+    }
+    msgs.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'msg-item' + (msg.date === today ? ' today' : '');
+        div.innerHTML = `
+            <div>${msg.text}</div>
+            <div class="msg-date">${msg.date} ${msg.date === today ? '⭐ امروز' : ''}</div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+// ---------- موزیک ----------
+function renderPlaylist() {
+    const list = document.getElementById('playlist');
+    const music = data.music || [];
+    list.innerHTML = '';
+    if(music.length === 0) {
+        list.innerHTML = '<p style="color:#888;">آهنگ‌ها رو از پنل مدیریت اضافه کن 🎶</p>';
+        return;
+    }
+    music.forEach((song, index) => {
+        const div = document.createElement('div');
+        div.className = 'music-item';
+        div.innerHTML = `
+            <img src="${song.cover || 'https://via.placeholder.com/60'}" alt="کاور" onerror="this.src='https://via.placeholder.com/60'">
+            <div class="music-info">
+                <div class="music-title">${song.title}</div>
+                <div class="music-artist">${song.artist || 'بی‌نام'}</div>
+            </div>
+            <button class="btn" onclick="playSong(${index})" style="padding:5px 15px;">▶️ پخش</button>
+        `;
+        list.appendChild(div);
+    });
+    if(music.length > 0 && !document.getElementById('audioPlayer').src) {
+        playSong(0);
+    }
+}
+
+function playSong(index) {
+    const music = data.music || [];
+    if(!music[index]) return;
+    currentSongIndex = index;
+    const song = music[index];
+    document.getElementById('currentCover').src = song.cover || 'https://via.placeholder.com/120';
+    document.getElementById('currentTitle').textContent = song.title;
+    document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
+    const audio = document.getElementById('audioPlayer');
+    audio.src = song.src || '';
+    audio.load();
+    audio.play().catch(() => {});
+}
+
+function downloadCurrentSong() {
+    const src = document.getElementById('audioPlayer').src;
+    if(src && src !== '') {
+        const a = document.createElement('a');
+        a.href = src;
+        a.download = 'آهنگ_عاشقانه.mp3';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    } else {
+        alert('اول یه آهنگ انتخاب کن! 🎵');
+    }
+}
+
+// ---------- نظرسنجی ----------
+function renderPoll() {
+    const poll = data.polls || { 
+        question: 'حالت چطوره؟', 
+        options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
+        votes: {}, 
+        date: '' 
+    };
+    document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره امروز؟';
+    
+    const container = document.getElementById('pollOptions');
+    container.innerHTML = '';
+    const today = new Date().toISOString().split('T')[0];
+    const hasVoted = poll.votes && poll.votes[today];
+    
+    (poll.options || []).forEach(opt => {
+        const label = document.createElement('label');
+        label.className = 'poll-option';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'poll';
+        radio.value = opt;
+        radio.disabled = !!hasVoted;
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(' ' + opt));
+        container.appendChild(label);
+    });
+    
+    // نتایج
+    const results = document.getElementById('pollResults');
+    if(poll.votes && Object.keys(poll.votes).length > 0) {
+        const votes = poll.votes || {};
+        const todayVotes = votes[today] || {};
+        const total = Object.values(todayVotes).reduce((a,b) => a + b, 0);
+        results.innerHTML = '<h4>📊 نتایج امروز:</h4>';
+        if(total === 0) {
+            results.innerHTML += '<p style="color:#888;">هنوز رایی ثبت نشده 😊</p>';
+        } else {
+            (poll.options || []).forEach(opt => {
+                const count = todayVotes[opt] || 0;
+                const percent = total > 0 ? Math.round((count/total)*100) : 0;
+                results.innerHTML += `
+                    <div style="margin-top:5px;">${opt}</div>
+                    <div class="poll-result-bar">
+                        <div class="poll-result-fill" style="width:${percent}%">${percent}% (${count} رای)</div>
+                    </div>
+                `;
+            });
+        }
+    } else {
+        results.innerHTML = '<p style="color:#888;">هنوز رایی ثبت نشده، اولین نفر باش 😍</p>';
+    }
+    
+    document.getElementById('pollStatus').textContent = hasVoted ? '✅ امروز رای دادی! ❤️' : '⭐ امروز رو انتخاب کن';
+}
+
+function submitVote() {
+    const poll = data.polls || {};
+    const today = new Date().toISOString().split('T')[0];
+    if(!poll.votes) poll.votes = {};
+    if(poll.votes[today]) {
+        alert('امروز قبلاً رای دادی! 😊');
+        return;
+    }
+    const selected = document.querySelector('input[name="poll"]:checked');
+    if(!selected) {
+        alert('لطفاً یه گزینه رو انتخاب کن!');
+        return;
+    }
+    if(!poll.votes[today]) poll.votes[today] = {};
+    poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
+    data.polls = poll;
+    saveData();
+    renderPoll();
+}
+
+// ---------- نظرات ----------
+function renderComments() {
+    const list = document.getElementById('commentsList');
+    const comments = data.comments || [];
+    list.innerHTML = '';
+    if(comments.length === 0) {
+        list.innerHTML = '<p style="color:#888;">هنوز نظری نیست، اولین نفر باش 💬</p>';
+        return;
+    }
+    // نمایش از آخر به اول (جدیدترین اول)
+    const sorted = [...comments].reverse();
+    sorted.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'comment-item';
+        div.innerHTML = `
+            <div>💬 ${c.text}</div>
+            ${c.reply ? `<div class="comment-reply">💝 پاسخ: ${c.reply}</div>` : '<div style="color:#888;font-size:14px;">⏳ در انتظار پاسخ...</div>'}
+            <div style="font-size:11px;color:#aaa;margin-top:5px;">${c.date || ''}</div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function sendComment() {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if(!text) {
+        alert('یه چیزی بنویس عزیزم! ❤️');
+        return;
+    }
+    if(!data.comments) data.comments = [];
+    data.comments.push({
+        id: Date.now(),
+        text: text,
+        date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date().toLocaleTimeString('fa-IR'),
+        reply: ''
+    });
+    input.value = '';
+    saveData();
+    renderComments();
+    updateCommentSelect();
+}
+
+// ---------- پنل مدیریت ----------
+function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.toggle('show');
+    if(panel.classList.contains('show')) {
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminContent').style.display = 'none';
+        updateCommentSelect();
+    }
+}
+
+function checkAdmin() {
+    const pass = document.getElementById('adminPass').value;
+    if(pass === ADMIN_PASSWORD) {
+        document.getElementById('adminContent').style.display = 'block';
+        alert('✅ به پنل مدیریت خوش اومدی عزیزم! ❤️');
+        updateCommentSelect();
+    } else {
+        alert('❌ رمز اشتباهه!');
+    }
+}
+
+function updateCommentSelect() {
+    const sel = document.getElementById('commentSelect');
+    if(!sel) return;
+    sel.innerHTML = '';
+    const noReply = (data.comments || []).filter(c => !c.reply);
+    if(noReply.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = '❗ هیچ نظری برای پاسخ نیست';
+        opt.disabled = true;
+        sel.appendChild(opt);
+    } else {
+        noReply.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.text.substring(0, 40) + (c.text.length > 40 ? '...' : '');
+            sel.appendChild(opt);
+        });
+    }
+}
+
+// ---------- مدیریت: پیام ----------
+function addMessage() {
+    const text = document.getElementById('newMsg').value.trim();
+    if(!text) { alert('متن پیام رو بنویس!'); return; }
+    if(!data.messages) data.messages = [];
+    data.messages.push({
+        id: Date.now(),
+        text: text,
+        date: new Date().toISOString().split('T')[0]
+    });
+    document.getElementById('newMsg').value = '';
+    saveData();
+    renderMessages();
+    alert('✅ پیام ذخیره شد! ❤️');
+}
+
+// ---------- مدیریت: آهنگ ----------
+function addMusic() {
+    const title = document.getElementById('newSongTitle').value.trim();
+    const artist = document.getElementById('newSongArtist').value.trim();
+    const cover = document.getElementById('newSongCover').value.trim();
+    const src = document.getElementById('newSongSrc').value.trim();
+    if(!title || !src) { alert('عنوان و لینک آهنگ الزامی‌ست!'); return; }
+    if(!data.music) data.music = [];
+    data.music.push({ 
+        id: Date.now(), 
+        title, 
+        artist: artist || 'بی‌نام', 
+        cover: cover || 'https://via.placeholder.com/100', 
+        src 
+    });
+    document.getElementById('newSongTitle').value = '';
+    document.getElementById('newSongArtist').value = '';
+    document.getElementById('newSongCover').value = '';
+    document.getElementById('newSongSrc').value = '';
+    saveData();
+    renderPlaylist();
+    alert('✅ آهنگ اضافه شد! 🎵');
+}
+
+// ---------- مدیریت: نظرسنجی ----------
+function updatePoll() {
+    const question = document.getElementById('newPollQuestion').value.trim();
+    const optionsRaw = document.getElementById('newPollOptions').value.trim();
+    if(!question || !optionsRaw) { alert('سوال و گزینه‌ها رو پر کن!'); return; }
+    const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s);
+    if(options.length < 2) { alert('حداقل ۲ گزینه وارد کن!'); return; }
+    data.polls = {
+        question: question,
+        options: options,
+        votes: {},
+        date: new Date().toISOString().split('T')[0]
+    };
+    document.getElementById('newPollQuestion').value = '';
+    document.getElementById('newPollOptions').value = '';
+    saveData();
+    renderPoll();
+    alert('✅ نظرسنجی بروزرسانی شد!');
+}
+
+function resetPollVotes() {
+    if(!data.polls) return;
+    const today = new Date().toISOString().split('T')[0];
+    if(data.polls.votes) {
+        delete data.polls.votes[today];
+    }
+    saveData();
+    renderPoll();
+    alert('🔄 آرای امروز ریست شد!');
+}
+
+// ---------- مدیریت: پاسخ به نظر ----------
+function replyComment() {
+    const sel = document.getElementById('commentSelect');
+    const reply = document.getElementById('replyInput').value.trim();
+    if(!reply) { alert('پاسخ رو بنویس!'); return; }
+    const id = parseInt(sel.value);
+    const comment = (data.comments || []).find(c => c.id === id);
+    if(comment) {
+        comment.reply = reply;
+        document.getElementById('replyInput').value = '';
+        saveData();
+        renderComments();
+        updateCommentSelect();
+        alert('✅ پاسخ ارسال شد! 💝');
+    } else {
+        alert('❗ نظری برای پاسخ نیست!');
+    }
+}
+
+// ============================================================
+// ====== بارگذاری اولیه ======
+// ============================================================
+loadData();
+
+// هر ۳۰ ثانیه یک‌بار رفرش (برای نمایش اطلاعات جدید)
+setInterval(loadData, 30000);
+
+// هر دقیقه تاریخ رو بروز کن
+setInterval(updateTodayDisplay, 60000);
+
+</script>
 </body>
-</html>
+    </html>
