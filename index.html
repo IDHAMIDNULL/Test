@@ -511,62 +511,6 @@
             white-space: nowrap;
         }
 
-        .music-player {
-            padding: 24px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 20px;
-        }
-
-        .music-player .top {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .music-player .cover {
-            width: 120px;
-            height: 120px;
-            border-radius: 20px;
-            object-fit: cover;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .music-player .info {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .music-player .info .title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .music-player .info .artist {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.95em;
-            margin-bottom: 12px;
-        }
-
-        .music-player .info audio {
-            width: 100%;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .music-player .controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
         .music-list {
             display: flex;
             flex-direction: column;
@@ -911,6 +855,17 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        .admin-comment-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .admin-comment-actions .btn {
+            margin: 0;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 12px;
@@ -926,19 +881,9 @@
                 padding: 8px 12px;
                 min-width: 60px;
             }
-            .music-player .cover {
-                width: 80px;
-                height: 80px;
-            }
-            .music-player .info .title {
-                font-size: 1.1em;
-            }
             #adminPanel .modal {
                 padding: 18px;
                 margin: 8px;
-            }
-            .music-player .top {
-                gap: 14px;
             }
             .timer-item .numbers .unit {
                 min-width: 32px;
@@ -963,6 +908,9 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             .music-item .actions {
+                flex-direction: column;
+            }
+            .admin-comment-actions {
                 flex-direction: column;
             }
         }
@@ -998,21 +946,6 @@
 
         <div class="card" id="tab-music">
             <h2>🎵 آهنگ‌های مخصوص تو</h2>
-            <div class="music-player" id="currentPlayer">
-                <div class="top">
-                    <img class="cover" id="currentCover" src="https://via.placeholder.com/120/1a1a1a/ec407a?text=♥" alt="کاور">
-                    <div class="info">
-                        <div class="title" id="currentTitle">هیچی پخش نشده</div>
-                        <div class="artist" id="currentArtist">♥</div>
-                        <audio controls id="audioPlayer" style="width:100%;"></audio>
-                        <div class="controls">
-                            <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
-                            <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
-                            <button class="btn btn-small btn-download" onclick="downloadCurrentSong()">⬇️ دانلود</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="music-list" id="playlist"></div>
         </div>
 
@@ -1131,9 +1064,15 @@
 
                 <div class="admin-section">
                     <h3>💬 مدیریت نظرات</h3>
-                    <select id="commentSelect"></select>
-                    <input id="replyInput" placeholder="پاسخ...">
-                    <button class="btn" onclick="replyComment()">ارسال پاسخ</button>
+                    <div class="admin-comment-actions">
+                        <input id="adminCommentInput" placeholder="پیام جدید... (اختیاری)">
+                        <button class="btn btn-small" onclick="sendAdminComment()">📤 ارسال پیام</button>
+                    </div>
+                    <div style="margin-top:8px;">
+                        <select id="commentSelect" style="width:100%;"></select>
+                        <input id="replyInput" placeholder="پاسخ به نظر انتخاب شده...">
+                        <button class="btn btn-small" onclick="replyComment()">💝 ارسال پاسخ</button>
+                    </div>
                     <div id="adminCommentList" style="margin-top:8px;"></div>
                 </div>
 
@@ -1160,6 +1099,7 @@
         let data = null;
         let currentSongIndex = 0;
         let timerInterval = null;
+        let isUpdating = false;
 
         // ============================================================
         // ====== THEME ======
@@ -1178,29 +1118,24 @@
             };
             const t = themes[theme] || themes.gold;
 
-            // Background
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
-            // Headers
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2').forEach(
-            el => {
-                el.style.color = t.primary;
-            });
+                el => {
+                    el.style.color = t.primary;
+                });
 
-            // Buttons
             document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
 
-            // Active tab
             document.querySelectorAll('.tab-btn.active').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 8px 30px ${t.glow}`;
             });
 
-            // Messages
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1209,18 +1144,15 @@
                 el.style.borderRightColor = t.primary;
             });
 
-            // Comments reply
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
 
-            // Timer numbers
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
 
-            // Poll history
             document.querySelectorAll('.poll-history-item .date').forEach(el => {
                 el.style.color = t.primary;
             });
@@ -1228,7 +1160,6 @@
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
 
-            // Theme popup active
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
@@ -1243,13 +1174,11 @@
                 }
             });
 
-            // Music player active
             document.querySelectorAll('.music-item.active').forEach(el => {
                 el.style.borderColor = `${t.primary}30`;
                 el.style.background = `${t.primary}08`;
             });
 
-            // Header glow
             document.querySelector('.header').style.borderColor = `${t.primary}20`;
         }
 
@@ -1257,7 +1186,6 @@
             localStorage.setItem('theme', theme);
             applyTheme(theme);
             closeThemePopup();
-            // Re-apply to all dynamic elements
             setTimeout(() => {
                 applyTheme(theme);
             }, 100);
@@ -1265,7 +1193,6 @@
 
         function openThemePopup() {
             document.getElementById('themePopup').classList.add('show');
-            // Highlight current theme
             const current = localStorage.getItem('theme') || 'gold';
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === current) {
@@ -1313,7 +1240,6 @@
                 this.classList.add('active');
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                 document.getElementById(this.dataset.tab).classList.add('active');
-                // Re-apply theme to active tab
                 const current = localStorage.getItem('theme') || 'gold';
                 applyTheme(current);
             });
@@ -1323,21 +1249,31 @@
         // ====== JSONBIN ======
         // ============================================================
         async function loadData() {
+            if (isUpdating) return;
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 const json = await res.json();
-                data = json.record;
-                if (!data.timers) {
-                    data.timers = [
-                        { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
-                        { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
-                    ];
+                const newData = json.record;
+                
+                // فقط اگه دیتا تغییر کرده باشه رندر کن
+                if (JSON.stringify(data) !== JSON.stringify(newData)) {
+                    data = newData;
+                    if (!data.timers) {
+                        data.timers = [
+                            { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
+                            { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
+                        ];
+                    }
+                    if (!data.polls) {
+                        data.polls = { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
+                            history: {} };
+                    }
+                    renderAll();
                 }
-                renderAll();
             } catch (e) {
-                console.error('خطا:', e);
+                console.error('خطا در loadData:', e);
                 if (!data) {
                     data = {
                         messages: [{ id: 1, text: '❤️ امروز عاشقتم', date: new Date().toISOString().split('T')[0] }],
@@ -1358,14 +1294,17 @@
 
         async function saveData() {
             try {
+                isUpdating = true;
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
                     body: JSON.stringify(data)
                 });
+                isUpdating = false;
             } catch (e) {
-                console.error('خطا:', e);
-                alert('❌ خطا در ذخیره!');
+                isUpdating = false;
+                console.error('خطا در saveData:', e);
+                alert('❌ خطا در ذخیره! لطفا دوباره تلاش کنید.');
             }
         }
 
@@ -1381,7 +1320,6 @@
             renderTimers();
             renderAdminLists();
             updateFooter();
-            // Re-apply theme after render
             const current = localStorage.getItem('theme') || 'gold';
             applyTheme(current);
         }
@@ -1404,9 +1342,11 @@
             }
 
             const now = new Date().getTime();
+            // تنظیم منطقه زمانی ایران (UTC+3:30)
+            const timezoneOffset = 3.5 * 60 * 60 * 1000;
 
             timers.forEach(timer => {
-                const target = new Date(timer.date + 'T00:00:00').getTime();
+                const target = new Date(timer.date + 'T00:00:00').getTime() + timezoneOffset;
                 const diff = target - now;
                 const isExpired = diff <= 0;
 
@@ -1484,16 +1424,14 @@
             if (!data.messages) data.messages = [];
             data.messages.push({ id: Date.now(), text, date: new Date().toISOString().split('T')[0] });
             document.getElementById('newMsg').value = '';
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
             alert('✅ پیام اضافه شد!');
         }
 
         function deleteMessage(id) {
             if (!confirm('حذف کنم؟')) return;
             data.messages = data.messages.filter(m => m.id !== id);
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
         }
 
         // ---------- MUSIC ----------
@@ -1505,6 +1443,12 @@
                 list.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هیچ آهنگی نیست 🎶</p>';
                 return;
             }
+            
+            // اگه currentSongIndex خارج از محدوده بود، تصحیح کن
+            if (currentSongIndex >= music.length) {
+                currentSongIndex = 0;
+            }
+
             music.forEach((song, index) => {
                 const isActive = index === currentSongIndex;
                 const div = document.createElement('div');
@@ -1524,18 +1468,19 @@
                     `;
                 list.appendChild(div);
             });
-            if (music.length && !document.getElementById('audioPlayer').src) {
-                playSong(0);
-            }
         }
 
         function togglePlay(index) {
             const music = data.music || [];
             if (!music[index]) return;
-            const audio = document.getElementById('audioPlayer');
+            
             if (index === currentSongIndex) {
-                if (audio.paused) {
-                    audio.play();
+                // همون آهنگ - play/pause
+                const audio = document.getElementById('audioPlayer');
+                if (!audio.src) {
+                    createAudioPlayer(index);
+                } else if (audio.paused) {
+                    audio.play().catch(() => {});
                 } else {
                     audio.pause();
                 }
@@ -1545,27 +1490,49 @@
             renderPlaylist();
         }
 
+        function createAudioPlayer(index) {
+            const music = data.music || [];
+            if (!music[index]) return;
+            
+            // حذف پلیر قبلی
+            const oldPlayer = document.getElementById('audioPlayer');
+            if (oldPlayer) oldPlayer.remove();
+            
+            const audio = document.createElement('audio');
+            audio.id = 'audioPlayer';
+            audio.src = music[index].src || '';
+            audio.style.display = 'none';
+            document.body.appendChild(audio);
+            
+            audio.addEventListener('ended', () => {
+                nextSong();
+            });
+            
+            audio.play().catch(() => {});
+        }
+
         function playSong(index) {
             const music = data.music || [];
             if (!music[index]) return;
+            
             currentSongIndex = index;
-            const song = music[index];
-            document.getElementById('currentCover').src = song.cover ||
-                'https://via.placeholder.com/120/1a1a1a/ec407a?text=♥';
-            document.getElementById('currentTitle').textContent = song.title;
-            document.getElementById('currentArtist').textContent = '🎤 ' + (song.artist || 'بی‌نام');
-            const audio = document.getElementById('audioPlayer');
-            audio.src = song.src || '';
-            audio.load();
+            
+            // حذف پلیر قبلی
+            const oldPlayer = document.getElementById('audioPlayer');
+            if (oldPlayer) oldPlayer.remove();
+            
+            const audio = document.createElement('audio');
+            audio.id = 'audioPlayer';
+            audio.src = music[index].src || '';
+            audio.style.display = 'none';
+            document.body.appendChild(audio);
+            
+            audio.addEventListener('ended', () => {
+                nextSong();
+            });
+            
             audio.play().catch(() => {});
             renderPlaylist();
-        }
-
-        function prevSong() {
-            const music = data.music || [];
-            if (!music.length) return;
-            const idx = (currentSongIndex - 1 + music.length) % music.length;
-            playSong(idx);
         }
 
         function nextSong() {
@@ -1573,21 +1540,6 @@
             if (!music.length) return;
             const idx = (currentSongIndex + 1) % music.length;
             playSong(idx);
-        }
-
-        function downloadCurrentSong() {
-            const src = document.getElementById('audioPlayer').src;
-            if (src && src !== '') {
-                const a = document.createElement('a');
-                a.href = src;
-                a.download = 'آهنگ_عاشقانه.mp3';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                alert('✅ دانلود شروع شد!');
-            } else {
-                alert('اول یه آهنگ انتخاب کن! 🎵');
-            }
         }
 
         function downloadSong(index) {
@@ -1620,8 +1572,7 @@
             document.getElementById('newSongArtist').value = '';
             document.getElementById('newSongCover').value = '';
             document.getElementById('newSongSrc').value = '';
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
             alert('✅ آهنگ اضافه شد!');
         }
 
@@ -1629,9 +1580,14 @@
             if (!confirm('حذف کنم؟')) return;
             data.music = data.music.filter(m => m.id !== id);
             if (currentSongIndex >= data.music.length) currentSongIndex = 0;
-            saveData();
-            renderAll();
-            if (data.music.length) playSong(0);
+            saveData().then(() => {
+                renderAll();
+                if (data.music.length) {
+                    // حذف پلیر قدیمی
+                    const oldPlayer = document.getElementById('audioPlayer');
+                    if (oldPlayer) oldPlayer.remove();
+                }
+            });
         }
 
         // ---------- POLL ----------
@@ -1643,7 +1599,7 @@
             const container = document.getElementById('pollOptions');
             container.innerHTML = '';
             const today = new Date().toISOString().split('T')[0];
-            const hasVoted = poll.votes && poll.votes[today];
+            const hasVoted = poll.votes && poll.votes[today] && Object.keys(poll.votes[today]).length > 0;
 
             (poll.options || []).forEach(opt => {
                 const label = document.createElement('label');
@@ -1709,7 +1665,10 @@
             const poll = data.polls || {};
             const today = new Date().toISOString().split('T')[0];
             if (!poll.votes) poll.votes = {};
-            if (poll.votes[today]) { alert('امروز رای دادی! 😊'); return; }
+            if (poll.votes[today] && Object.keys(poll.votes[today]).length > 0) {
+                alert('امروز رای دادی! 😊');
+                return;
+            }
             const selected = document.querySelector('input[name="poll"]:checked');
             if (!selected) { alert('یه گزینه انتخاب کن!'); return; }
             if (!poll.votes[today]) poll.votes[today] = {};
@@ -1717,8 +1676,7 @@
             if (!poll.history) poll.history = {};
             poll.history[today] = { ...poll.votes[today] };
             data.polls = poll;
-            saveData();
-            renderPoll();
+            saveData().then(() => renderPoll());
             alert('✅ رای ثبت شد!');
         }
 
@@ -1731,8 +1689,7 @@
             data.polls = { question, options, votes: {}, history: data.polls?.history || {} };
             document.getElementById('newPollQuestion').value = '';
             document.getElementById('newPollOptions').value = '';
-            saveData();
-            renderPoll();
+            saveData().then(() => renderPoll());
             alert('✅ نظرسنجی بروزرسانی شد!');
         }
 
@@ -1765,16 +1722,48 @@
             data.comments.push({ id: Date.now(), text, date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date()
                     .toLocaleTimeString('fa-IR'), reply: '' });
             input.value = '';
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
             alert('✅ نظرت ثبت شد!');
         }
 
         function deleteComment(id) {
             if (!confirm('حذف کنم؟')) return;
             data.comments = data.comments.filter(c => c.id !== id);
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
+        }
+
+        // ---------- ADMIN COMMENT ----------
+        function sendAdminComment() {
+            const input = document.getElementById('adminCommentInput');
+            const text = input.value.trim();
+            if (!text) { alert('متن پیام رو بنویس!'); return; }
+            if (!data.comments) data.comments = [];
+            data.comments.push({ 
+                id: Date.now(), 
+                text: '📢 ' + text, 
+                date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date().toLocaleTimeString('fa-IR'), 
+                reply: '',
+                isAdmin: true 
+            });
+            input.value = '';
+            saveData().then(() => renderAll());
+            alert('✅ پیام ارسال شد!');
+        }
+
+        function replyComment() {
+            const sel = document.getElementById('commentSelect');
+            const reply = document.getElementById('replyInput').value.trim();
+            if (!reply) { alert('پاسخ رو بنویس!'); return; }
+            const id = parseInt(sel.value);
+            const comment = (data.comments || []).find(c => c.id === id);
+            if (comment) {
+                comment.reply = reply;
+                document.getElementById('replyInput').value = '';
+                saveData().then(() => renderAll());
+                alert('✅ پاسخ ارسال شد! 💝');
+            } else {
+                alert('❗ نظری برای پاسخ نیست!');
+            }
         }
 
         // ---------- TIMER MANAGEMENT ----------
@@ -1786,16 +1775,14 @@
             data.timers.push({ id: Date.now(), label, date });
             document.getElementById('newTimerLabel').value = '';
             document.getElementById('newTimerDate').value = '';
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
             alert('✅ تایمر اضافه شد!');
         }
 
         function deleteTimer(id) {
             if (!confirm('حذف کنم؟')) return;
             data.timers = data.timers.filter(t => t.id !== id);
-            saveData();
-            renderAll();
+            saveData().then(() => renderAll());
         }
 
         // ---------- ADMIN LISTS ----------
@@ -1835,7 +1822,7 @@
                     const div = document.createElement('div');
                     div.className = 'item-row';
                     div.innerHTML = `
-                            <span class="label">${c.text.substring(0, 30)}${c.text.length > 30 ? '...' : ''}</span>
+                            <span class="label">${c.text.substring(0, 30)}${c.text.length > 30 ? '...' : ''} ${c.reply ? '✅' : '⏳'}</span>
                             <button class="btn btn-danger btn-small" onclick="deleteComment(${c.id})">🗑️</button>
                         `;
                     commentList.appendChild(div);
@@ -1904,23 +1891,6 @@
             }
         }
 
-        function replyComment() {
-            const sel = document.getElementById('commentSelect');
-            const reply = document.getElementById('replyInput').value.trim();
-            if (!reply) { alert('پاسخ رو بنویس!'); return; }
-            const id = parseInt(sel.value);
-            const comment = (data.comments || []).find(c => c.id === id);
-            if (comment) {
-                comment.reply = reply;
-                document.getElementById('replyInput').value = '';
-                saveData();
-                renderAll();
-                alert('✅ پاسخ ارسال شد! 💝');
-            } else {
-                alert('❗ نظری برای پاسخ نیست!');
-            }
-        }
-
         // ============================================================
         // ====== TIMER LOOP ======
         // ============================================================
@@ -1943,8 +1913,10 @@
         // ============================================================
         loadData();
         startTimerLoop();
-        setInterval(loadData, 30000);
-        setInterval(updateFooter, 60000);
+        // فقط هر ۶۰ ثانیه یکبار آپدیت سبک (بدون ریست موزیک)
+        setInterval(() => {
+            updateFooter();
+        }, 60000);
     </script>
 </body>
     </html>
