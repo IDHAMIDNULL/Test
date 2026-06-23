@@ -1,620 +1,230 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سایت سرور AZ_NY</title>
+    <title>نمایش اطلاعات JSON</title>
     <style>
-        /* ===== استایل‌های کامل (همان‌های قبل) ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Tahoma, Arial, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; min-height: 100vh; }
-        .admin-btn { position: fixed; bottom: 20px; left: 20px; background: #1a73e8; color: white; border: none; padding: 14px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(26,115,232,0.4); z-index: 999; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
-        .admin-btn:hover { background: #1557b0; transform: scale(1.05); }
-        .admin-btn .icon { font-size: 20px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; overflow-y: auto; padding: 20px; }
-        .modal.show { display: block; }
-        .modal-content { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 30px rgba(0,0,0,0.3); position: relative; }
-        .modal-close { position: absolute; top: 15px; left: 20px; background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; }
-        .modal-close:hover { background: #b71c1c; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #1a73e8; border-bottom: 3px solid #e8f0fe; padding-bottom: 15px; margin-bottom: 25px; }
-        .section { background: #f8f9fa; border-radius: 12px; padding: 18px; margin-bottom: 20px; border-right: 4px solid #1a73e8; }
-        .section h2 { color: #1a73e8; font-size: 18px; margin-bottom: 12px; }
-        .item { display: flex; padding: 8px 0; border-bottom: 1px dashed #e0e0e0; }
-        .item:last-child { border-bottom: none; }
-        .key { font-weight: bold; width: 120px; color: #555; flex-shrink: 0; }
-        .value { color: #222; word-break: break-word; }
-        .badge { background: #1a73e8; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-right: 8px; }
-        .loading { text-align: center; color: #666; padding: 40px 0; font-size: 16px; }
-        .error { background: #fce4ec; color: #c62828; padding: 15px; border-radius: 8px; text-align: center; margin: 10px 0; }
-        .success { background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
-        .music-item, .poll-item, .chat-item, .msg-item { background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-        .chat-item { border-right: 3px solid #1a73e8; }
-        .chat-item .sender { font-weight: bold; color: #1a73e8; }
-        .chat-item .time { color: #999; font-size: 12px; }
-        .timestamp { text-align: center; color: #999; font-size: 12px; margin-top: 20px; }
-        .admin-section { background: #f8f9fa; border-radius: 12px; padding: 18px; margin-bottom: 20px; border-right: 4px solid #1a73e8; }
-        .admin-section h2 { color: #1a73e8; font-size: 18px; margin-bottom: 15px; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 4px; color: #555; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; }
-        .form-group textarea { min-height: 60px; resize: vertical; }
-        .btn { background: #1a73e8; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-left: 10px; margin-bottom: 5px; }
-        .btn:hover { background: #1557b0; }
-        .btn-danger { background: #d32f2f; }
-        .btn-danger:hover { background: #b71c1c; }
-        .btn-success { background: #2e7d32; }
-        .btn-success:hover { background: #1b5e20; }
-        .btn-warning { background: #f57c00; }
-        .btn-warning:hover { background: #e65100; }
-        .status { padding: 12px; border-radius: 8px; margin: 15px 0; display: none; }
-        .status.success { background: #e8f5e9; color: #2e7d32; display: block; }
-        .status.error { background: #fce4ec; color: #c62828; display: block; }
-        .status.info { background: #e3f2fd; color: #0d47a1; display: block; }
-        .item-list { background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .item-list .remove-btn { background: #d32f2f; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; }
-        .item-list .remove-btn:hover { background: #b71c1c; }
-        .admin-tab { display: inline-block; padding: 10px 20px; background: #e8f0fe; border-radius: 8px 8px 0 0; cursor: pointer; margin-left: 5px; }
-        .admin-tab.active { background: #1a73e8; color: white; }
-        .admin-tab-content { display: none; padding: 20px; background: white; border-radius: 0 8px 8px 8px; border: 1px solid #e8f0fe; }
-        .admin-tab-content.active { display: block; }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-        .debug-box { background: #263238; color: #aed581; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; direction: ltr; text-align: left; margin-top: 10px; display: none; }
-        .debug-box.show { display: block; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .meta-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafafa;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #2980b9;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        .item {
+            background: #fff;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-right: 4px solid #3498db;
+        }
+        .item strong {
+            color: #e74c3c;
+        }
+        .chat-item {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .chat-user {
+            background: #d4edda;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .chat-admin {
+            background: #cce5ff;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .chat-sender {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .chat-text {
+            margin: 0 10px;
+        }
+        .chat-time {
+            color: #7f8c8d;
+            font-size: 0.8em;
+        }
+        .vote-option {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 5px 12px;
+            margin: 3px 5px 3px 0;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .vote-count {
+            background: #2c3e50;
+            color: white;
+            border-radius: 50%;
+            padding: 0 8px;
+            margin-right: 5px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.85em;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        .badge {
+            display: inline-block;
+            background: #2ecc71;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-right: 8px;
+        }
+        .badge-off {
+            background: #e74c3c;
+        }
     </style>
 </head>
 <body>
+    <div class="container" id="app">
+        <h1>💌 اطلاعات سایت</h1>
+        
+        <!-- بخش متا -->
+        <div class="meta-info" v-if="data.meta">
+            <h3 style="margin-top:0;">📋 متا اطلاعات</h3>
+            <p><strong>نام سایت:</strong> {{ data.meta.siteName }}</p>
+            <p><strong>ورژن:</strong> {{ data.meta.version }}</p>
+            <p><strong>آخرین بروزرسانی:</strong> {{ data.meta.lastUpdate }}</p>
+        </div>
 
-    <!-- ===== دکمه پنل مدیریت ===== -->
-    <button class="admin-btn" onclick="openAdminPanel()">
-        <span class="icon">⚙️</span>
-        پنل مدیریت
-    </button>
+        <!-- بخش تنظیمات -->
+        <div class="section" v-if="data.settings">
+            <h2>⚙️ تنظیمات</h2>
+            <p>
+                <span v-for="(value, key) in data.settings" :key="key" style="margin-left: 20px;">
+                    <strong>{{ key }}:</strong> 
+                    <span :class="['badge', { 'badge-off': !value }]">{{ value ? 'فعال' : 'غیرفعال' }}</span>
+                </span>
+            </p>
+        </div>
 
-    <!-- ===== مودال پنل مدیریت ===== -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeAdminPanel()">✕ بستن</button>
-            <h1 style="text-align:center; color:#1a73e8;">📝 پنل مدیریت</h1>
-            
-            <div id="adminStatus" class="status"></div>
-            
-            <div class="btn-group">
-                <button class="btn btn-success" onclick="fetchData()">📥 بارگذاری از گیت‌هاب</button>
-                <button class="btn btn-warning" onclick="saveToGitHub()">💾 ذخیره در گیت‌هاب</button>
-                <button class="btn btn-danger" onclick="toggleDebug()">🐛 نمایش خطاها</button>
+        <!-- بخش پیام‌ها -->
+        <div class="section" v-if="data.messages && data.messages.length">
+            <h2>💬 پیام‌ها</h2>
+            <div class="item" v-for="msg in data.messages" :key="msg.id">
+                <strong>{{ msg.date }}:</strong> {{ msg.text }}
             </div>
-            
-            <div id="debugBox" class="debug-box"></div>
-            
-            <hr style="margin: 20px 0;">
-            
-            <!-- تب‌ها -->
-            <div>
-                <div class="admin-tab active" onclick="switchAdminTab('messages')">💬 پیام‌ها</div>
-                <div class="admin-tab" onclick="switchAdminTab('music')">🎵 موسیقی</div>
-                <div class="admin-tab" onclick="switchAdminTab('polls')">📊 نظرسنجی</div>
-                <div class="admin-tab" onclick="switchAdminTab('chat')">💬 چت</div>
-                <div class="admin-tab" onclick="switchAdminTab('settings')">⚙️ تنظیمات</div>
-            </div>
+        </div>
 
-            <!-- تب پیام‌ها -->
-            <div id="admin-tab-messages" class="admin-tab-content active">
-                <div class="admin-section">
-                    <h2>💬 پیام‌ها</h2>
-                    <div id="admin-messages-list"></div>
-                    <div class="form-group">
-                        <label>متن پیام جدید:</label>
-                        <input type="text" id="new-message-text" placeholder="متن پیام را وارد کنید...">
-                    </div>
-                    <button class="btn btn-success" onclick="addMessageAdmin()">➕ اضافه کردن پیام</button>
+        <!-- بخش موسیقی -->
+        <div class="section" v-if="data.music && data.music.length">
+            <h2>🎵 موسیقی</h2>
+            <div class="item" v-for="song in data.music" :key="song.id">
+                <strong>{{ song.name }}</strong> - {{ song.artist }}
+                <span style="margin-right: 15px; font-size: 0.9em;">
+                    <a :href="song.play" target="_blank">▶ پخش</a> | 
+                    <a :href="song.download" target="_blank">⬇ دانلود</a>
+                </span>
+            </div>
+        </div>
+
+        <!-- بخش نظرسنجی‌ها -->
+        <div class="section" v-if="data.polls && data.polls.length">
+            <h2>📊 نظرسنجی</h2>
+            <div v-for="poll in data.polls" :key="poll.id" class="item">
+                <h4 style="margin-top:0;">{{ poll.question }}</h4>
+                <div>
+                    <span class="vote-option" v-for="opt in poll.options" :key="opt.text">
+                        {{ opt.text }} <span class="vote-count">{{ opt.votes }}</span>
+                    </span>
                 </div>
             </div>
+        </div>
 
-            <!-- تب موسیقی -->
-            <div id="admin-tab-music" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>🎵 موسیقی</h2>
-                    <div id="admin-music-list"></div>
-                    <div class="form-group">
-                        <label>نام آهنگ:</label>
-                        <input type="text" id="new-music-name" placeholder="نام آهنگ...">
-                    </div>
-                    <div class="form-group">
-                        <label>خواننده:</label>
-                        <input type="text" id="new-music-artist" placeholder="نام خواننده...">
-                    </div>
-                    <div class="form-group">
-                        <label>لینک پخش:</label>
-                        <input type="text" id="new-music-play" placeholder="https://...">
-                    </div>
-                    <button class="btn btn-success" onclick="addMusicAdmin()">➕ اضافه کردن آهنگ</button>
-                </div>
+        <!-- بخش چت -->
+        <div class="section" v-if="data.chat && data.chat.length">
+            <h2>💬 چت</h2>
+            <div v-for="msg in data.chat" :key="msg.id" 
+                 :class="['chat-item', msg.sender === 'user' ? 'chat-user' : 'chat-admin']">
+                <span class="chat-sender">{{ msg.sender === 'user' ? '👤 کاربر' : '🛡 ادمین' }}</span>
+                <span class="chat-text">{{ msg.text }}</span>
+                <span class="chat-time">{{ msg.time }}</span>
             </div>
+        </div>
 
-            <!-- تب نظرسنجی -->
-            <div id="admin-tab-polls" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>📊 نظرسنجی</h2>
-                    <div id="admin-polls-list"></div>
-                    <div class="form-group">
-                        <label>سوال نظرسنجی:</label>
-                        <input type="text" id="new-poll-question" placeholder="سوال را وارد کنید...">
-                    </div>
-                    <div class="form-group">
-                        <label>گزینه‌ها (با کاما جدا کنید):</label>
-                        <input type="text" id="new-poll-options" placeholder="گزینه 1, گزینه 2, گزینه 3">
-                    </div>
-                    <button class="btn btn-success" onclick="addPollAdmin()">➕ اضافه کردن نظرسنجی</button>
-                </div>
-            </div>
-
-            <!-- تب چت -->
-            <div id="admin-tab-chat" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>💬 چت</h2>
-                    <div id="admin-chat-list"></div>
-                    <div class="form-group">
-                        <label>فرستنده:</label>
-                        <select id="new-chat-sender">
-                            <option value="user">کاربر</option>
-                            <option value="admin">مدیر</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>متن پیام:</label>
-                        <input type="text" id="new-chat-text" placeholder="متن پیام...">
-                    </div>
-                    <button class="btn btn-success" onclick="addChatAdmin()">➕ اضافه کردن پیام</button>
-                </div>
-            </div>
-
-            <!-- تب تنظیمات -->
-            <div id="admin-tab-settings" class="admin-tab-content">
-                <div class="admin-section">
-                    <h2>⚙️ تنظیمات</h2>
-                    <div id="admin-settings-list"></div>
-                </div>
-            </div>
-
-            <div style="text-align:center; margin-top:20px; color:#999; font-size:12px;">
-                آخرین تغییر: <span id="adminLastUpdate">-</span>
-            </div>
+        <div class="footer">
+            اطلاعات از فایل JSON دریافت شده | آخرین بروزرسانی: {{ data.meta?.lastUpdate || 'نامشخص' }}
         </div>
     </div>
 
-    <!-- ===== بخش اصلی سایت ===== -->
-    <div class="container">
-        <h1>📡 اطلاعات سرور AZ_NY</h1>
-        <div id="mainContent" class="loading">⏳ در حال بارگذاری اطلاعات...</div>
-        <div class="timestamp" id="mainTimestamp"></div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- ===== اسکریپت با گیت‌هاب (خواندن و نوشتن) ===== -->
-    <!-- ============================================================ -->
+    <!-- اضافه کردن Vue.js از CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
-        // ============================================================
-        // 🔐 تنظیمات گیت‌هاب
-        // ============================================================
-        const GITHUB_TOKEN = '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';
-        const REPO_OWNER = 'IDHAMIDNULL';
-        const REPO_NAME = 'Test';
-        const FILE_PATH = 'AZ_NY.JSON';
-        const RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${FILE_PATH}`;
-        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-
-        let currentData = null;
-        let debugLogs = [];
-
-        // ============================================================
-        // 📝 لاگ خطاها
-        // ============================================================
-        function logDebug(message, data = null) {
-            const timestamp = new Date().toLocaleTimeString('fa-IR');
-            const logEntry = `[${timestamp}] ${message}` + (data ? '\n' + JSON.stringify(data, null, 2) : '');
-            debugLogs.push(logEntry);
-            console.log(logEntry);
-            
-            const debugBox = document.getElementById('debugBox');
-            if (debugBox) {
-                debugBox.textContent = debugLogs.join('\n\n');
-                debugBox.scrollTop = debugBox.scrollHeight;
-            }
-        }
-
-        function toggleDebug() {
-            const box = document.getElementById('debugBox');
-            box.classList.toggle('show');
-            if (box.classList.contains('show')) {
-                box.textContent = debugLogs.join('\n\n');
-            }
-        }
-
-        // ============================================================
-        // 📥 دریافت داده از گیت‌هاب
-        // ============================================================
-        function fetchData() {
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = '<div class="loading">⏳ در حال دریافت از گیت‌هاب...</div>';
-            showAdminStatus('⏳ در حال دریافت داده از گیت‌هاب...', 'info');
-            logDebug('📥 شروع دریافت از گیت‌هاب');
-
-            fetch(RAW_URL + '?t=' + new Date().getTime())
-            .then(response => {
-                logDebug(`📡 پاسخ: وضعیت ${response.status}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status} - فایل در گیت‌هاب پیدا نشد`);
-                return response.json();
-            })
-            .then(data => {
-                currentData = data;
-                logDebug('✅ داده دریافت شد', data);
-                renderMainPage(currentData);
-                renderAdminPanel(currentData);
-                showAdminStatus('✅ داده با موفقیت از گیت‌هاب بارگذاری شد', 'success');
-                document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR') + ' (از گیت‌هاب)';
-            })
-            .catch(error => {
-                logDebug('❌ خطا:', error.message);
-                mainContent.innerHTML = `<div class="error">❌ خطا: ${error.message}</div>`;
-                showAdminStatus('❌ خطا: ' + error.message, 'error');
-            });
-        }
-
-        // ============================================================
-        // 💾 ذخیره در گیت‌هاب (با توکن)
-        // ============================================================
-        function saveToGitHub() {
-            if (!currentData) {
-                showAdminStatus('❌ داده‌ای برای ذخیره وجود ندارد. ابتدا بارگذاری کنید.', 'error');
-                logDebug('❌ تلاش برای ذخیره بدون داده');
-                return;
-            }
-
-            showAdminStatus('⏳ مرحله 1: دریافت اطلاعات فایل...', 'info');
-            logDebug('💾 شروع فرآیند ذخیره');
-
-            // مرحله 1: دریافت SHA فایل
-            fetch(API_URL, {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            })
-            .then(response => {
-                logDebug(`📡 پاسخ دریافت SHA: وضعیت ${response.status}`);
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        throw new Error('فایل AZ_NY.JSON در مخزن وجود ندارد. ابتدا فایل را ایجاد کنید.');
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const sha = data.sha;
-                logDebug('✅ SHA دریافت شد:', sha);
-                
-                showAdminStatus('⏳ مرحله 2: در حال ذخیره فایل...', 'info');
-                
-                // مرحله 2: ذخیره فایل با SHA
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
-                logDebug('📦 محتوای JSON آماده شد (طول: ' + content.length + ' کاراکتر)');
-                
-                return fetch(API_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        message: 'به‌روزرسانی از پنل مدیریت | ' + new Date().toLocaleString('fa-IR'),
-                        content: content,
-                        sha: sha
+        new Vue({
+            el: '#app',
+            data: {
+                data: {} // داده‌ها در اینجا ذخیره می‌شوند
+            },
+            mounted() {
+                // دریافت داده از فایل JSON
+                fetch('https://tk-server.ir/json/hbhsjdj.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('خطا در دریافت اطلاعات');
+                        }
+                        return response.json();
                     })
-                });
-            })
-            .then(response => {
-                logDebug(`📡 پاسخ ذخیره: وضعیت ${response.status}`);
-                if (!response.ok) {
-                    return response.json().then(errData => {
-                        logDebug('❌ جزئیات خطا:', errData);
-                        throw new Error(`HTTP ${response.status}: ${errData.message || 'خطای ناشناخته'}`);
+                    .then(jsonData => {
+                        this.data = jsonData;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching JSON:', error);
+                        // در صورت خطا، یک پیام نمایش داده می‌شود
+                        this.data = { 
+                            meta: { siteName: 'خطا', version: '?', lastUpdate: 'نامشخص' },
+                            messages: [{ id: 0, date: '---', text: 'خطا در بارگیری اطلاعات' }]
+                        };
                     });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.content) {
-                    logDebug('✅ ذخیره موفق!', data);
-                    showAdminStatus('✅ فایل با موفقیت در گیت‌هاب ذخیره شد!', 'success');
-                    document.getElementById('adminLastUpdate').textContent = new Date().toLocaleString('fa-IR');
-                    document.getElementById('mainTimestamp').textContent = 'آخرین بروزرسانی: ' + new Date().toLocaleString('fa-IR') + ' (ذخیره در گیت‌هاب)';
-                } else {
-                    logDebug('⚠️ پاسخ غیرمنتظره:', data);
-                    showAdminStatus('⚠️ پاسخ غیرمنتظره: ' + JSON.stringify(data), 'error');
-                }
-            })
-            .catch(error => {
-                logDebug('❌ خطا:', error.message);
-                showAdminStatus('❌ خطا: ' + error.message, 'error');
-                if (error.message.includes('404')) {
-                    showAdminStatus('❌ فایل AZ_NY.JSON در مخزن وجود ندارد. لطفاً ابتدا فایل را ایجاد کنید.', 'error');
-                }
-            });
-        }
-
-        // ============================================================
-        // 🖼 توابع رندر (کامل)
-        // ============================================================
-        function renderMainPage(data) {
-            const container = document.getElementById('mainContent');
-            let html = '';
-            if (data.meta) {
-                html += `<div class="section"><h2>📋 اطلاعات پایه</h2>`;
-                for (const [key, value] of Object.entries(data.meta)) {
-                    html += `<div class="item"><span class="key">${key}:</span><span class="value">${value}</span></div>`;
-                }
-                html += `</div>`;
             }
-            if (data.messages && data.messages.length > 0) {
-                html += `<div class="section"><h2>💬 پیام‌ها <span class="badge">${data.messages.length}</span></h2>`;
-                data.messages.forEach(msg => {
-                    html += `<div class="msg-item"><strong>${msg.text}</strong><div style="color:#999;font-size:12px;">📅 ${msg.date}</div></div>`;
-                });
-                html += `</div>`;
-            }
-            if (data.music && data.music.length > 0) {
-                html += `<div class="section"><h2>🎵 موسیقی <span class="badge">${data.music.length}</span></h2>`;
-                data.music.forEach(song => {
-                    html += `<div class="music-item"><strong>${song.name}</strong> - ${song.artist}</div>`;
-                });
-                html += `</div>`;
-            }
-            if (data.polls && data.polls.length > 0) {
-                html += `<div class="section"><h2>📊 نظرسنجی‌ها <span class="badge">${data.polls.length}</span></h2>`;
-                data.polls.forEach(poll => {
-                    html += `<div class="poll-item"><strong>❓ ${poll.question}</strong></div>`;
-                });
-                html += `</div>`;
-            }
-            if (data.chat && data.chat.length > 0) {
-                html += `<div class="section"><h2>💬 چت <span class="badge">${data.chat.length}</span></h2>`;
-                data.chat.forEach(msg => {
-                    const senderLabel = msg.sender === 'admin' ? 'مدیر' : 'کاربر';
-                    html += `<div class="chat-item"><span class="sender">${senderLabel}</span> <span class="time">${msg.time}</span><div>${msg.text}</div></div>`;
-                });
-                html += `</div>`;
-            }
-            container.innerHTML = html || '<p style="color:#999;">هیچ داده‌ای موجود نیست.</p>';
-        }
-
-        function renderAdminPanel(data) {
-            renderAdminMessages(data);
-            renderAdminMusic(data);
-            renderAdminPolls(data);
-            renderAdminChat(data);
-            renderAdminSettings(data);
-            document.getElementById('adminLastUpdate').textContent = new Date().toLocaleString('fa-IR');
-        }
-
-        function renderAdminMessages(data) {
-            const container = document.getElementById('admin-messages-list');
-            if (!data.messages || data.messages.length === 0) {
-                container.innerHTML = '<p style="color:#999;">هیچ پیامی وجود ندارد.</p>';
-                return;
-            }
-            let html = '';
-            data.messages.forEach((msg, index) => {
-                html += `
-                    <div class="item-list">
-                        <span><strong>${msg.text}</strong> <span style="color:#999;font-size:12px;">📅 ${msg.date}</span></span>
-                        <button class="remove-btn" onclick="removeItemAdmin('messages', ${index})">🗑</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function renderAdminMusic(data) {
-            const container = document.getElementById('admin-music-list');
-            if (!data.music || data.music.length === 0) {
-                container.innerHTML = '<p style="color:#999;">هیچ آهنگی وجود ندارد.</p>';
-                return;
-            }
-            let html = '';
-            data.music.forEach((song, index) => {
-                html += `
-                    <div class="item-list">
-                        <span><strong>${song.name}</strong> - ${song.artist}</span>
-                        <button class="remove-btn" onclick="removeItemAdmin('music', ${index})">🗑</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function renderAdminPolls(data) {
-            const container = document.getElementById('admin-polls-list');
-            if (!data.polls || data.polls.length === 0) {
-                container.innerHTML = '<p style="color:#999;">هیچ نظرسنجی وجود ندارد.</p>';
-                return;
-            }
-            let html = '';
-            data.polls.forEach((poll, index) => {
-                html += `
-                    <div class="item-list">
-                        <span><strong>❓ ${poll.question}</strong> (${poll.options.length} گزینه)</span>
-                        <button class="remove-btn" onclick="removeItemAdmin('polls', ${index})">🗑</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function renderAdminChat(data) {
-            const container = document.getElementById('admin-chat-list');
-            if (!data.chat || data.chat.length === 0) {
-                container.innerHTML = '<p style="color:#999;">هیچ پیام چتی وجود ندارد.</p>';
-                return;
-            }
-            let html = '';
-            data.chat.forEach((msg, index) => {
-                const senderLabel = msg.sender === 'admin' ? 'مدیر' : 'کاربر';
-                html += `
-                    <div class="item-list">
-                        <span><span style="color:#1a73e8;font-weight:bold;">${senderLabel}</span> ${msg.text}</span>
-                        <button class="remove-btn" onclick="removeItemAdmin('chat', ${index})">🗑</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function renderAdminSettings(data) {
-            const container = document.getElementById('admin-settings-list');
-            if (!data.settings) return;
-            let html = '';
-            for (const [key, value] of Object.entries(data.settings)) {
-                const checked = value ? 'checked' : '';
-                html += `
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" ${checked} onchange="updateSettingAdmin('${key}', this.checked)">
-                            ${key}
-                        </label>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // ➕ عملیات اضافه کردن
-        // ============================================================
-        function addMessageAdmin() {
-            const input = document.getElementById('new-message-text');
-            const text = input.value.trim();
-            if (!text) { showAdminStatus('❌ لطفاً متن پیام را وارد کنید', 'error'); return; }
-            if (!currentData.messages) currentData.messages = [];
-            currentData.messages.push({ id: currentData.messages.length + 1, date: new Date().toISOString().split('T')[0], text: text });
-            input.value = '';
-            renderAdminPanel(currentData);
-            showAdminStatus('✅ پیام اضافه شد', 'success');
-            logDebug('➕ پیام جدید اضافه شد:', text);
-        }
-
-        function addMusicAdmin() {
-            const name = document.getElementById('new-music-name').value.trim();
-            const artist = document.getElementById('new-music-artist').value.trim();
-            const play = document.getElementById('new-music-play').value.trim();
-            if (!name || !artist) { showAdminStatus('❌ نام و خواننده را وارد کنید', 'error'); return; }
-            if (!currentData.music) currentData.music = [];
-            currentData.music.push({ id: currentData.music.length + 1, name: name, artist: artist, play: play || '#', download: '#' });
-            document.getElementById('new-music-name').value = '';
-            document.getElementById('new-music-artist').value = '';
-            document.getElementById('new-music-play').value = '';
-            renderAdminPanel(currentData);
-            showAdminStatus('✅ آهنگ اضافه شد', 'success');
-            logDebug('➕ آهنگ جدید اضافه شد:', name);
-        }
-
-        function addPollAdmin() {
-            const question = document.getElementById('new-poll-question').value.trim();
-            const optionsText = document.getElementById('new-poll-options').value.trim();
-            if (!question || !optionsText) { showAdminStatus('❌ سوال و گزینه‌ها را وارد کنید', 'error'); return; }
-            const options = optionsText.split(',').map(text => ({ text: text.trim(), votes: 0 }));
-            if (!currentData.polls) currentData.polls = [];
-            currentData.polls.push({ id: currentData.polls.length + 1, question: question, options: options });
-            document.getElementById('new-poll-question').value = '';
-            document.getElementById('new-poll-options').value = '';
-            renderAdminPanel(currentData);
-            showAdminStatus('✅ نظرسنجی اضافه شد', 'success');
-            logDebug('➕ نظرسنجی جدید اضافه شد:', question);
-        }
-
-        function addChatAdmin() {
-            const sender = document.getElementById('new-chat-sender').value;
-            const text = document.getElementById('new-chat-text').value.trim();
-            if (!text) { showAdminStatus('❌ متن پیام را وارد کنید', 'error'); return; }
-            if (!currentData.chat) currentData.chat = [];
-            currentData.chat.push({
-                id: currentData.chat.length + 1,
-                sender: sender,
-                text: text,
-                time: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' })
-            });
-            document.getElementById('new-chat-text').value = '';
-            renderAdminPanel(currentData);
-            showAdminStatus('✅ پیام چت اضافه شد', 'success');
-            logDebug('➕ پیام چت جدید اضافه شد:', text);
-        }
-
-        // ============================================================
-        // 🗑 حذف آیتم
-        // ============================================================
-        function removeItemAdmin(section, index) {
-            if (!confirm('آیا مطمئن هستید؟')) return;
-            currentData[section].splice(index, 1);
-            renderAdminPanel(currentData);
-            showAdminStatus('✅ آیتم حذف شد', 'success');
-            logDebug(`🗑 آیتم از ${section} حذف شد`);
-        }
-
-        // ============================================================
-        // ⚙️ به‌روزرسانی تنظیمات
-        // ============================================================
-        function updateSettingAdmin(key, value) {
-            currentData.settings[key] = value;
-            showAdminStatus(`✅ تنظیم ${key} ${value ? 'فعال' : 'غیرفعال'} شد`, 'success');
-            logDebug(`⚙️ تنظیم ${key} = ${value}`);
-        }
-
-        // ============================================================
-        // 📊 نمایش وضعیت
-        // ============================================================
-        function showAdminStatus(message, type) {
-            const status = document.getElementById('adminStatus');
-            status.textContent = message;
-            status.className = 'status ' + type;
-            status.style.display = 'block';
-            if (type !== 'info') {
-                setTimeout(() => { status.style.display = 'none'; }, 5000);
-            }
-        }
-
-        // ============================================================
-        // 🔄 تغییر تب
-        // ============================================================
-        function switchAdminTab(tabName) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.admin-tab[onclick="switchAdminTab('${tabName}')"]`).classList.add('active');
-            document.getElementById(`admin-tab-${tabName}`).classList.add('active');
-        }
-
-        // ============================================================
-        // 🚪 باز و بستن پنل
-        // ============================================================
-        function openAdminPanel() {
-            document.getElementById('adminModal').classList.add('show');
-            document.body.style.overflow = 'hidden';
-            logDebug('🔓 پنل مدیریت باز شد');
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('adminModal').classList.remove('show');
-            document.body.style.overflow = 'auto';
-            logDebug('🔒 پنل مدیریت بسته شد');
-        }
-
-        // ============================================================
-        // 🚀 بارگذاری اولیه
-        // ============================================================
-        logDebug('🚀 سایت بارگذاری شد');
-        fetchData();
+        });
     </script>
-
 </body>
     </html>
