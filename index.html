@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نمایش اطلاعات JSON</title>
+    <title>نمالیش اطلاعات JSON</title>
     <style>
+        /* تمام استایل‌های قبلی را همینجا قرار دهید */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
@@ -121,105 +122,137 @@
         .badge-off {
             background: #e74c3c;
         }
+        .error-box {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2em;
+            color: #3498db;
+        }
     </style>
 </head>
 <body>
     <div class="container" id="app">
         <h1>💌 اطلاعات سایت</h1>
         
-        <!-- بخش متا -->
-        <div class="meta-info" v-if="data.meta">
-            <h3 style="margin-top:0;">📋 متا اطلاعات</h3>
-            <p><strong>نام سایت:</strong> {{ data.meta.siteName }}</p>
-            <p><strong>ورژن:</strong> {{ data.meta.version }}</p>
-            <p><strong>آخرین بروزرسانی:</strong> {{ data.meta.lastUpdate }}</p>
+        <div v-if="loading" class="loading">
+            ⏳ در حال بارگیری اطلاعات...
         </div>
 
-        <!-- بخش تنظیمات -->
-        <div class="section" v-if="data.settings">
-            <h2>⚙️ تنظیمات</h2>
-            <p>
-                <span v-for="(value, key) in data.settings" :key="key" style="margin-left: 20px;">
-                    <strong>{{ key }}:</strong> 
-                    <span :class="['badge', { 'badge-off': !value }]">{{ value ? 'فعال' : 'غیرفعال' }}</span>
-                </span>
-            </p>
+        <div v-if="error" class="error-box">
+            ⚠️ {{ error }}
         </div>
 
-        <!-- بخش پیام‌ها -->
-        <div class="section" v-if="data.messages && data.messages.length">
-            <h2>💬 پیام‌ها</h2>
-            <div class="item" v-for="msg in data.messages" :key="msg.id">
-                <strong>{{ msg.date }}:</strong> {{ msg.text }}
+        <template v-if="!loading && !error && data.meta">
+            <!-- بخش متا -->
+            <div class="meta-info">
+                <h3 style="margin-top:0;">📋 متا اطلاعات</h3>
+                <p><strong>نام سایت:</strong> {{ data.meta.siteName }}</p>
+                <p><strong>ورژن:</strong> {{ data.meta.version }}</p>
+                <p><strong>آخرین بروزرسانی:</strong> {{ data.meta.lastUpdate }}</p>
             </div>
-        </div>
 
-        <!-- بخش موسیقی -->
-        <div class="section" v-if="data.music && data.music.length">
-            <h2>🎵 موسیقی</h2>
-            <div class="item" v-for="song in data.music" :key="song.id">
-                <strong>{{ song.name }}</strong> - {{ song.artist }}
-                <span style="margin-right: 15px; font-size: 0.9em;">
-                    <a :href="song.play" target="_blank">▶ پخش</a> | 
-                    <a :href="song.download" target="_blank">⬇ دانلود</a>
-                </span>
+            <!-- بخش تنظیمات -->
+            <div class="section" v-if="data.settings">
+                <h2>⚙️ تنظیمات</h2>
+                <p>
+                    <span v-for="(value, key) in data.settings" :key="key" style="margin-left: 20px;">
+                        <strong>{{ key }}:</strong> 
+                        <span :class="['badge', { 'badge-off': !value }]">{{ value ? 'فعال' : 'غیرفعال' }}</span>
+                    </span>
+                </p>
             </div>
-        </div>
 
-        <!-- بخش نظرسنجی‌ها -->
-        <div class="section" v-if="data.polls && data.polls.length">
-            <h2>📊 نظرسنجی</h2>
-            <div v-for="poll in data.polls" :key="poll.id" class="item">
-                <h4 style="margin-top:0;">{{ poll.question }}</h4>
-                <div>
-                    <span class="vote-option" v-for="opt in poll.options" :key="opt.text">
-                        {{ opt.text }} <span class="vote-count">{{ opt.votes }}</span>
+            <!-- بخش پیام‌ها -->
+            <div class="section" v-if="data.messages && data.messages.length">
+                <h2>💬 پیام‌ها</h2>
+                <div class="item" v-for="msg in data.messages" :key="msg.id">
+                    <strong>{{ msg.date }}:</strong> {{ msg.text }}
+                </div>
+            </div>
+
+            <!-- بخش موسیقی -->
+            <div class="section" v-if="data.music && data.music.length">
+                <h2>🎵 موسیقی</h2>
+                <div class="item" v-for="song in data.music" :key="song.id">
+                    <strong>{{ song.name }}</strong> - {{ song.artist }}
+                    <span style="margin-right: 15px; font-size: 0.9em;">
+                        <a :href="song.play" target="_blank">▶ پخش</a> | 
+                        <a :href="song.download" target="_blank">⬇ دانلود</a>
                     </span>
                 </div>
             </div>
-        </div>
 
-        <!-- بخش چت -->
-        <div class="section" v-if="data.chat && data.chat.length">
-            <h2>💬 چت</h2>
-            <div v-for="msg in data.chat" :key="msg.id" 
-                 :class="['chat-item', msg.sender === 'user' ? 'chat-user' : 'chat-admin']">
-                <span class="chat-sender">{{ msg.sender === 'user' ? '👤 کاربر' : '🛡 ادمین' }}</span>
-                <span class="chat-text">{{ msg.text }}</span>
-                <span class="chat-time">{{ msg.time }}</span>
+            <!-- بخش نظرسنجی‌ها -->
+            <div class="section" v-if="data.polls && data.polls.length">
+                <h2>📊 نظرسنجی</h2>
+                <div v-for="poll in data.polls" :key="poll.id" class="item">
+                    <h4 style="margin-top:0;">{{ poll.question }}</h4>
+                    <div>
+                        <span class="vote-option" v-for="opt in poll.options" :key="opt.text">
+                            {{ opt.text }} <span class="vote-count">{{ opt.votes }}</span>
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="footer">
-            اطلاعات از فایل JSON دریافت شده | آخرین بروزرسانی: {{ data.meta?.lastUpdate || 'نامشخص' }}
-        </div>
+            <!-- بخش چت -->
+            <div class="section" v-if="data.chat && data.chat.length">
+                <h2>💬 چت</h2>
+                <div v-for="msg in data.chat" :key="msg.id" 
+                     :class="['chat-item', msg.sender === 'user' ? 'chat-user' : 'chat-admin']">
+                    <span class="chat-sender">{{ msg.sender === 'user' ? '👤 کاربر' : '🛡 ادمین' }}</span>
+                    <span class="chat-text">{{ msg.text }}</span>
+                    <span class="chat-time">{{ msg.time }}</span>
+                </div>
+            </div>
+
+            <div class="footer">
+                اطلاعات از فایل JSON دریافت شده | آخرین بروزرسانی: {{ data.meta?.lastUpdate || 'نامشخص' }}
+            </div>
+        </template>
     </div>
 
-    <!-- اضافه کردن Vue.js از CDN -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
         new Vue({
             el: '#app',
             data: {
-                data: {} // داده‌ها در اینجا ذخیره می‌شوند
+                data: {},
+                loading: true,
+                error: null
             },
             mounted() {
-                // دریافت داده از فایل JSON
-                fetch('https://tk-server.ir/json/hbhsjdj.json')
+                // استفاده از پروکسی CORS
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const targetUrl = 'https://tk-server.ir/json/hbhsjdj.json';
+                
+                fetch(proxyUrl + encodeURIComponent(targetUrl))
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('خطا در دریافت اطلاعات');
+                            throw new Error('خطا در دریافت اطلاعات از سرور');
                         }
                         return response.json();
                     })
                     .then(jsonData => {
                         this.data = jsonData;
+                        this.loading = false;
                     })
                     .catch(error => {
                         console.error('Error fetching JSON:', error);
-                        // در صورت خطا، یک پیام نمایش داده می‌شود
-                        this.data = { 
-                            meta: { siteName: 'خطا', version: '?', lastUpdate: 'نامشخص' },
+                        this.error = 'خطا در بارگیری اطلاعات. لطفاً اتصال اینترنت خود را بررسی کنید.';
+                        this.loading = false;
+                        // داده‌های پیش‌فرض برای نمایش
+                        this.data = {
+                            meta: { siteName: 'خطا در دریافت', version: '?', lastUpdate: 'نامشخص' },
+                            settings: { messagesEnabled: false, musicEnabled: false, pollEnabled: false, chatEnabled: false },
                             messages: [{ id: 0, date: '---', text: 'خطا در بارگیری اطلاعات' }]
                         };
                     });
@@ -227,4 +260,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
