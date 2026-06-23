@@ -425,6 +425,21 @@
             box-shadow: none;
         }
 
+        .btn-play {
+            background: rgba(255, 255, 255, 0.06);
+            min-width: 40px;
+        }
+
+        .btn-play:hover {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
+        }
+
+        .btn-play.active {
+            background: rgba(236, 64, 122, 0.2);
+            color: #ec407a;
+        }
+
         input,
         textarea,
         select {
@@ -565,7 +580,6 @@
             padding: 12px 16px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 16px;
-            cursor: pointer;
             transition: all 0.3s;
             border: 1px solid transparent;
         }
@@ -600,6 +614,11 @@
         .music-item .info .artist {
             font-size: 0.75em;
             color: rgba(255, 255, 255, 0.3);
+        }
+
+        .music-item .actions {
+            display: flex;
+            gap: 4px;
         }
 
         .poll-option {
@@ -943,6 +962,9 @@
             #themePopup .theme-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            .music-item .actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -1025,7 +1047,7 @@
                 <button class="close-btn" onclick="closeThemePopup()">✕</button>
             </div>
             <div class="theme-grid">
-                <div class="theme-option active" onclick="selectTheme('rose')" data-theme="rose">
+                <div class="theme-option" onclick="selectTheme('rose')" data-theme="rose">
                     <div class="color-box" style="background:linear-gradient(135deg,#fce4ec,#e91e63);"></div>
                     <div class="name">رز</div>
                 </div>
@@ -1041,6 +1063,10 @@
                     <div class="color-box" style="background:linear-gradient(135deg,#fff3e0,#e65100);"></div>
                     <div class="name">غروب</div>
                 </div>
+                <div class="theme-option active" onclick="selectTheme('gold')" data-theme="gold">
+                    <div class="color-box" style="background:linear-gradient(135deg,#fff8e1,#f9a825);box-shadow:0 0 20px rgba(249,168,37,0.3);"></div>
+                    <div class="name">طلایی</div>
+                </div>
                 <div class="theme-option" onclick="selectTheme('ocean')" data-theme="ocean">
                     <div class="color-box" style="background:linear-gradient(135deg,#e0f7fa,#00695c);"></div>
                     <div class="name">اقیانوس</div>
@@ -1052,10 +1078,6 @@
                 <div class="theme-option" onclick="selectTheme('dark')" data-theme="dark">
                     <div class="color-box" style="background:linear-gradient(135deg,#263238,#000000);"></div>
                     <div class="name">شب</div>
-                </div>
-                <div class="theme-option" onclick="selectTheme('gold')" data-theme="gold">
-                    <div class="color-box" style="background:linear-gradient(135deg,#fff8e1,#f9a825);"></div>
-                    <div class="name">طلایی</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('mint')" data-theme="mint">
                     <div class="color-box" style="background:linear-gradient(135deg,#e8f5e9,#2e7d32);"></div>
@@ -1144,28 +1166,41 @@
         // ============================================================
         function applyTheme(theme) {
             const themes = {
-                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
-                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c' },
-                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1' },
-                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
-                ocean: { bg: '#0a1212', primary: '#00695c', secondary: '#004d40' },
-                lavender: { bg: '#0d0a14', primary: '#6a1b9a', secondary: '#4a148c' },
-                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' },
-                gold: { bg: '#1a140a', primary: '#f9a825', secondary: '#f57f17' },
-                mint: { bg: '#0a140a', primary: '#2e7d32', secondary: '#1b5e20' }
+                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc', glow: 'rgba(236,64,122,0.3)' },
+                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c', glow: 'rgba(123,31,162,0.3)' },
+                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1', glow: 'rgba(30,136,229,0.3)' },
+                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c', glow: 'rgba(230,81,0,0.3)' },
+                gold: { bg: '#1a1408', primary: '#f9a825', secondary: '#f57f17', glow: 'rgba(249,168,37,0.5)' },
+                ocean: { bg: '#0a1212', primary: '#00695c', secondary: '#004d40', glow: 'rgba(0,105,92,0.3)' },
+                lavender: { bg: '#0d0a14', primary: '#6a1b9a', secondary: '#4a148c', glow: 'rgba(106,27,154,0.3)' },
+                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f', glow: 'rgba(120,144,156,0.2)' },
+                mint: { bg: '#0a140a', primary: '#2e7d32', secondary: '#1b5e20', glow: 'rgba(46,125,50,0.3)' }
             };
-            const t = themes[theme] || themes.rose;
-            document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
+            const t = themes[theme] || themes.gold;
+
+            // Background
+            document.body.style.background =
+                `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
+
+            // Headers
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2').forEach(
             el => {
                 el.style.color = t.primary;
             });
-            document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download)').forEach(el => {
+
+            // Buttons
+            document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+                el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
+
+            // Active tab
             document.querySelectorAll('.tab-btn.active').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+                el.style.boxShadow = `0 8px 30px ${t.glow}`;
             });
+
+            // Messages
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1173,51 +1208,77 @@
             document.querySelectorAll('.msg-item').forEach(el => {
                 el.style.borderRightColor = t.primary;
             });
+
+            // Comments reply
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
+
+            // Timer numbers
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
+
+            // Poll history
             document.querySelectorAll('.poll-history-item .date').forEach(el => {
                 el.style.color = t.primary;
             });
             document.querySelectorAll('.poll-history-item .result-row .bar-wrap .fill').forEach(el => {
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
-            document.querySelectorAll('.theme-option.active').forEach(el => {
-                el.style.borderColor = t.primary;
-                el.style.background = `${t.primary}15`;
-            });
+
+            // Theme popup active
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
                     el.style.borderColor = t.primary;
                     el.style.background = `${t.primary}15`;
+                    el.style.boxShadow = `0 0 30px ${t.glow}`;
                 } else {
                     el.classList.remove('active');
                     el.style.borderColor = 'rgba(255,255,255,0.06)';
                     el.style.background = 'rgba(255,255,255,0.02)';
+                    el.style.boxShadow = 'none';
                 }
             });
+
+            // Music player active
+            document.querySelectorAll('.music-item.active').forEach(el => {
+                el.style.borderColor = `${t.primary}30`;
+                el.style.background = `${t.primary}08`;
+            });
+
+            // Header glow
+            document.querySelector('.header').style.borderColor = `${t.primary}20`;
         }
 
         function selectTheme(theme) {
             localStorage.setItem('theme', theme);
             applyTheme(theme);
             closeThemePopup();
+            // Re-apply to all dynamic elements
+            setTimeout(() => {
+                applyTheme(theme);
+            }, 100);
         }
 
         function openThemePopup() {
             document.getElementById('themePopup').classList.add('show');
+            // Highlight current theme
+            const current = localStorage.getItem('theme') || 'gold';
+            document.querySelectorAll('.theme-option').forEach(el => {
+                if (el.dataset.theme === current) {
+                    el.classList.add('active');
+                }
+            });
         }
 
         function closeThemePopup() {
             document.getElementById('themePopup').classList.remove('show');
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'rose';
+        const savedTheme = localStorage.getItem('theme') || 'gold';
         applyTheme(savedTheme);
 
         document.getElementById('themePopup').addEventListener('click', function(e) {
@@ -1252,6 +1313,9 @@
                 this.classList.add('active');
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                 document.getElementById(this.dataset.tab).classList.add('active');
+                // Re-apply theme to active tab
+                const current = localStorage.getItem('theme') || 'gold';
+                applyTheme(current);
             });
         });
 
@@ -1267,9 +1331,8 @@
                 data = json.record;
                 if (!data.timers) {
                     data.timers = [
-                        { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
-                        { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
-                        { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-15' }
+                        { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
+                        { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
                     ];
                 }
                 renderAll();
@@ -1284,9 +1347,8 @@
                             history: {} },
                         comments: [],
                         timers: [
-                            { id: 1, label: '🎂 تا تولدت', date: '2026-12-25' },
-                            { id: 2, label: '💍 تا سالگرد', date: '2027-01-01' },
-                            { id: 3, label: '💕 تا دیدار بعدی', date: '2026-07-15' }
+                            { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
+                            { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
                         ]
                     };
                     renderAll();
@@ -1319,6 +1381,9 @@
             renderTimers();
             renderAdminLists();
             updateFooter();
+            // Re-apply theme after render
+            const current = localStorage.getItem('theme') || 'gold';
+            applyTheme(current);
         }
 
         function updateFooter() {
@@ -1441,21 +1506,43 @@
                 return;
             }
             music.forEach((song, index) => {
+                const isActive = index === currentSongIndex;
                 const div = document.createElement('div');
-                div.className = 'music-item' + (index === currentSongIndex ? ' active' : '');
+                div.className = 'music-item' + (isActive ? ' active' : '');
                 div.innerHTML = `
                         <img src="${song.cover || 'https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'">
                         <div class="info">
                             <div class="title">${song.title}</div>
                             <div class="artist">${song.artist || 'بی‌نام'}</div>
                         </div>
-                        <button class="btn btn-small" onclick="playSong(${index})">▶️</button>
+                        <div class="actions">
+                            <button class="btn btn-small btn-play ${isActive ? 'active' : ''}" onclick="togglePlay(${index})">
+                                ${isActive ? '⏸' : '▶️'}
+                            </button>
+                            <button class="btn btn-small btn-download" onclick="downloadSong(${index})">⬇️</button>
+                        </div>
                     `;
                 list.appendChild(div);
             });
             if (music.length && !document.getElementById('audioPlayer').src) {
                 playSong(0);
             }
+        }
+
+        function togglePlay(index) {
+            const music = data.music || [];
+            if (!music[index]) return;
+            const audio = document.getElementById('audioPlayer');
+            if (index === currentSongIndex) {
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            } else {
+                playSong(index);
+            }
+            renderPlaylist();
         }
 
         function playSong(index) {
@@ -1500,6 +1587,23 @@
                 alert('✅ دانلود شروع شد!');
             } else {
                 alert('اول یه آهنگ انتخاب کن! 🎵');
+            }
+        }
+
+        function downloadSong(index) {
+            const music = data.music || [];
+            if (!music[index]) return;
+            const src = music[index].src;
+            if (src && src !== '') {
+                const a = document.createElement('a');
+                a.href = src;
+                a.download = `${music[index].title}.mp3`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                alert('✅ دانلود شروع شد!');
+            } else {
+                alert('❌ لینک دانلود موجود نیست!');
             }
         }
 
@@ -1554,7 +1658,7 @@
                 container.appendChild(label);
             });
 
-            // ====== HISTORY (به سبک نتایج روزانه) ======
+            // ====== HISTORY ======
             const historyDiv = document.getElementById('pollHistory');
             historyDiv.innerHTML = '';
 
@@ -1843,4 +1947,4 @@
         setInterval(updateFooter, 60000);
     </script>
 </body>
-                </html>
+    </html>
