@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>❤️ سایت عشق</title>
     <style>
-        /* ====== RESET ====== */
         * {
             margin: 0;
             padding: 0;
@@ -29,10 +28,9 @@
             width: 100%;
         }
 
-        /* ====== HEADER ====== */
         .header {
             text-align: center;
-            padding: 35px 20px 25px;
+            padding: 30px 20px 25px;
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(12px);
             border-radius: 40px;
@@ -115,60 +113,131 @@
             }
         }
 
-        /* ====== THEME SELECTOR IN HEADER ====== */
-        .theme-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 16px;
+        .theme-trigger-btn {
             position: relative;
             z-index: 1;
-            flex-wrap: wrap;
+            margin-top: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
         }
 
-        .theme-btn {
+        .theme-trigger-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        #themePopup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #themePopup.show {
+            display: flex;
+        }
+
+        #themePopup .popup-content {
+            background: #1a1a1a;
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            animation: slideUp 0.35s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        #themePopup .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #themePopup .popup-header h2 {
+            color: #ec407a;
+            font-size: 1.3em;
+        }
+
+        #themePopup .popup-header .close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #themePopup .popup-header .close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        #themePopup .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        #themePopup .theme-grid .theme-option {
+            padding: 12px 8px;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        #themePopup .theme-grid .theme-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        #themePopup .theme-grid .theme-option.active {
+            border-color: #ec407a;
+            background: rgba(236, 64, 122, 0.08);
+        }
+
+        #themePopup .theme-grid .theme-option .color-box {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
+            margin: 0 auto 6px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
         }
 
-        .theme-btn:hover {
-            transform: scale(1.12);
-            border-color: rgba(255, 255, 255, 0.2);
+        #themePopup .theme-grid .theme-option .name {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        .theme-btn.active {
-            border-color: #ec407a;
-            box-shadow: 0 0 25px rgba(236, 64, 122, 0.25);
-        }
-
-        .theme-btn.rose {
-            background: linear-gradient(135deg, #fce4ec, #e91e63);
-        }
-        .theme-btn.violet {
-            background: linear-gradient(135deg, #ede7f6, #7b1fa2);
-        }
-        .theme-btn.sky {
-            background: linear-gradient(135deg, #e3f2fd, #1565c0);
-        }
-        .theme-btn.sunset {
-            background: linear-gradient(135deg, #fff3e0, #e65100);
-        }
-        .theme-btn.dark {
-            background: linear-gradient(135deg, #263238, #000000);
-        }
-        .theme-btn.ocean {
-            background: linear-gradient(135deg, #e0f7fa, #00695c);
-        }
-        .theme-btn.lavender {
-            background: linear-gradient(135deg, #f3e5f5, #6a1b9a);
-        }
-
-        /* ====== TABS ====== */
         .tabs {
             display: flex;
             gap: 6px;
@@ -178,7 +247,7 @@
         }
 
         .tab-btn {
-            padding: 12px 26px;
+            padding: 11px 24px;
             border: none;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.04);
@@ -189,8 +258,8 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             font-weight: 500;
             flex: 1;
-            min-width: 90px;
-            max-width: 170px;
+            min-width: 80px;
+            max-width: 160px;
         }
 
         .tab-btn:hover {
@@ -205,7 +274,6 @@
             border-color: transparent;
         }
 
-        /* ====== CARDS ====== */
         .card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
@@ -242,7 +310,6 @@
             font-weight: 600;
         }
 
-        /* ====== TIMER ====== */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -317,7 +384,6 @@
             margin-top: 6px;
         }
 
-        /* ====== BUTTONS ====== */
         .btn {
             background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
@@ -350,7 +416,15 @@
             font-size: 13px;
         }
 
-        /* ====== INPUTS ====== */
+        .btn-download {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-download:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
+        }
+
         input,
         textarea,
         select {
@@ -390,7 +464,6 @@
             resize: vertical;
         }
 
-        /* ====== MESSAGES ====== */
         .msg-item {
             padding: 14px 18px;
             margin: 10px 0;
@@ -423,7 +496,6 @@
             white-space: nowrap;
         }
 
-        /* ====== MUSIC ====== */
         .music-player {
             padding: 24px;
             background: rgba(255, 255, 255, 0.04);
@@ -530,7 +602,6 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* ====== POLL ====== */
         .poll-option {
             display: flex;
             align-items: center;
@@ -554,60 +625,65 @@
             accent-color: #ec407a;
         }
 
-        .poll-result {
-            margin: 10px 0;
-        }
-
-        .poll-result .label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 3px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .poll-result .bar {
-            height: 28px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            overflow: hidden;
-        }
-
-        .poll-result .bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ec407a, #ab47bc);
-            border-radius: 14px;
-            transition: width 0.8s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 14px;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            min-width: 36px;
-        }
-
         .poll-history {
             margin-top: 20px;
             padding-top: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
 
+        .poll-history-title {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1em;
+            margin-bottom: 12px;
+        }
+
         .poll-history-item {
-            padding: 10px 14px;
-            margin: 4px 0;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            font-size: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .poll-history-item .date {
             color: #ec407a;
             font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 8px;
         }
 
-        /* ====== COMMENTS ====== */
+        .poll-history-item .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .poll-history-item .result-row .bar-wrap {
+            flex: 1;
+            margin: 0 12px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .poll-history-item .result-row .bar-wrap .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ec407a, #ab47bc);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .poll-history-item .total {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.15);
+            margin-top: 6px;
+            text-align: left;
+        }
+
         .comment-item {
             padding: 14px 18px;
             margin: 8px 0;
@@ -630,7 +706,6 @@
             margin-top: 4px;
         }
 
-        /* ====== ADMIN MODAL ====== */
         #adminPanel {
             display: none;
             position: fixed;
@@ -663,17 +738,6 @@
             animation: slideUp 0.35s ease;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
         #adminPanel .modal .header-modal {
             display: flex;
             justify-content: space-between;
@@ -702,7 +766,6 @@
             transform: rotate(90deg);
         }
 
-        /* ====== ADMIN LOGIN ====== */
         #adminLogin {
             margin-bottom: 20px;
         }
@@ -753,7 +816,6 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
-        /* ====== FOOTER ====== */
         .footer {
             text-align: center;
             padding: 25px 20px 15px;
@@ -763,7 +825,6 @@
             margin-top: 10px;
         }
 
-        /* ====== FLOATING HEARTS ====== */
         .floating-hearts {
             position: fixed;
             top: 0;
@@ -793,7 +854,6 @@
             }
         }
 
-        /* ====== ADMIN FAB ====== */
         .admin-fab {
             position: fixed;
             bottom: 24px;
@@ -818,7 +878,6 @@
             color: #fff;
         }
 
-        /* ====== SCROLLBAR ====== */
         ::-webkit-scrollbar {
             width: 5px;
         }
@@ -833,7 +892,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* ====== RESPONSIVE ====== */
         @media (max-width: 600px) {
             body {
                 padding: 12px;
@@ -882,36 +940,27 @@
             #adminLogin .login-row .btn {
                 width: 100%;
             }
+            #themePopup .theme-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ====== FLOATING HEARTS ====== -->
     <div class="floating-hearts" id="hearts"></div>
 
-    <!-- ====== CONTAINER ====== -->
     <div class="container">
 
-        <!-- ====== HEADER ====== -->
         <div class="header">
             <h1>❤️ عشق من</h1>
             <p class="sub">برای تو که بهترینی 🌹</p>
             <div class="greeting" id="greeting">
                 <span class="heart-beat">❤️</span> هر روز با تو زیباترینه...
             </div>
-            <div class="theme-selector">
-                <button class="theme-btn rose active" onclick="changeTheme('rose')" title="رز"></button>
-                <button class="theme-btn violet" onclick="changeTheme('violet')" title="بنفشه"></button>
-                <button class="theme-btn sky" onclick="changeTheme('sky')" title="آسمان"></button>
-                <button class="theme-btn sunset" onclick="changeTheme('sunset')" title="غروب"></button>
-                <button class="theme-btn ocean" onclick="changeTheme('ocean')" title="اقیانوس"></button>
-                <button class="theme-btn lavender" onclick="changeTheme('lavender')" title="اسطوخودوس"></button>
-                <button class="theme-btn dark" onclick="changeTheme('dark')" title="شب"></button>
-            </div>
+            <button class="theme-trigger-btn" onclick="openThemePopup()">🎨 تغییر تم</button>
         </div>
 
-        <!-- ====== TABS ====== -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="tab-messages">📝 پیام‌ها</button>
             <button class="tab-btn" data-tab="tab-music">🎵 موزیک</button>
@@ -920,13 +969,11 @@
             <button class="tab-btn" data-tab="tab-timer">⏳ زمان‌ها</button>
         </div>
 
-        <!-- ====== TAB: MESSAGES ====== -->
         <div class="card active" id="tab-messages">
             <h2>📝 پیام‌های امروز</h2>
             <div id="messageList"></div>
         </div>
 
-        <!-- ====== TAB: MUSIC ====== -->
         <div class="card" id="tab-music">
             <h2>🎵 آهنگ‌های مخصوص تو</h2>
             <div class="music-player" id="currentPlayer">
@@ -939,7 +986,7 @@
                         <div class="controls">
                             <button class="btn btn-small" onclick="prevSong()">⏮ قبلی</button>
                             <button class="btn btn-small" onclick="nextSong()">بعدی ⏭</button>
-                            <button class="btn btn-small" onclick="downloadCurrentSong()">⬇️ دانلود</button>
+                            <button class="btn btn-small btn-download" onclick="downloadCurrentSong()">⬇️ دانلود</button>
                         </div>
                     </div>
                 </div>
@@ -947,17 +994,14 @@
             <div class="music-list" id="playlist"></div>
         </div>
 
-        <!-- ====== TAB: POLL ====== -->
         <div class="card" id="tab-poll">
-            <h2>📊 نظرسنجی امروز</h2>
+            <h2>📊 نظرسنجی</h2>
             <p id="pollQuestion" style="font-size:1.05em; margin-bottom:14px; color:rgba(255,255,255,0.5);"></p>
             <div id="pollOptions"></div>
             <button class="btn" onclick="submitVote()" style="margin-top:6px;">🗳️ رای بده</button>
-            <div id="pollResults" style="margin-top:16px;"></div>
             <div class="poll-history" id="pollHistory"></div>
         </div>
 
-        <!-- ====== TAB: COMMENTS ====== -->
         <div class="card" id="tab-comments">
             <h2>💬 سوال یا حرف داری؟</h2>
             <textarea id="commentInput" placeholder="هر چی دلت می‌خواد بنویس... ❤️"></textarea>
@@ -965,21 +1009,64 @@
             <div id="commentsList" style="margin-top:14px;"></div>
         </div>
 
-        <!-- ====== TAB: TIMER ====== -->
         <div class="card" id="tab-timer">
             <h2>⏳ زمان‌های مهم</h2>
             <div class="timer-grid" id="timerGrid"></div>
         </div>
 
-        <!-- ====== FOOTER ====== -->
         <div class="footer" id="footer"></div>
 
     </div>
 
-    <!-- ====== ADMIN FAB ====== -->
+    <div id="themePopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>🎨 انتخاب تم</h2>
+                <button class="close-btn" onclick="closeThemePopup()">✕</button>
+            </div>
+            <div class="theme-grid">
+                <div class="theme-option active" onclick="selectTheme('rose')" data-theme="rose">
+                    <div class="color-box" style="background:linear-gradient(135deg,#fce4ec,#e91e63);"></div>
+                    <div class="name">رز</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('violet')" data-theme="violet">
+                    <div class="color-box" style="background:linear-gradient(135deg,#ede7f6,#7b1fa2);"></div>
+                    <div class="name">بنفشه</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('sky')" data-theme="sky">
+                    <div class="color-box" style="background:linear-gradient(135deg,#e3f2fd,#1565c0);"></div>
+                    <div class="name">آسمان</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('sunset')" data-theme="sunset">
+                    <div class="color-box" style="background:linear-gradient(135deg,#fff3e0,#e65100);"></div>
+                    <div class="name">غروب</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('ocean')" data-theme="ocean">
+                    <div class="color-box" style="background:linear-gradient(135deg,#e0f7fa,#00695c);"></div>
+                    <div class="name">اقیانوس</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('lavender')" data-theme="lavender">
+                    <div class="color-box" style="background:linear-gradient(135deg,#f3e5f5,#6a1b9a);"></div>
+                    <div class="name">اسطوخودوس</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('dark')" data-theme="dark">
+                    <div class="color-box" style="background:linear-gradient(135deg,#263238,#000000);"></div>
+                    <div class="name">شب</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('gold')" data-theme="gold">
+                    <div class="color-box" style="background:linear-gradient(135deg,#fff8e1,#f9a825);"></div>
+                    <div class="name">طلایی</div>
+                </div>
+                <div class="theme-option" onclick="selectTheme('mint')" data-theme="mint">
+                    <div class="color-box" style="background:linear-gradient(135deg,#e8f5e9,#2e7d32);"></div>
+                    <div class="name">نعناع</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button class="admin-fab" onclick="toggleAdmin()" title="مدیریت">⚙️</button>
 
-    <!-- ====== ADMIN MODAL ====== -->
     <div id="adminPanel">
         <div class="modal">
             <div class="header-modal">
@@ -987,7 +1074,6 @@
                 <button class="close-btn" onclick="toggleAdmin()">✕</button>
             </div>
 
-            <!-- Login -->
             <div id="adminLogin">
                 <div class="login-row">
                     <input type="password" id="adminPass" placeholder="رمز مدیریت...">
@@ -995,10 +1081,8 @@
                 </div>
             </div>
 
-            <!-- Admin Content (hidden until login) -->
             <div id="adminContent" style="display:none; margin-top:16px;">
 
-                <!-- Messages -->
                 <div class="admin-section">
                     <h3>📝 مدیریت پیام‌ها</h3>
                     <textarea id="newMsg" placeholder="متن پیام جدید..."></textarea>
@@ -1006,7 +1090,6 @@
                     <div id="adminMsgList" style="margin-top:8px;"></div>
                 </div>
 
-                <!-- Music -->
                 <div class="admin-section">
                     <h3>🎵 مدیریت آهنگ‌ها</h3>
                     <input id="newSongTitle" placeholder="عنوان آهنگ">
@@ -1017,7 +1100,6 @@
                     <div id="adminMusicList" style="margin-top:8px;"></div>
                 </div>
 
-                <!-- Poll -->
                 <div class="admin-section">
                     <h3>📊 مدیریت نظرسنجی</h3>
                     <input id="newPollQuestion" placeholder="سوال نظرسنجی">
@@ -1025,7 +1107,6 @@
                     <button class="btn" onclick="updatePoll()">بروزرسانی</button>
                 </div>
 
-                <!-- Comments -->
                 <div class="admin-section">
                     <h3>💬 مدیریت نظرات</h3>
                     <select id="commentSelect"></select>
@@ -1034,7 +1115,6 @@
                     <div id="adminCommentList" style="margin-top:8px;"></div>
                 </div>
 
-                <!-- Timer -->
                 <div class="admin-section">
                     <h3>⏳ مدیریت تایمرها</h3>
                     <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
@@ -1062,15 +1142,6 @@
         // ============================================================
         // ====== THEME ======
         // ============================================================
-        function changeTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.classList.contains(theme));
-            });
-            applyTheme(theme);
-        }
-
         function applyTheme(theme) {
             const themes = {
                 rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc' },
@@ -1079,21 +1150,21 @@
                 sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c' },
                 ocean: { bg: '#0a1212', primary: '#00695c', secondary: '#004d40' },
                 lavender: { bg: '#0d0a14', primary: '#6a1b9a', secondary: '#4a148c' },
-                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' }
+                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f' },
+                gold: { bg: '#1a140a', primary: '#f9a825', secondary: '#f57f17' },
+                mint: { bg: '#0a140a', primary: '#2e7d32', secondary: '#1b5e20' }
             };
             const t = themes[theme] || themes.rose;
             document.body.style.background = `radial-gradient(circle at 20% 30%, ${t.primary}15, ${t.bg})`;
-            document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2').forEach(el => {
+            document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2').forEach(
+            el => {
                 el.style.color = t.primary;
             });
-            document.querySelectorAll('.btn:not(.btn-danger)').forEach(el => {
+            document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
             });
             document.querySelectorAll('.tab-btn.active').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-            });
-            document.querySelectorAll('.poll-result .bar .fill').forEach(el => {
-                el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
@@ -1109,10 +1180,49 @@
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
+            document.querySelectorAll('.poll-history-item .date').forEach(el => {
+                el.style.color = t.primary;
+            });
+            document.querySelectorAll('.poll-history-item .result-row .bar-wrap .fill').forEach(el => {
+                el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
+            });
+            document.querySelectorAll('.theme-option.active').forEach(el => {
+                el.style.borderColor = t.primary;
+                el.style.background = `${t.primary}15`;
+            });
+            document.querySelectorAll('.theme-option').forEach(el => {
+                if (el.dataset.theme === theme) {
+                    el.classList.add('active');
+                    el.style.borderColor = t.primary;
+                    el.style.background = `${t.primary}15`;
+                } else {
+                    el.classList.remove('active');
+                    el.style.borderColor = 'rgba(255,255,255,0.06)';
+                    el.style.background = 'rgba(255,255,255,0.02)';
+                }
+            });
+        }
+
+        function selectTheme(theme) {
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
+            closeThemePopup();
+        }
+
+        function openThemePopup() {
+            document.getElementById('themePopup').classList.add('show');
+        }
+
+        function closeThemePopup() {
+            document.getElementById('themePopup').classList.remove('show');
         }
 
         const savedTheme = localStorage.getItem('theme') || 'rose';
-        changeTheme(savedTheme);
+        applyTheme(savedTheme);
+
+        document.getElementById('themePopup').addEventListener('click', function(e) {
+            if (e.target === this) closeThemePopup();
+        });
 
         // ============================================================
         // ====== HEARTS ======
@@ -1243,7 +1353,7 @@
                     content = `
                             <div class="label">${timer.label}</div>
                             <div class="expired">
-                                <span class="heart-emoji">❤️</span> رسید! 
+                                <span class="heart-emoji">❤️</span> رسید!
                             </div>
                             <div class="date-label">${timer.date}</div>
                         `;
@@ -1387,6 +1497,7 @@
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+                alert('✅ دانلود شروع شد!');
             } else {
                 alert('اول یه آهنگ انتخاب کن! 🎵');
             }
@@ -1443,49 +1554,50 @@
                 container.appendChild(label);
             });
 
-            const results = document.getElementById('pollResults');
-            if (poll.votes && poll.votes[today]) {
-                const todayVotes = poll.votes[today];
-                const total = Object.values(todayVotes).reduce((a, b) => a + b, 0);
-                results.innerHTML = '<h4 style="color:rgba(255,255,255,0.4); margin-bottom:8px;">📊 نتایج امروز:</h4>';
-                if (total === 0) {
-                    results.innerHTML += '<p style="color:rgba(255,255,255,0.2);">هنوز رایی نیست</p>';
-                } else {
+            // ====== HISTORY (به سبک نتایج روزانه) ======
+            const historyDiv = document.getElementById('pollHistory');
+            historyDiv.innerHTML = '';
+
+            if (poll.history && Object.keys(poll.history).length > 0) {
+                const title = document.createElement('div');
+                title.className = 'poll-history-title';
+                title.textContent = '📜 تاریخچه نظرسنجی';
+                historyDiv.appendChild(title);
+
+                const sortedDates = Object.keys(poll.history).sort().reverse();
+
+                sortedDates.forEach(date => {
+                    const dayVotes = poll.history[date];
+                    const total = Object.values(dayVotes).reduce((a, b) => a + b, 0);
+
+                    const item = document.createElement('div');
+                    item.className = 'poll-history-item';
+
+                    let detailsHtml = '';
                     (poll.options || []).forEach(opt => {
-                        const count = todayVotes[opt] || 0;
+                        const count = dayVotes[opt] || 0;
                         const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-                        results.innerHTML += `
-                                <div class="poll-result">
-                                    <div class="label"><span>${opt}</span><span>${count} (${percent}%)</span></div>
-                                    <div class="bar"><div class="fill" style="width:${percent}%">${percent}%</div></div>
+                        detailsHtml += `
+                                <div class="result-row">
+                                    <span>${opt}</span>
+                                    <div class="bar-wrap">
+                                        <div class="fill" style="width:${percent}%"></div>
+                                    </div>
+                                    <span style="min-width:50px;text-align:left;">${count} (${percent}%)</span>
                                 </div>
                             `;
                     });
-                }
-            } else {
-                results.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هنوز رای ندادی 😊</p>';
-            }
 
-            const historyDiv = document.getElementById('pollHistory');
-            historyDiv.innerHTML = '<h4 style="color:rgba(255,255,255,0.4);">📜 تاریخچه:</h4>';
-            if (poll.history && Object.keys(poll.history).length > 0) {
-                const sorted = Object.keys(poll.history).sort().reverse();
-                sorted.forEach(date => {
-                    if (date === today) return;
-                    const dayVotes = poll.history[date];
-                    const total = Object.values(dayVotes).reduce((a, b) => a + b, 0);
-                    const div = document.createElement('div');
-                    div.className = 'poll-history-item';
-                    div.innerHTML = `
+                    item.innerHTML = `
                             <div class="date">📅 ${date}</div>
-                            <div style="font-size:13px; color:rgba(255,255,255,0.3);">
-                                ${Object.entries(dayVotes).map(([opt,count]) => `${opt}: ${count}`).join(' | ')}
-                            </div>
+                            ${detailsHtml}
+                            <div class="total">مجموع: ${total} رای</div>
                         `;
-                    historyDiv.appendChild(div);
+
+                    historyDiv.appendChild(item);
                 });
             } else {
-                historyDiv.innerHTML += '<p style="color:rgba(255,255,255,0.1);">هنوز تاریخچه‌ای نیست</p>';
+                historyDiv.innerHTML = '<p style="color:rgba(255,255,255,0.15);">هنوز تاریخچه‌ای ثبت نشده</p>';
             }
         }
 
@@ -1650,6 +1762,7 @@
             if (panel.classList.contains('show')) {
                 document.getElementById('adminPass').value = '';
                 document.getElementById('adminContent').style.display = 'none';
+                document.getElementById('adminLogin').style.display = 'block';
                 renderAdminLists();
             }
         }
@@ -1730,4 +1843,4 @@
         setInterval(updateFooter, 60000);
     </script>
 </body>
-    </html>
+                </html>
