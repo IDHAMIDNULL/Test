@@ -343,6 +343,7 @@
             display: flex;
             justify-content: center;
             gap: 6px;
+            direction: ltr;
         }
 
         .timer-item .numbers .unit {
@@ -878,23 +879,6 @@
             direction: ltr;
         }
 
-        /* اصلاح گرافیک تب‌ها */
-        .tab-btn,
-        .card,
-        .card h2,
-        .timer-item,
-        .timer-item .label,
-        .timer-item .numbers .unit .num,
-        .poll-history-item .date,
-        .comment-item .reply,
-        .msg-item,
-        .music-item,
-        .btn,
-        .admin-section,
-        #adminPanel .modal .header-modal h2 {
-            transition: all 0.3s ease;
-        }
-
         @media (max-width: 600px) {
             body {
                 padding: 12px;
@@ -1132,10 +1116,9 @@
         let audioPlayer = null;
 
         // ============================================================
-        // ====== تبدیل تاریخ شمسی به میلادی (دقیق) ======
+        // ====== تبدیل تاریخ شمسی به میلادی ======
         // ============================================================
         function shamsiToGregorian(jy, jm, jd) {
-            // الگوریتم دقیق تبدیل شمسی به میلادی
             let jy1 = jy + 1595;
             let days = -355668 + (365 * jy1) + Math.floor(jy1 / 33) * 8 + Math.floor(((jy1 % 33) + 3) / 4) +
                 jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
@@ -1160,7 +1143,6 @@
             if (gm === 0) gm = 12;
             let gd = tmp - gm_days[gm - 1] + 1;
 
-            // اصلاح سال کبیسه میلادی
             const isLeap = (gy % 4 === 0 && (gy % 100 !== 0 || gy % 400 === 0));
             if (gm > 2 && isLeap) {
                 gd++;
@@ -1179,7 +1161,6 @@
 
         function convertShamsiToGregorian(shamsiDate) {
             try {
-                // پشتیبانی از دو فرمت: 1404/11/17 یا 1404-11-17
                 const parts = shamsiDate.split(/[\/\-]/);
                 if (parts.length !== 3) return null;
                 const year = parseInt(parts[0]);
@@ -1190,7 +1171,7 @@
                 if (month < 1 || month > 12 || day < 1 || day > 31) return null;
 
                 const greg = shamsiToGregorian(year, month, day);
-                // ایجاد تاریخ میلادی با ساعت 23:59:59 برای محاسبه دقیق
+                // ساعت 23:59:59 برای محاسبه دقیق
                 return new Date(greg.year, greg.month - 1, greg.day, 23, 59, 59, 999);
             } catch (e) {
                 return null;
@@ -1214,29 +1195,24 @@
             };
             const t = themes[theme] || themes.gold;
 
-            // پس‌زمینه
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
-            // هدرها
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2')
                 .forEach(el => {
                     if (el) el.style.color = t.primary;
                 });
 
-            // دکمه‌ها
             document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
 
-            // تب‌های فعال
             document.querySelectorAll('.tab-btn.active').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 8px 30px ${t.glow}`;
             });
 
-            // پیام‌ها
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1245,18 +1221,15 @@
                 el.style.borderRightColor = t.primary;
             });
 
-            // پاسخ نظرات
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
 
-            // اعداد تایمر
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
 
-            // تاریخچه نظرسنجی
             document.querySelectorAll('.poll-history-item .date').forEach(el => {
                 el.style.color = t.primary;
             });
@@ -1264,7 +1237,6 @@
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
 
-            // تم‌های انتخاب شده
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
@@ -1279,13 +1251,11 @@
                 }
             });
 
-            // آهنگ فعال
             document.querySelectorAll('.music-item.active').forEach(el => {
                 el.style.borderColor = `${t.primary}30`;
                 el.style.background = `${t.primary}08`;
             });
 
-            // هدر
             const header = document.querySelector('.header');
             if (header) header.style.borderColor = `${t.primary}20`;
         }
@@ -1348,7 +1318,6 @@
                 this.classList.add('active');
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                 document.getElementById(this.dataset.tab).classList.add('active');
-                // اعمال مجدد تم روی تب جدید
                 const current = localStorage.getItem('theme') || 'gold';
                 applyTheme(current);
             });
@@ -1440,7 +1409,7 @@
         }
 
         // ============================================================
-        // ====== TIMERS (SHAMSI - دقیق) ======
+        // ====== TIMERS (SHAMSI - دقیق با ترتیب چپ به راست) ======
         // ============================================================
         function renderTimers() {
             const grid = document.getElementById('timerGrid');
@@ -1494,6 +1463,7 @@
                             <div class="date-label">${timer.date} (شمسی)</div>
                         `;
                 } else {
+                    // ترتیب چپ به راست: روز، ساعت، دقیقه، ثانیه
                     content = `
                             <div class="label">${timer.label}</div>
                             <div class="numbers">
@@ -1685,7 +1655,7 @@
             });
         }
 
-        // ---------- POLL ----------
+        // ---------- POLL (رفع باگ رای) ----------
         function renderPoll() {
             const poll = data.polls || { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
                 history: {} };
@@ -1694,7 +1664,14 @@
             const container = document.getElementById('pollOptions');
             container.innerHTML = '';
             const today = new Date().toISOString().split('T')[0];
-            const hasVoted = poll.votes && poll.votes[today] && Object.keys(poll.votes[today]).length > 0;
+            
+            // بررسی دقیق رای امروز
+            let hasVoted = false;
+            if (poll.votes && poll.votes[today]) {
+                // بررسی اینکه آیا واقعاً رای ثبت شده یا خالی است
+                const voteKeys = Object.keys(poll.votes[today]);
+                hasVoted = voteKeys.length > 0 && poll.votes[today][voteKeys[0]] > 0;
+            }
 
             (poll.options || []).forEach(opt => {
                 const label = document.createElement('label');
@@ -1703,11 +1680,19 @@
                 radio.type = 'radio';
                 radio.name = 'poll';
                 radio.value = opt;
-                radio.disabled = !!hasVoted;
+                radio.disabled = hasVoted;
                 label.appendChild(radio);
                 label.appendChild(document.createTextNode(' ' + opt));
                 container.appendChild(label);
             });
+
+            // نمایش پیام اگر رای داده شده
+            if (hasVoted) {
+                const msg = document.createElement('p');
+                msg.style.cssText = 'color:rgba(255,255,255,0.3);font-size:14px;margin-top:8px;';
+                msg.textContent = '✅ امروز رای دادی!';
+                container.appendChild(msg);
+            }
 
             const historyDiv = document.getElementById('pollHistory');
             historyDiv.innerHTML = '';
@@ -1759,12 +1744,22 @@
             const poll = data.polls || {};
             const today = new Date().toISOString().split('T')[0];
             if (!poll.votes) poll.votes = {};
-            if (poll.votes[today] && Object.keys(poll.votes[today]).length > 0) {
+            
+            // بررسی دقیق رای امروز
+            let hasVoted = false;
+            if (poll.votes[today]) {
+                const voteKeys = Object.keys(poll.votes[today]);
+                hasVoted = voteKeys.length > 0 && poll.votes[today][voteKeys[0]] > 0;
+            }
+            
+            if (hasVoted) {
                 alert('امروز رای دادی! 😊');
                 return;
             }
+            
             const selected = document.querySelector('input[name="poll"]:checked');
             if (!selected) { alert('یه گزینه انتخاب کن!'); return; }
+            
             if (!poll.votes[today]) poll.votes[today] = {};
             poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
             if (!poll.history) poll.history = {};
@@ -1866,7 +1861,6 @@
             const date = document.getElementById('newTimerDate').value.trim();
             if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
 
-            // پشتیبانی از دو فرمت: 1404/11/17 یا 1404-11-17
             const parts = date.split(/[\/\-]/);
             if (parts.length !== 3) {
                 alert('فرمت تاریخ باید به صورت سال/ماه/روز باشد (مثال: 1404/11/17)');
@@ -2035,4 +2029,4 @@
         }, 60000);
     </script>
 </body>
-                </html>
+    </html>
