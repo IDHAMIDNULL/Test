@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>❤️ سایت عشق</title>
+    <!-- اضافه کردن moment.js و moment-jalaali -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.6/moment-jalaali.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -866,6 +869,10 @@
             margin: 0;
         }
 
+        .timer-date-input {
+            direction: ltr;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 12px;
@@ -1077,9 +1084,9 @@
                 </div>
 
                 <div class="admin-section">
-                    <h3>⏳ مدیریت تایمرها</h3>
+                    <h3>⏳ مدیریت تایمرها (تاریخ شمسی)</h3>
                     <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
-                    <input id="newTimerDate" type="date" placeholder="تاریخ">
+                    <input id="newTimerDate" type="text" class="timer-date-input" placeholder="مثال: 1404/11/15">
                     <button class="btn" onclick="addTimer()">➕ افزودن تایمر</button>
                     <div id="adminTimerList" style="margin-top:8px;"></div>
                 </div>
@@ -1100,6 +1107,7 @@
         let currentSongIndex = 0;
         let timerInterval = null;
         let isUpdating = false;
+        let audioPlayer = null;
 
         // ============================================================
         // ====== THEME ======
@@ -1121,7 +1129,8 @@
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
-            document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2').forEach(
+            document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2')
+            .forEach(
                 el => {
                     el.style.color = t.primary;
                 });
@@ -1256,14 +1265,13 @@
                 });
                 const json = await res.json();
                 const newData = json.record;
-                
-                // فقط اگه دیتا تغییر کرده باشه رندر کن
+
                 if (JSON.stringify(data) !== JSON.stringify(newData)) {
                     data = newData;
                     if (!data.timers) {
                         data.timers = [
-                            { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
-                            { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
+                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/15' },
+                            { id: 2, label: '🌙 عید نوروز', date: '1404/12/29' }
                         ];
                     }
                     if (!data.polls) {
@@ -1283,8 +1291,8 @@
                             history: {} },
                         comments: [],
                         timers: [
-                            { id: 1, label: '🎂 تولد عشقم', date: '2026-02-06' },
-                            { id: 2, label: '🌙 عید نوروز', date: '2026-03-21' }
+                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/15' },
+                            { id: 2, label: '🌙 عید نوروز', date: '1404/12/29' }
                         ]
                     };
                     renderAll();
@@ -1331,7 +1339,27 @@
             document.getElementById('footer').textContent = `❤️ با عشق | ${persian} | ${gregorian}`;
         }
 
-        // ---------- TIMERS ----------
+        // ============================================================
+        // ====== TIMERS (SHAMSI) ======
+        // ============================================================
+        function convertShamsiToGregorian(shamsiDate) {
+            try {
+                // فرمت: 1404/11/15
+                const parts = shamsiDate.split('/');
+                if (parts.length !== 3) return null;
+                const year = parseInt(parts[0]);
+                const month = parseInt(parts[1]);
+                const day = parseInt(parts[2]);
+                
+                // استفاده از moment-jalaali برای تبدیل
+                const m = moment(`${year}/${month}/${day}`, 'jYYYY/jMM/jDD');
+                if (!m.isValid()) return null;
+                return m.toDate();
+            } catch (e) {
+                return null;
+            }
+        }
+
         function renderTimers() {
             const grid = document.getElementById('timerGrid');
             grid.innerHTML = '';
@@ -1342,32 +1370,48 @@
             }
 
             const now = new Date().getTime();
-            // تنظیم منطقه زمانی ایران (UTC+3:30)
-            const timezoneOffset = 3.5 * 60 * 60 * 1000;
 
             timers.forEach(timer => {
-                const target = new Date(timer.date + 'T00:00:00').getTime() + timezoneOffset;
-                const diff = target - now;
-                const isExpired = diff <= 0;
+                const targetDate = convertShamsiToGregorian(timer.date);
+                let isExpired = true;
+                let diff = 0;
+                let days = 0,
+                    hours = 0,
+                    minutes = 0,
+                    seconds = 0;
+
+                if (targetDate) {
+                    const target = targetDate.getTime();
+                    diff = target - now;
+                    isExpired = diff <= 0;
+                    
+                    if (!isExpired) {
+                        days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    }
+                }
 
                 const div = document.createElement('div');
                 div.className = 'timer-item';
 
                 let content = '';
-                if (isExpired) {
+                if (!targetDate) {
+                    content = `
+                            <div class="label">${timer.label}</div>
+                            <div style="color:rgba(255,255,255,0.2);font-size:14px;">❌ تاریخ نامعتبر</div>
+                            <div class="date-label">${timer.date}</div>
+                        `;
+                } else if (isExpired) {
                     content = `
                             <div class="label">${timer.label}</div>
                             <div class="expired">
                                 <span class="heart-emoji">❤️</span> رسید!
                             </div>
-                            <div class="date-label">${timer.date}</div>
+                            <div class="date-label">${timer.date} (شمسی)</div>
                         `;
                 } else {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
                     content = `
                             <div class="label">${timer.label}</div>
                             <div class="numbers">
@@ -1388,7 +1432,7 @@
                                     <span class="lbl">ثانیه</span>
                                 </div>
                             </div>
-                            <div class="date-label">${timer.date}</div>
+                            <div class="date-label">${timer.date} (شمسی)</div>
                         `;
                 }
 
@@ -1443,8 +1487,7 @@
                 list.innerHTML = '<p style="color:rgba(255,255,255,0.2);">هیچ آهنگی نیست 🎶</p>';
                 return;
             }
-            
-            // اگه currentSongIndex خارج از محدوده بود، تصحیح کن
+
             if (currentSongIndex >= music.length) {
                 currentSongIndex = 0;
             }
@@ -1473,16 +1516,12 @@
         function togglePlay(index) {
             const music = data.music || [];
             if (!music[index]) return;
-            
-            if (index === currentSongIndex) {
-                // همون آهنگ - play/pause
-                const audio = document.getElementById('audioPlayer');
-                if (!audio.src) {
-                    createAudioPlayer(index);
-                } else if (audio.paused) {
-                    audio.play().catch(() => {});
+
+            if (index === currentSongIndex && audioPlayer) {
+                if (audioPlayer.paused) {
+                    audioPlayer.play().catch(() => {});
                 } else {
-                    audio.pause();
+                    audioPlayer.pause();
                 }
             } else {
                 playSong(index);
@@ -1490,56 +1529,35 @@
             renderPlaylist();
         }
 
-        function createAudioPlayer(index) {
-            const music = data.music || [];
-            if (!music[index]) return;
-            
-            // حذف پلیر قبلی
-            const oldPlayer = document.getElementById('audioPlayer');
-            if (oldPlayer) oldPlayer.remove();
-            
-            const audio = document.createElement('audio');
-            audio.id = 'audioPlayer';
-            audio.src = music[index].src || '';
-            audio.style.display = 'none';
-            document.body.appendChild(audio);
-            
-            audio.addEventListener('ended', () => {
-                nextSong();
-            });
-            
-            audio.play().catch(() => {});
-        }
-
         function playSong(index) {
             const music = data.music || [];
             if (!music[index]) return;
-            
-            currentSongIndex = index;
-            
-            // حذف پلیر قبلی
-            const oldPlayer = document.getElementById('audioPlayer');
-            if (oldPlayer) oldPlayer.remove();
-            
-            const audio = document.createElement('audio');
-            audio.id = 'audioPlayer';
-            audio.src = music[index].src || '';
-            audio.style.display = 'none';
-            document.body.appendChild(audio);
-            
-            audio.addEventListener('ended', () => {
-                nextSong();
-            });
-            
-            audio.play().catch(() => {});
-            renderPlaylist();
-        }
 
-        function nextSong() {
-            const music = data.music || [];
-            if (!music.length) return;
-            const idx = (currentSongIndex + 1) % music.length;
-            playSong(idx);
+            currentSongIndex = index;
+
+            // حذف پلیر قبلی
+            if (audioPlayer) {
+                audioPlayer.pause();
+                audioPlayer.remove();
+                audioPlayer = null;
+            }
+
+            audioPlayer = document.createElement('audio');
+            audioPlayer.src = music[index].src || '';
+            audioPlayer.style.display = 'none';
+            document.body.appendChild(audioPlayer);
+
+            // وقتی آهنگ تموم شد، قطع کن (به آهنگ بعدی نره)
+            audioPlayer.addEventListener('ended', function() {
+                // فقط قطع کن و هیچ کاری نکن
+                this.currentTime = 0;
+                this.pause();
+                // آپدیت دکمه‌ها
+                renderPlaylist();
+            });
+
+            audioPlayer.play().catch(() => {});
+            renderPlaylist();
         }
 
         function downloadSong(index) {
@@ -1582,10 +1600,9 @@
             if (currentSongIndex >= data.music.length) currentSongIndex = 0;
             saveData().then(() => {
                 renderAll();
-                if (data.music.length) {
-                    // حذف پلیر قدیمی
-                    const oldPlayer = document.getElementById('audioPlayer');
-                    if (oldPlayer) oldPlayer.remove();
+                if (data.music.length && audioPlayer) {
+                    audioPlayer.remove();
+                    audioPlayer = null;
                 }
             });
         }
@@ -1614,7 +1631,6 @@
                 container.appendChild(label);
             });
 
-            // ====== HISTORY ======
             const historyDiv = document.getElementById('pollHistory');
             historyDiv.innerHTML = '';
 
@@ -1738,12 +1754,12 @@
             const text = input.value.trim();
             if (!text) { alert('متن پیام رو بنویس!'); return; }
             if (!data.comments) data.comments = [];
-            data.comments.push({ 
-                id: Date.now(), 
-                text: '📢 ' + text, 
-                date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date().toLocaleTimeString('fa-IR'), 
+            data.comments.push({
+                id: Date.now(),
+                text: '📢 ' + text,
+                date: new Date().toLocaleDateString('fa-IR') + ' ' + new Date().toLocaleTimeString('fa-IR'),
                 reply: '',
-                isAdmin: true 
+                isAdmin: true
             });
             input.value = '';
             saveData().then(() => renderAll());
@@ -1769,8 +1785,25 @@
         // ---------- TIMER MANAGEMENT ----------
         function addTimer() {
             const label = document.getElementById('newTimerLabel').value.trim();
-            const date = document.getElementById('newTimerDate').value;
+            const date = document.getElementById('newTimerDate').value.trim();
             if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
+            
+            // بررسی فرمت تاریخ شمسی
+            const parts = date.split('/');
+            if (parts.length !== 3) {
+                alert('فرمت تاریخ باید به صورت سال/ماه/روز باشد (مثال: 1404/11/15)');
+                return;
+            }
+            
+            const year = parseInt(parts[0]);
+            const month = parseInt(parts[1]);
+            const day = parseInt(parts[2]);
+            
+            if (isNaN(year) || isNaN(month) || isNaN(day) || month < 1 || month > 12 || day < 1 || day > 31) {
+                alert('تاریخ نامعتبر است!');
+                return;
+            }
+            
             if (!data.timers) data.timers = [];
             data.timers.push({ id: Date.now(), label, date });
             document.getElementById('newTimerLabel').value = '';
@@ -1913,7 +1946,6 @@
         // ============================================================
         loadData();
         startTimerLoop();
-        // فقط هر ۶۰ ثانیه یکبار آپدیت سبک (بدون ریست موزیک)
         setInterval(() => {
             updateFooter();
         }, 60000);
