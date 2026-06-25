@@ -250,16 +250,16 @@
             padding: 11px 24px;
             border: none;
             border-radius: 30px;
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
             font-weight: 500;
             flex: 1;
             min-width: 80px;
             max-width: 160px;
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .tab-btn:hover {
@@ -268,10 +268,9 @@
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
-            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.25);
             border-color: transparent;
+            box-shadow: 0 8px 30px rgba(236, 64, 122, 0.25);
         }
 
         .card {
@@ -303,7 +302,6 @@
 
         .card h2 {
             font-size: 1.4em;
-            color: #ec407a;
             border-bottom: 1px solid rgba(236, 64, 122, 0.12);
             padding-bottom: 12px;
             margin-bottom: 20px;
@@ -357,7 +355,6 @@
         .timer-item .numbers .unit .num {
             font-size: 1.6em;
             font-weight: 700;
-            color: #ec407a;
             display: block;
             line-height: 1.2;
             font-family: 'Courier New', monospace;
@@ -390,7 +387,6 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #ec407a, #ab47bc);
             color: #fff;
             border: none;
             padding: 10px 24px;
@@ -614,14 +610,6 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .poll-history-item .date {
-            color: #ec407a;
-            font-weight: 600;
-            font-size: 0.95em;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-        }
-
         .poll-history-item .result-row {
             display: flex;
             justify-content: space-between;
@@ -642,7 +630,6 @@
 
         .poll-history-item .result-row .bar-wrap .fill {
             height: 100%;
-            background: linear-gradient(90deg, #ec407a, #ab47bc);
             border-radius: 3px;
             transition: all 0.5s ease;
         }
@@ -663,7 +650,6 @@
         }
 
         .comment-item .reply {
-            background: rgba(236, 64, 122, 0.05);
             padding: 10px 14px;
             border-radius: 12px;
             margin-top: 8px;
@@ -717,7 +703,6 @@
         }
 
         #adminPanel .modal .header-modal h2 {
-            color: #ec407a;
             font-size: 1.4em;
             margin: 0;
             transition: color 0.3s ease;
@@ -1006,27 +991,27 @@
                     <div class="name">آسمان</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('sunset')" data-theme="sunset">
-                    <div class="color-box" style="background:linear-gradient(135deg,#fff3e0,#e65100);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#ff6f00,#e65100);"></div>
                     <div class="name">غروب</div>
                 </div>
                 <div class="theme-option active" onclick="selectTheme('gold')" data-theme="gold">
-                    <div class="color-box" style="background:linear-gradient(135deg,#fff8e1,#f9a825);box-shadow:0 0 20px rgba(249,168,37,0.3);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#f9a825,#f57f17);box-shadow:0 0 20px rgba(249,168,37,0.3);"></div>
                     <div class="name">طلایی</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('ocean')" data-theme="ocean">
-                    <div class="color-box" style="background:linear-gradient(135deg,#e0f7fa,#00695c);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#00695c,#004d40);"></div>
                     <div class="name">اقیانوس</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('lavender')" data-theme="lavender">
-                    <div class="color-box" style="background:linear-gradient(135deg,#f3e5f5,#6a1b9a);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#7b1fa2,#4a148c);"></div>
                     <div class="name">اسطوخودوس</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('dark')" data-theme="dark">
-                    <div class="color-box" style="background:linear-gradient(135deg,#263238,#000000);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#37474f,#000000);"></div>
                     <div class="name">شب</div>
                 </div>
                 <div class="theme-option" onclick="selectTheme('mint')" data-theme="mint">
-                    <div class="color-box" style="background:linear-gradient(135deg,#e8f5e9,#2e7d32);"></div>
+                    <div class="color-box" style="background:linear-gradient(135deg,#2e7d32,#1b5e20);"></div>
                     <div class="name">نعناع</div>
                 </div>
             </div>
@@ -1171,7 +1156,6 @@
                 if (month < 1 || month > 12 || day < 1 || day > 31) return null;
 
                 const greg = shamsiToGregorian(year, month, day);
-                // ساعت 23:59:59 برای محاسبه دقیق
                 return new Date(greg.year, greg.month - 1, greg.day, 23, 59, 59, 999);
             } catch (e) {
                 return null;
@@ -1179,40 +1163,112 @@
         }
 
         // ============================================================
-        // ====== THEME ======
+        // ====== THEME (دقیق با رنگ‌های هماهنگ) ======
         // ============================================================
-        function applyTheme(theme) {
-            const themes = {
-                rose: { bg: '#0d0d0d', primary: '#ec407a', secondary: '#ab47bc', glow: 'rgba(236,64,122,0.3)' },
-                violet: { bg: '#0d0a14', primary: '#7b1fa2', secondary: '#4a148c', glow: 'rgba(123,31,162,0.3)' },
-                sky: { bg: '#0a0e1a', primary: '#1e88e5', secondary: '#0d47a1', glow: 'rgba(30,136,229,0.3)' },
-                sunset: { bg: '#140a08', primary: '#e65100', secondary: '#bf360c', glow: 'rgba(230,81,0,0.3)' },
-                gold: { bg: '#1a1408', primary: '#f9a825', secondary: '#f57f17', glow: 'rgba(249,168,37,0.5)' },
-                ocean: { bg: '#0a1212', primary: '#00695c', secondary: '#004d40', glow: 'rgba(0,105,92,0.3)' },
-                lavender: { bg: '#0d0a14', primary: '#6a1b9a', secondary: '#4a148c', glow: 'rgba(106,27,154,0.3)' },
-                dark: { bg: '#000000', primary: '#78909c', secondary: '#37474f', glow: 'rgba(120,144,156,0.2)' },
-                mint: { bg: '#0a140a', primary: '#2e7d32', secondary: '#1b5e20', glow: 'rgba(46,125,50,0.3)' }
-            };
-            const t = themes[theme] || themes.gold;
+        const THEMES = {
+            rose: { 
+                bg: '#0d0d0d', 
+                primary: '#e91e63', 
+                secondary: '#c2185b', 
+                glow: 'rgba(233,30,99,0.3)',
+                light: '#fce4ec'
+            },
+            violet: { 
+                bg: '#0d0a14', 
+                primary: '#7b1fa2', 
+                secondary: '#4a148c', 
+                glow: 'rgba(123,31,162,0.3)',
+                light: '#ede7f6'
+            },
+            sky: { 
+                bg: '#0a0e1a', 
+                primary: '#1565c0', 
+                secondary: '#0d47a1', 
+                glow: 'rgba(21,101,192,0.3)',
+                light: '#e3f2fd'
+            },
+            sunset: { 
+                bg: '#140a08', 
+                primary: '#e65100', 
+                secondary: '#bf360c', 
+                glow: 'rgba(230,81,0,0.4)',
+                light: '#fff3e0'
+            },
+            gold: { 
+                bg: '#1a1408', 
+                primary: '#f9a825', 
+                secondary: '#f57f17', 
+                glow: 'rgba(249,168,37,0.5)',
+                light: '#fff8e1'
+            },
+            ocean: { 
+                bg: '#0a1212', 
+                primary: '#00695c', 
+                secondary: '#004d40', 
+                glow: 'rgba(0,105,92,0.3)',
+                light: '#e0f7fa'
+            },
+            lavender: { 
+                bg: '#0d0a14', 
+                primary: '#6a1b9a', 
+                secondary: '#4a148c', 
+                glow: 'rgba(106,27,154,0.3)',
+                light: '#f3e5f5'
+            },
+            dark: { 
+                bg: '#000000', 
+                primary: '#607d8b', 
+                secondary: '#37474f', 
+                glow: 'rgba(96,125,139,0.2)',
+                light: '#263238'
+            },
+            mint: { 
+                bg: '#0a140a', 
+                primary: '#2e7d32', 
+                secondary: '#1b5e20', 
+                glow: 'rgba(46,125,50,0.3)',
+                light: '#e8f5e9'
+            }
+        };
 
+        function applyTheme(theme) {
+            const t = THEMES[theme] || THEMES.gold;
+
+            // پس‌زمینه
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
+            // هدرهای کارت‌ها
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2')
                 .forEach(el => {
-                    if (el) el.style.color = t.primary;
+                    if (el) {
+                        el.style.color = t.primary;
+                        el.style.borderBottomColor = `${t.primary}20`;
+                    }
                 });
 
+            // تب‌ها
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.style.background = 'rgba(255,255,255,0.04)';
+                el.style.color = 'rgba(255,255,255,0.4)';
+                el.style.borderColor = 'rgba(255,255,255,0.05)';
+                el.style.boxShadow = 'none';
+            });
+
+            document.querySelectorAll('.tab-btn.active').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+                el.style.color = '#fff';
+                el.style.borderColor = 'transparent';
+                el.style.boxShadow = `0 8px 30px ${t.glow}`;
+            });
+
+            // دکمه‌ها
             document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
 
-            document.querySelectorAll('.tab-btn.active').forEach(el => {
-                el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-                el.style.boxShadow = `0 8px 30px ${t.glow}`;
-            });
-
+            // پیام‌های امروز
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1221,22 +1277,23 @@
                 el.style.borderRightColor = t.primary;
             });
 
+            // پاسخ نظرات
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
 
+            // اعداد تایمر
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
 
-            document.querySelectorAll('.poll-history-item .date').forEach(el => {
-                el.style.color = t.primary;
-            });
+            // نوارهای نظرسنجی
             document.querySelectorAll('.poll-history-item .result-row .bar-wrap .fill').forEach(el => {
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
 
+            // تم‌های انتخاب شده
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
@@ -1251,13 +1308,26 @@
                 }
             });
 
+            // آهنگ فعال
             document.querySelectorAll('.music-item.active').forEach(el => {
                 el.style.borderColor = `${t.primary}30`;
                 el.style.background = `${t.primary}08`;
             });
 
+            // هدر
             const header = document.querySelector('.header');
             if (header) header.style.borderColor = `${t.primary}20`;
+
+            // دکمه پلی فعال
+            document.querySelectorAll('.btn-play.active').forEach(el => {
+                el.style.background = `${t.primary}20`;
+                el.style.color = t.primary;
+            });
+
+            // رادیو باتن‌ها
+            document.querySelectorAll('input[type="radio"]').forEach(el => {
+                el.style.accentColor = t.primary;
+            });
         }
 
         function selectTheme(theme) {
@@ -1344,8 +1414,12 @@
                         ];
                     }
                     if (!data.polls) {
-                        data.polls = { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
-                            history: {} };
+                        data.polls = { 
+                            question: 'حالت چطوره؟', 
+                            options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
+                            votes: {},
+                            history: {} 
+                        };
                     }
                     renderAll();
                 }
@@ -1409,7 +1483,7 @@
         }
 
         // ============================================================
-        // ====== TIMERS (SHAMSI - دقیق با ترتیب چپ به راست) ======
+        // ====== TIMERS ======
         // ============================================================
         function renderTimers() {
             const grid = document.getElementById('timerGrid');
@@ -1463,7 +1537,6 @@
                             <div class="date-label">${timer.date} (شمسی)</div>
                         `;
                 } else {
-                    // ترتیب چپ به راست: روز، ساعت، دقیقه، ثانیه
                     content = `
                             <div class="label">${timer.label}</div>
                             <div class="numbers">
@@ -1655,20 +1728,24 @@
             });
         }
 
-        // ---------- POLL (رفع باگ رای) ----------
+        // ============================================================
+        // ====== POLL (مجموع کل آرا) ======
+        // ============================================================
         function renderPoll() {
-            const poll = data.polls || { question: 'حالت چطوره؟', options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], votes: {},
-                history: {} };
+            const poll = data.polls || { 
+                question: 'حالت چطوره؟', 
+                options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
+                votes: {},
+                history: {} 
+            };
             document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره؟';
 
             const container = document.getElementById('pollOptions');
             container.innerHTML = '';
             const today = new Date().toISOString().split('T')[0];
             
-            // بررسی دقیق رای امروز
             let hasVoted = false;
             if (poll.votes && poll.votes[today]) {
-                // بررسی اینکه آیا واقعاً رای ثبت شده یا خالی است
                 const voteKeys = Object.keys(poll.votes[today]);
                 hasVoted = voteKeys.length > 0 && poll.votes[today][voteKeys[0]] > 0;
             }
@@ -1686,7 +1763,6 @@
                 container.appendChild(label);
             });
 
-            // نمایش پیام اگر رای داده شده
             if (hasVoted) {
                 const msg = document.createElement('p');
                 msg.style.cssText = 'color:rgba(255,255,255,0.3);font-size:14px;margin-top:8px;';
@@ -1694,49 +1770,60 @@
                 container.appendChild(msg);
             }
 
+            // ====== تاریخچه ======
             const historyDiv = document.getElementById('pollHistory');
             historyDiv.innerHTML = '';
 
-            if (poll.history && Object.keys(poll.history).length > 0) {
+            // جمع‌آوری کل آرا از تمام تاریخ‌ها
+            const totalVotes = {};
+            let grandTotal = 0;
+            
+            if (poll.history) {
+                Object.keys(poll.history).forEach(date => {
+                    const dayVotes = poll.history[date];
+                    Object.keys(dayVotes).forEach(opt => {
+                        if (!totalVotes[opt]) totalVotes[opt] = 0;
+                        totalVotes[opt] += dayVotes[opt];
+                        grandTotal += dayVotes[opt];
+                    });
+                });
+            }
+
+            if (grandTotal > 0) {
                 const title = document.createElement('div');
                 title.className = 'poll-history-title';
-                title.textContent = '📜 تاریخچه نظرسنجی';
+                title.textContent = '📊 مجموع کل آرا';
                 historyDiv.appendChild(title);
 
-                const sortedDates = Object.keys(poll.history).sort().reverse();
+                const item = document.createElement('div');
+                item.className = 'poll-history-item';
 
-                sortedDates.forEach(date => {
-                    const dayVotes = poll.history[date];
-                    const total = Object.values(dayVotes).reduce((a, b) => a + b, 0);
-
-                    const item = document.createElement('div');
-                    item.className = 'poll-history-item';
-
-                    let detailsHtml = '';
-                    (poll.options || []).forEach(opt => {
-                        const count = dayVotes[opt] || 0;
-                        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-                        detailsHtml += `
-                                <div class="result-row">
-                                    <span>${opt}</span>
-                                    <div class="bar-wrap">
-                                        <div class="fill" style="width:${percent}%"></div>
-                                    </div>
-                                    <span style="min-width:50px;text-align:left;">${count} (${percent}%)</span>
+                let detailsHtml = '';
+                (poll.options || []).forEach(opt => {
+                    const count = totalVotes[opt] || 0;
+                    const percent = grandTotal > 0 ? Math.round((count / grandTotal) * 100) : 0;
+                    detailsHtml += `
+                            <div class="result-row">
+                                <span>${opt}</span>
+                                <div class="bar-wrap">
+                                    <div class="fill" style="width:${percent}%"></div>
                                 </div>
-                            `;
-                    });
-
-                    item.innerHTML = `
-                            <div class="date">📅 ${date}</div>
-                            ${detailsHtml}
-                            <div class="total">مجموع: ${total} رای</div>
+                                <span style="min-width:50px;text-align:left;">${count} (${percent}%)</span>
+                            </div>
                         `;
-
-                    historyDiv.appendChild(item);
                 });
+
+                item.innerHTML = `
+                        <div style="color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:8px;">
+                            مجموع ${Object.keys(poll.history).length} روز
+                        </div>
+                        ${detailsHtml}
+                        <div class="total">مجموع کل: ${grandTotal} رای</div>
+                    `;
+
+                historyDiv.appendChild(item);
             } else {
-                historyDiv.innerHTML = '<p style="color:rgba(255,255,255,0.15);">هنوز تاریخچه‌ای ثبت نشده</p>';
+                historyDiv.innerHTML = '<p style="color:rgba(255,255,255,0.15);">هنوز رایی ثبت نشده</p>';
             }
         }
 
@@ -1745,7 +1832,6 @@
             const today = new Date().toISOString().split('T')[0];
             if (!poll.votes) poll.votes = {};
             
-            // بررسی دقیق رای امروز
             let hasVoted = false;
             if (poll.votes[today]) {
                 const voteKeys = Object.keys(poll.votes[today]);
