@@ -308,6 +308,7 @@
             padding-bottom: 12px;
             margin-bottom: 20px;
             font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         .timer-grid {
@@ -322,7 +323,7 @@
             padding: 20px 16px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
         .timer-item:hover {
@@ -335,6 +336,7 @@
             color: rgba(255, 255, 255, 0.4);
             margin-bottom: 10px;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .timer-item .numbers {
@@ -348,6 +350,7 @@
             padding: 8px 10px;
             border-radius: 12px;
             min-width: 44px;
+            transition: all 0.3s ease;
         }
 
         .timer-item .numbers .unit .num {
@@ -357,6 +360,7 @@
             display: block;
             line-height: 1.2;
             font-family: 'Courier New', monospace;
+            transition: color 0.3s ease;
         }
 
         .timer-item .numbers .unit .lbl {
@@ -392,7 +396,7 @@
             border-radius: 30px;
             cursor: pointer;
             font-size: 15px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             font-weight: 500;
             margin: 4px;
         }
@@ -428,6 +432,7 @@
         .btn-play {
             background: rgba(255, 255, 255, 0.06);
             min-width: 40px;
+            transition: all 0.3s ease;
         }
 
         .btn-play:hover {
@@ -451,7 +456,7 @@
             margin: 8px 0;
             background: rgba(255, 255, 255, 0.04);
             color: #fff;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             font-family: inherit;
         }
 
@@ -489,7 +494,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 12px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
         .msg-item:hover {
@@ -524,7 +529,7 @@
             padding: 12px 16px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 16px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             border: 1px solid transparent;
         }
 
@@ -573,7 +578,7 @@
             background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             border: 1px solid transparent;
         }
 
@@ -613,6 +618,7 @@
             font-weight: 600;
             font-size: 0.95em;
             margin-bottom: 8px;
+            transition: color 0.3s ease;
         }
 
         .poll-history-item .result-row {
@@ -637,7 +643,7 @@
             height: 100%;
             background: linear-gradient(90deg, #ec407a, #ab47bc);
             border-radius: 3px;
-            transition: width 0.5s ease;
+            transition: all 0.5s ease;
         }
 
         .poll-history-item .total {
@@ -661,6 +667,7 @@
             border-radius: 12px;
             margin-top: 8px;
             border-right: 3px solid #ec407a;
+            transition: all 0.3s ease;
         }
 
         .comment-item .meta {
@@ -712,6 +719,7 @@
             color: #ec407a;
             font-size: 1.4em;
             margin: 0;
+            transition: color 0.3s ease;
         }
 
         #adminPanel .modal .close-btn {
@@ -720,7 +728,7 @@
             color: rgba(255, 255, 255, 0.3);
             font-size: 28px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             padding: 0 8px;
         }
 
@@ -831,7 +839,7 @@
             color: rgba(255, 255, 255, 0.3);
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
@@ -868,6 +876,23 @@
 
         .timer-date-input {
             direction: ltr;
+        }
+
+        /* اصلاح گرافیک تب‌ها */
+        .tab-btn,
+        .card,
+        .card h2,
+        .timer-item,
+        .timer-item .label,
+        .timer-item .numbers .unit .num,
+        .poll-history-item .date,
+        .comment-item .reply,
+        .msg-item,
+        .music-item,
+        .btn,
+        .admin-section,
+        #adminPanel .modal .header-modal h2 {
+            transition: all 0.3s ease;
         }
 
         @media (max-width: 600px) {
@@ -1083,7 +1108,7 @@
                 <div class="admin-section">
                     <h3>⏳ مدیریت تایمرها (تاریخ شمسی)</h3>
                     <input id="newTimerLabel" placeholder="عنوان (مثلاً: تا تولدت)">
-                    <input id="newTimerDate" type="text" class="timer-date-input" placeholder="مثال: 1404/11/15">
+                    <input id="newTimerDate" type="text" class="timer-date-input" placeholder="مثال: 1404/11/17">
                     <button class="btn" onclick="addTimer()">➕ افزودن تایمر</button>
                     <div id="adminTimerList" style="margin-top:8px;"></div>
                 </div>
@@ -1107,16 +1132,15 @@
         let audioPlayer = null;
 
         // ============================================================
-        // ====== تبدیل تاریخ شمسی به میلادی ======
+        // ====== تبدیل تاریخ شمسی به میلادی (دقیق) ======
         // ============================================================
-        function toGregorian(jy, jm, jd) {
-            // الگوریتم تبدیل تاریخ شمسی به میلادی
-            let gy, gm, gd;
-            const jy1 = jy + 1595;
-            const days = -355668 + (365 * jy1) + Math.floor(jy1 / 33) * 8 + Math.floor(((jy1 % 33) + 3) / 4) +
+        function shamsiToGregorian(jy, jm, jd) {
+            // الگوریتم دقیق تبدیل شمسی به میلادی
+            let jy1 = jy + 1595;
+            let days = -355668 + (365 * jy1) + Math.floor(jy1 / 33) * 8 + Math.floor(((jy1 % 33) + 3) / 4) +
                 jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
 
-            gy = 400 * Math.floor(days / 146097);
+            let gy = 400 * Math.floor(days / 146097);
             let tmp = days % 146097;
             if (tmp === 0) { gy--; tmp = 146097; }
             gy += 100 * Math.floor(tmp / 36524);
@@ -1129,33 +1153,34 @@
             tmp = (tmp - 1) % 365;
 
             const gm_days = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-            let gmonth = 0;
+            let gm = 0;
             for (let i = 0; i < 12; i++) {
-                if (tmp < gm_days[i + 1]) { gmonth = i + 1; break; }
+                if (tmp < gm_days[i + 1]) { gm = i + 1; break; }
             }
-            if (gmonth === 0) gmonth = 12;
-            gd = tmp - gm_days[gmonth - 1] + 1;
+            if (gm === 0) gm = 12;
+            let gd = tmp - gm_days[gm - 1] + 1;
 
-            // اصلاح سال کبیسه
+            // اصلاح سال کبیسه میلادی
             const isLeap = (gy % 4 === 0 && (gy % 100 !== 0 || gy % 400 === 0));
-            if (gmonth > 2 && isLeap) {
+            if (gm > 2 && isLeap) {
                 gd++;
-                if (gd > (gmonth === 3 ? 30 : 31)) {
+                if (gd > (gm === 3 ? 30 : 31)) {
                     gd = 1;
-                    gmonth++;
-                    if (gmonth > 12) {
-                        gmonth = 1;
+                    gm++;
+                    if (gm > 12) {
+                        gm = 1;
                         gy++;
                     }
                 }
             }
 
-            return { year: gy, month: gmonth, day: gd };
+            return { year: gy, month: gm, day: gd };
         }
 
         function convertShamsiToGregorian(shamsiDate) {
             try {
-                const parts = shamsiDate.split('/');
+                // پشتیبانی از دو فرمت: 1404/11/17 یا 1404-11-17
+                const parts = shamsiDate.split(/[\/\-]/);
                 if (parts.length !== 3) return null;
                 const year = parseInt(parts[0]);
                 const month = parseInt(parts[1]);
@@ -1164,9 +1189,9 @@
                 if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
                 if (month < 1 || month > 12 || day < 1 || day > 31) return null;
 
-                const greg = toGregorian(year, month, day);
-                // ایجاد تاریخ میلادی با ساعت 00:00:00
-                return new Date(greg.year, greg.month - 1, greg.day, 0, 0, 0, 0);
+                const greg = shamsiToGregorian(year, month, day);
+                // ایجاد تاریخ میلادی با ساعت 23:59:59 برای محاسبه دقیق
+                return new Date(greg.year, greg.month - 1, greg.day, 23, 59, 59, 999);
             } catch (e) {
                 return null;
             }
@@ -1189,25 +1214,29 @@
             };
             const t = themes[theme] || themes.gold;
 
+            // پس‌زمینه
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
+            // هدرها
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2')
-            .forEach(
-                el => {
-                    el.style.color = t.primary;
+                .forEach(el => {
+                    if (el) el.style.color = t.primary;
                 });
 
+            // دکمه‌ها
             document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
 
+            // تب‌های فعال
             document.querySelectorAll('.tab-btn.active').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 8px 30px ${t.glow}`;
             });
 
+            // پیام‌ها
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1216,15 +1245,18 @@
                 el.style.borderRightColor = t.primary;
             });
 
+            // پاسخ نظرات
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
 
+            // اعداد تایمر
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
 
+            // تاریخچه نظرسنجی
             document.querySelectorAll('.poll-history-item .date').forEach(el => {
                 el.style.color = t.primary;
             });
@@ -1232,6 +1264,7 @@
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
 
+            // تم‌های انتخاب شده
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
@@ -1246,12 +1279,15 @@
                 }
             });
 
+            // آهنگ فعال
             document.querySelectorAll('.music-item.active').forEach(el => {
                 el.style.borderColor = `${t.primary}30`;
                 el.style.background = `${t.primary}08`;
             });
 
-            document.querySelector('.header').style.borderColor = `${t.primary}20`;
+            // هدر
+            const header = document.querySelector('.header');
+            if (header) header.style.borderColor = `${t.primary}20`;
         }
 
         function selectTheme(theme) {
@@ -1312,6 +1348,7 @@
                 this.classList.add('active');
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                 document.getElementById(this.dataset.tab).classList.add('active');
+                // اعمال مجدد تم روی تب جدید
                 const current = localStorage.getItem('theme') || 'gold';
                 applyTheme(current);
             });
@@ -1333,7 +1370,7 @@
                     data = newData;
                     if (!data.timers) {
                         data.timers = [
-                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/15' },
+                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/17' },
                             { id: 2, label: '🌙 عید نوروز', date: '1404/12/29' }
                         ];
                     }
@@ -1354,7 +1391,7 @@
                             history: {} },
                         comments: [],
                         timers: [
-                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/15' },
+                            { id: 1, label: '🎂 تولد عشقم', date: '1404/11/17' },
                             { id: 2, label: '🌙 عید نوروز', date: '1404/12/29' }
                         ]
                     };
@@ -1591,7 +1628,6 @@
             audioPlayer.style.display = 'none';
             document.body.appendChild(audioPlayer);
 
-            // وقتی آهنگ تموم شد، فقط قطع کن
             audioPlayer.addEventListener('ended', function() {
                 this.currentTime = 0;
                 this.pause();
@@ -1830,9 +1866,10 @@
             const date = document.getElementById('newTimerDate').value.trim();
             if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
 
-            const parts = date.split('/');
+            // پشتیبانی از دو فرمت: 1404/11/17 یا 1404-11-17
+            const parts = date.split(/[\/\-]/);
             if (parts.length !== 3) {
-                alert('فرمت تاریخ باید به صورت سال/ماه/روز باشد (مثال: 1404/11/15)');
+                alert('فرمت تاریخ باید به صورت سال/ماه/روز باشد (مثال: 1404/11/17)');
                 return;
             }
 
@@ -1845,7 +1882,6 @@
                 return;
             }
 
-            // تست تبدیل
             const testDate = convertShamsiToGregorian(date);
             if (!testDate) {
                 alert('تاریخ شمسی نامعتبر است!');
@@ -1999,4 +2035,4 @@
         }, 60000);
     </script>
 </body>
-                                                                           </html>
+                </html>
