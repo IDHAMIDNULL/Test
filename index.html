@@ -427,19 +427,73 @@
         }
 
         .btn-play {
+            min-width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
             background: rgba(255, 255, 255, 0.06);
-            min-width: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.5);
+            position: relative;
+            margin: 0;
         }
 
         .btn-play:hover {
             background: rgba(255, 255, 255, 0.12);
-            box-shadow: none;
+            transform: scale(1.05);
+            color: #fff;
         }
 
         .btn-play.active {
             background: rgba(236, 64, 122, 0.2);
+            border-color: #ec407a;
             color: #ec407a;
+            box-shadow: 0 0 20px rgba(236, 64, 122, 0.2);
+        }
+
+        .btn-play.active:hover {
+            background: rgba(236, 64, 122, 0.3);
+            box-shadow: 0 0 30px rgba(236, 64, 122, 0.3);
+        }
+
+        .btn-play.pulse {
+            animation: pulseBtn 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseBtn {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(236, 64, 122, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(236, 64, 122, 0);
+            }
+        }
+
+        .btn-play .icon {
+            line-height: 1;
+        }
+
+        .btn-play .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(236, 64, 122, 0.3);
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         input,
@@ -516,7 +570,7 @@
         .music-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .music-item {
@@ -555,6 +609,7 @@
         .music-item .info .title {
             font-weight: 500;
             font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .music-item .info .artist {
@@ -562,9 +617,24 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
+        .music-item .info .status {
+            font-size: 0.65em;
+            color: rgba(255, 255, 255, 0.15);
+            margin-top: 2px;
+        }
+
+        .music-item .info .status.playing {
+            color: #4caf50;
+        }
+
+        .music-item .info .status.paused {
+            color: #ff9800;
+        }
+
         .music-item .actions {
             display: flex;
-            gap: 4px;
+            gap: 6px;
+            align-items: center;
         }
 
         .poll-option {
@@ -906,10 +976,15 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             .music-item .actions {
-                flex-direction: column;
+                flex-direction: row;
             }
             .admin-comment-actions {
                 flex-direction: column;
+            }
+            .btn-play {
+                min-width: 38px;
+                height: 38px;
+                font-size: 15px;
             }
         }
     </style>
@@ -1099,6 +1174,7 @@
         let timerInterval = null;
         let isUpdating = false;
         let audioPlayer = null;
+        let isPlaying = false;
 
         // ============================================================
         // ====== تبدیل تاریخ شمسی به میلادی ======
@@ -1163,69 +1239,69 @@
         }
 
         // ============================================================
-        // ====== THEME (دقیق با رنگ‌های هماهنگ) ======
+        // ====== THEME ======
         // ============================================================
         const THEMES = {
-            rose: { 
-                bg: '#0d0d0d', 
-                primary: '#e91e63', 
-                secondary: '#c2185b', 
+            rose: {
+                bg: '#0d0d0d',
+                primary: '#e91e63',
+                secondary: '#c2185b',
                 glow: 'rgba(233,30,99,0.3)',
                 light: '#fce4ec'
             },
-            violet: { 
-                bg: '#0d0a14', 
-                primary: '#7b1fa2', 
-                secondary: '#4a148c', 
+            violet: {
+                bg: '#0d0a14',
+                primary: '#7b1fa2',
+                secondary: '#4a148c',
                 glow: 'rgba(123,31,162,0.3)',
                 light: '#ede7f6'
             },
-            sky: { 
-                bg: '#0a0e1a', 
-                primary: '#1565c0', 
-                secondary: '#0d47a1', 
+            sky: {
+                bg: '#0a0e1a',
+                primary: '#1565c0',
+                secondary: '#0d47a1',
                 glow: 'rgba(21,101,192,0.3)',
                 light: '#e3f2fd'
             },
-            sunset: { 
-                bg: '#140a08', 
-                primary: '#e65100', 
-                secondary: '#bf360c', 
+            sunset: {
+                bg: '#140a08',
+                primary: '#e65100',
+                secondary: '#bf360c',
                 glow: 'rgba(230,81,0,0.4)',
                 light: '#fff3e0'
             },
-            gold: { 
-                bg: '#1a1408', 
-                primary: '#f9a825', 
-                secondary: '#f57f17', 
+            gold: {
+                bg: '#1a1408',
+                primary: '#f9a825',
+                secondary: '#f57f17',
                 glow: 'rgba(249,168,37,0.5)',
                 light: '#fff8e1'
             },
-            ocean: { 
-                bg: '#0a1212', 
-                primary: '#00695c', 
-                secondary: '#004d40', 
+            ocean: {
+                bg: '#0a1212',
+                primary: '#00695c',
+                secondary: '#004d40',
                 glow: 'rgba(0,105,92,0.3)',
                 light: '#e0f7fa'
             },
-            lavender: { 
-                bg: '#0d0a14', 
-                primary: '#6a1b9a', 
-                secondary: '#4a148c', 
+            lavender: {
+                bg: '#0d0a14',
+                primary: '#6a1b9a',
+                secondary: '#4a148c',
                 glow: 'rgba(106,27,154,0.3)',
                 light: '#f3e5f5'
             },
-            dark: { 
-                bg: '#000000', 
-                primary: '#607d8b', 
-                secondary: '#37474f', 
+            dark: {
+                bg: '#000000',
+                primary: '#607d8b',
+                secondary: '#37474f',
                 glow: 'rgba(96,125,139,0.2)',
                 light: '#263238'
             },
-            mint: { 
-                bg: '#0a140a', 
-                primary: '#2e7d32', 
-                secondary: '#1b5e20', 
+            mint: {
+                bg: '#0a140a',
+                primary: '#2e7d32',
+                secondary: '#1b5e20',
                 glow: 'rgba(46,125,50,0.3)',
                 light: '#e8f5e9'
             }
@@ -1234,11 +1310,9 @@
         function applyTheme(theme) {
             const t = THEMES[theme] || THEMES.gold;
 
-            // پس‌زمینه
             document.body.style.background =
                 `radial-gradient(circle at 20% 30%, ${t.primary}20, ${t.bg}), radial-gradient(circle at 80% 70%, ${t.secondary}15, transparent 50%)`;
 
-            // هدرهای کارت‌ها
             document.querySelectorAll('.card h2, #adminPanel .modal .header-modal h2, #themePopup .popup-header h2')
                 .forEach(el => {
                     if (el) {
@@ -1247,7 +1321,6 @@
                     }
                 });
 
-            // تب‌ها
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.style.background = 'rgba(255,255,255,0.04)';
                 el.style.color = 'rgba(255,255,255,0.4)';
@@ -1262,13 +1335,22 @@
                 el.style.boxShadow = `0 8px 30px ${t.glow}`;
             });
 
-            // دکمه‌ها
             document.querySelectorAll('.btn:not(.btn-danger):not(.btn-download):not(.btn-play)').forEach(el => {
                 el.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
                 el.style.boxShadow = `0 4px 20px ${t.glow}`;
             });
 
-            // پیام‌های امروز
+            document.querySelectorAll('.btn-play.active').forEach(el => {
+                el.style.background = `${t.primary}20`;
+                el.style.borderColor = t.primary;
+                el.style.color = t.primary;
+                el.style.boxShadow = `0 0 20px ${t.glow}`;
+            });
+
+            document.querySelectorAll('.btn-play.pulse').forEach(el => {
+                el.style.animation = `pulseBtn 1.5s ease-in-out infinite`;
+            });
+
             document.querySelectorAll('.msg-item.today').forEach(el => {
                 el.style.borderRightColor = t.secondary;
                 el.style.background = `${t.primary}15`;
@@ -1277,23 +1359,19 @@
                 el.style.borderRightColor = t.primary;
             });
 
-            // پاسخ نظرات
             document.querySelectorAll('.comment-item .reply').forEach(el => {
                 el.style.borderRightColor = t.primary;
                 el.style.background = `${t.primary}05`;
             });
 
-            // اعداد تایمر
             document.querySelectorAll('.timer-item .numbers .unit .num').forEach(el => {
                 el.style.color = t.primary;
             });
 
-            // نوارهای نظرسنجی
             document.querySelectorAll('.poll-history-item .result-row .bar-wrap .fill').forEach(el => {
                 el.style.background = `linear-gradient(90deg, ${t.primary}, ${t.secondary})`;
             });
 
-            // تم‌های انتخاب شده
             document.querySelectorAll('.theme-option').forEach(el => {
                 if (el.dataset.theme === theme) {
                     el.classList.add('active');
@@ -1308,23 +1386,14 @@
                 }
             });
 
-            // آهنگ فعال
             document.querySelectorAll('.music-item.active').forEach(el => {
                 el.style.borderColor = `${t.primary}30`;
                 el.style.background = `${t.primary}08`;
             });
 
-            // هدر
             const header = document.querySelector('.header');
             if (header) header.style.borderColor = `${t.primary}20`;
 
-            // دکمه پلی فعال
-            document.querySelectorAll('.btn-play.active').forEach(el => {
-                el.style.background = `${t.primary}20`;
-                el.style.color = t.primary;
-            });
-
-            // رادیو باتن‌ها
             document.querySelectorAll('input[type="radio"]').forEach(el => {
                 el.style.accentColor = t.primary;
             });
@@ -1414,11 +1483,11 @@
                         ];
                     }
                     if (!data.polls) {
-                        data.polls = { 
-                            question: 'حالت چطوره؟', 
-                            options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
+                        data.polls = {
+                            question: 'حالت چطوره؟',
+                            options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'],
                             votes: {},
-                            history: {} 
+                            history: {}
                         };
                     }
                     renderAll();
@@ -1603,7 +1672,9 @@
             saveData().then(() => renderAll());
         }
 
-        // ---------- MUSIC ----------
+        // ============================================================
+        // ====== MUSIC (دکمه‌های دقیق و قشنگ) ======
+        // ============================================================
         function renderPlaylist() {
             const list = document.getElementById('playlist');
             const music = data.music || [];
@@ -1621,17 +1692,48 @@
                 const isActive = index === currentSongIndex;
                 const div = document.createElement('div');
                 div.className = 'music-item' + (isActive ? ' active' : '');
+
+                // وضعیت پخش
+                let statusText = '';
+                let statusClass = '';
+                let playIcon = '▶️';
+                let isPulsing = false;
+
+                if (isActive && audioPlayer) {
+                    if (!audioPlayer.paused && audioPlayer.currentTime > 0) {
+                        statusText = 'در حال پخش...';
+                        statusClass = 'playing';
+                        playIcon = '⏸';
+                        isPulsing = true;
+                    } else if (audioPlayer.paused && audioPlayer.currentTime > 0) {
+                        statusText = 'متوقف شده';
+                        statusClass = 'paused';
+                        playIcon = '▶️';
+                    } else if (audioPlayer.paused && audioPlayer.currentTime === 0) {
+                        statusText = 'آماده پخش';
+                        statusClass = '';
+                        playIcon = '▶️';
+                    }
+                } else if (isActive) {
+                    statusText = 'آماده پخش';
+                    statusClass = '';
+                    playIcon = '▶️';
+                }
+
                 div.innerHTML = `
                         <img src="${song.cover || 'https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'}" alt="کاور" onerror="this.src='https://via.placeholder.com/44/1a1a1a/ec407a?text=♥'">
                         <div class="info">
                             <div class="title">${song.title}</div>
                             <div class="artist">${song.artist || 'بی‌نام'}</div>
+                            ${statusText ? `<div class="status ${statusClass}">${statusText}</div>` : ''}
                         </div>
                         <div class="actions">
-                            <button class="btn btn-small btn-play ${isActive ? 'active' : ''}" onclick="togglePlay(${index})">
-                                ${isActive ? '⏸' : '▶️'}
+                            <button class="btn-play ${isActive ? 'active' : ''} ${isPulsing ? 'pulse' : ''}" 
+                                    onclick="togglePlay(${index})" 
+                                    title="${isActive && audioPlayer && !audioPlayer.paused ? 'توقف' : 'پخش'}">
+                                <span class="icon">${playIcon}</span>
                             </button>
-                            <button class="btn btn-small btn-download" onclick="downloadSong(${index})">⬇️</button>
+                            <button class="btn btn-small btn-download" onclick="downloadSong(${index})" title="دانلود">⬇️</button>
                         </div>
                     `;
                 list.appendChild(div);
@@ -1642,14 +1744,19 @@
             const music = data.music || [];
             if (!music[index]) return;
 
-            if (index === currentSongIndex && audioPlayer) {
-                if (audioPlayer.paused) {
-                    audioPlayer.play().catch(() => {});
-                } else {
-                    audioPlayer.pause();
-                }
-            } else {
+            // اگر روی آهنگ دیگه‌ای کلیک شده یا پلیر وجود نداره
+            if (index !== currentSongIndex || !audioPlayer) {
                 playSong(index);
+                return;
+            }
+
+            // همون آهنگ - تغییر وضعیت
+            if (audioPlayer.paused) {
+                audioPlayer.play().catch(() => {});
+                isPlaying = true;
+            } else {
+                audioPlayer.pause();
+                isPlaying = false;
             }
             renderPlaylist();
         }
@@ -1674,10 +1781,24 @@
             audioPlayer.addEventListener('ended', function() {
                 this.currentTime = 0;
                 this.pause();
+                isPlaying = false;
                 renderPlaylist();
             });
 
-            audioPlayer.play().catch(() => {});
+            audioPlayer.addEventListener('play', function() {
+                isPlaying = true;
+                renderPlaylist();
+            });
+
+            audioPlayer.addEventListener('pause', function() {
+                isPlaying = false;
+                renderPlaylist();
+            });
+
+            audioPlayer.play().catch(() => {
+                isPlaying = false;
+                renderPlaylist();
+            });
             renderPlaylist();
         }
 
@@ -1724,26 +1845,27 @@
                 if (data.music.length && audioPlayer) {
                     audioPlayer.remove();
                     audioPlayer = null;
+                    isPlaying = false;
                 }
             });
         }
 
         // ============================================================
-        // ====== POLL (مجموع کل آرا) ======
+        // ====== POLL ======
         // ============================================================
         function renderPoll() {
-            const poll = data.polls || { 
-                question: 'حالت چطوره؟', 
-                options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'], 
+            const poll = data.polls || {
+                question: 'حالت چطوره؟',
+                options: ['عالی 😍', 'خوب 😊', 'معمولی 😐'],
                 votes: {},
-                history: {} 
+                history: {}
             };
             document.getElementById('pollQuestion').textContent = poll.question || 'حالت چطوره؟';
 
             const container = document.getElementById('pollOptions');
             container.innerHTML = '';
             const today = new Date().toISOString().split('T')[0];
-            
+
             let hasVoted = false;
             if (poll.votes && poll.votes[today]) {
                 const voteKeys = Object.keys(poll.votes[today]);
@@ -1770,14 +1892,12 @@
                 container.appendChild(msg);
             }
 
-            // ====== تاریخچه ======
             const historyDiv = document.getElementById('pollHistory');
             historyDiv.innerHTML = '';
 
-            // جمع‌آوری کل آرا از تمام تاریخ‌ها
             const totalVotes = {};
             let grandTotal = 0;
-            
+
             if (poll.history) {
                 Object.keys(poll.history).forEach(date => {
                     const dayVotes = poll.history[date];
@@ -1831,21 +1951,21 @@
             const poll = data.polls || {};
             const today = new Date().toISOString().split('T')[0];
             if (!poll.votes) poll.votes = {};
-            
+
             let hasVoted = false;
             if (poll.votes[today]) {
                 const voteKeys = Object.keys(poll.votes[today]);
                 hasVoted = voteKeys.length > 0 && poll.votes[today][voteKeys[0]] > 0;
             }
-            
+
             if (hasVoted) {
                 alert('امروز رای دادی! 😊');
                 return;
             }
-            
+
             const selected = document.querySelector('input[name="poll"]:checked');
             if (!selected) { alert('یه گزینه انتخاب کن!'); return; }
-            
+
             if (!poll.votes[today]) poll.votes[today] = {};
             poll.votes[today][selected.value] = (poll.votes[today][selected.value] || 0) + 1;
             if (!poll.history) poll.history = {};
