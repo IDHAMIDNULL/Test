@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>❤️ سایت عشق</title>
-    <!-- اضافه کردن moment.js و moment-jalaali -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.6/moment-jalaali.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1110,6 +1107,72 @@
         let audioPlayer = null;
 
         // ============================================================
+        // ====== تبدیل تاریخ شمسی به میلادی ======
+        // ============================================================
+        function toGregorian(jy, jm, jd) {
+            // الگوریتم تبدیل تاریخ شمسی به میلادی
+            let gy, gm, gd;
+            const jy1 = jy + 1595;
+            const days = -355668 + (365 * jy1) + Math.floor(jy1 / 33) * 8 + Math.floor(((jy1 % 33) + 3) / 4) +
+                jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+
+            gy = 400 * Math.floor(days / 146097);
+            let tmp = days % 146097;
+            if (tmp === 0) { gy--; tmp = 146097; }
+            gy += 100 * Math.floor(tmp / 36524);
+            tmp %= 36524;
+            if (tmp === 0) { gy--; tmp = 36524; }
+            gy += 4 * Math.floor(tmp / 1461);
+            tmp %= 1461;
+            if (tmp === 0) { gy--; tmp = 1461; }
+            gy += Math.floor((tmp - 1) / 365);
+            tmp = (tmp - 1) % 365;
+
+            const gm_days = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let gmonth = 0;
+            for (let i = 0; i < 12; i++) {
+                if (tmp < gm_days[i + 1]) { gmonth = i + 1; break; }
+            }
+            if (gmonth === 0) gmonth = 12;
+            gd = tmp - gm_days[gmonth - 1] + 1;
+
+            // اصلاح سال کبیسه
+            const isLeap = (gy % 4 === 0 && (gy % 100 !== 0 || gy % 400 === 0));
+            if (gmonth > 2 && isLeap) {
+                gd++;
+                if (gd > (gmonth === 3 ? 30 : 31)) {
+                    gd = 1;
+                    gmonth++;
+                    if (gmonth > 12) {
+                        gmonth = 1;
+                        gy++;
+                    }
+                }
+            }
+
+            return { year: gy, month: gmonth, day: gd };
+        }
+
+        function convertShamsiToGregorian(shamsiDate) {
+            try {
+                const parts = shamsiDate.split('/');
+                if (parts.length !== 3) return null;
+                const year = parseInt(parts[0]);
+                const month = parseInt(parts[1]);
+                const day = parseInt(parts[2]);
+
+                if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
+                if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+                const greg = toGregorian(year, month, day);
+                // ایجاد تاریخ میلادی با ساعت 00:00:00
+                return new Date(greg.year, greg.month - 1, greg.day, 0, 0, 0, 0);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // ============================================================
         // ====== THEME ======
         // ============================================================
         function applyTheme(theme) {
@@ -1340,26 +1403,8 @@
         }
 
         // ============================================================
-        // ====== TIMERS (SHAMSI) ======
+        // ====== TIMERS (SHAMSI - دقیق) ======
         // ============================================================
-        function convertShamsiToGregorian(shamsiDate) {
-            try {
-                // فرمت: 1404/11/15
-                const parts = shamsiDate.split('/');
-                if (parts.length !== 3) return null;
-                const year = parseInt(parts[0]);
-                const month = parseInt(parts[1]);
-                const day = parseInt(parts[2]);
-                
-                // استفاده از moment-jalaali برای تبدیل
-                const m = moment(`${year}/${month}/${day}`, 'jYYYY/jMM/jDD');
-                if (!m.isValid()) return null;
-                return m.toDate();
-            } catch (e) {
-                return null;
-            }
-        }
-
         function renderTimers() {
             const grid = document.getElementById('timerGrid');
             grid.innerHTML = '';
@@ -1384,7 +1429,7 @@
                     const target = targetDate.getTime();
                     diff = target - now;
                     isExpired = diff <= 0;
-                    
+
                     if (!isExpired) {
                         days = Math.floor(diff / (1000 * 60 * 60 * 24));
                         hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1535,7 +1580,6 @@
 
             currentSongIndex = index;
 
-            // حذف پلیر قبلی
             if (audioPlayer) {
                 audioPlayer.pause();
                 audioPlayer.remove();
@@ -1547,12 +1591,10 @@
             audioPlayer.style.display = 'none';
             document.body.appendChild(audioPlayer);
 
-            // وقتی آهنگ تموم شد، قطع کن (به آهنگ بعدی نره)
+            // وقتی آهنگ تموم شد، فقط قطع کن
             audioPlayer.addEventListener('ended', function() {
-                // فقط قطع کن و هیچ کاری نکن
                 this.currentTime = 0;
                 this.pause();
-                // آپدیت دکمه‌ها
                 renderPlaylist();
             });
 
@@ -1787,23 +1829,29 @@
             const label = document.getElementById('newTimerLabel').value.trim();
             const date = document.getElementById('newTimerDate').value.trim();
             if (!label || !date) { alert('عنوان و تاریخ رو پر کن!'); return; }
-            
-            // بررسی فرمت تاریخ شمسی
+
             const parts = date.split('/');
             if (parts.length !== 3) {
                 alert('فرمت تاریخ باید به صورت سال/ماه/روز باشد (مثال: 1404/11/15)');
                 return;
             }
-            
+
             const year = parseInt(parts[0]);
             const month = parseInt(parts[1]);
             const day = parseInt(parts[2]);
-            
+
             if (isNaN(year) || isNaN(month) || isNaN(day) || month < 1 || month > 12 || day < 1 || day > 31) {
                 alert('تاریخ نامعتبر است!');
                 return;
             }
-            
+
+            // تست تبدیل
+            const testDate = convertShamsiToGregorian(date);
+            if (!testDate) {
+                alert('تاریخ شمسی نامعتبر است!');
+                return;
+            }
+
             if (!data.timers) data.timers = [];
             data.timers.push({ id: Date.now(), label, date });
             document.getElementById('newTimerLabel').value = '';
@@ -1951,4 +1999,4 @@
         }, 60000);
     </script>
 </body>
-    </html>
+                                                                           </html>
